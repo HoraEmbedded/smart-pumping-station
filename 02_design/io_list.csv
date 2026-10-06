@@ -1,9 +1,8 @@
 Tag,Address,DataType,Direction,Description,Range,Unit,PID_Tag,Source,Comment
-
 DI_Start_System,%I0.0,Bool,Input,System start request,0-1,,HS-101,HMI or pushbutton,
 DI_Stop_System,%I0.1,Bool,Input,Normal stop request,0-1,,HS-102,HMI or pushbutton,
 DI_Reset_Alarm,%I0.2,Bool,Input,Alarm reset request,0-1,,HS-103,HMI or pushbutton,
-DI_EStop_Sim,%I0.3,Bool,Input,Simulated emergency stop,0-1,,HS-104,Simulated,Sim only. NC contact logic
+DI_EStop_Sim,%I0.3,Bool,Input,Simulated emergency stop,0-1,,HS-104,Simulated,Sim only. NC contact: FALSE = stop
 DI_Mode_Auto,%I0.4,Bool,Input,Auto mode selection,0-1,,HS-105,Selector,
 DI_Mode_Manual,%I0.5,Bool,Input,Manual mode selection,0-1,,HS-105,Selector,
 DI_Mode_Maintenance,%I0.6,Bool,Input,Maintenance mode selection,0-1,,HS-105,Selector,
@@ -12,14 +11,12 @@ DI_P1_Fault,%I1.0,Bool,Input,Pump 1 fault feedback,0-1,,M-101,Motor protection,N
 DI_P2_Fault,%I1.1,Bool,Input,Pump 2 fault feedback,0-1,,M-102,Motor protection,NC contact: FALSE = fault
 DI_P1_RunFeedback,%I1.2,Bool,Input,Pump 1 run feedback,0-1,,M-101,Contactor aux contact,
 DI_P2_RunFeedback,%I1.3,Bool,Input,Pump 2 run feedback,0-1,,M-102,Contactor aux contact,
-
 AI_Tank_Level_pct,%IW64,Int,Input,Tank level,0-100,%,LT-101,4-20 mA,Scaled 0-27648
 AI_Source_Level_pct,%IW66,Int,Input,Source level,0-100,%,LT-001,4-20 mA,Scaled 0-27648
 AI_Flow_m3h,%IW68,Int,Input,Discharge flow,0-20,m3/h,FT-101,4-20 mA,Scaled 0-27648
 AI_Pressure_bar,%IW70,Int,Input,Discharge pressure,0-10,bar,PT-101,4-20 mA,Scaled 0-27648
 AI_P1_Current_A,%IW72,Int,Input,Pump 1 motor current,0-20,A,II-101,4-20 mA,Scaled 0-27648
 AI_P2_Current_A,%IW74,Int,Input,Pump 2 motor current,0-20,A,II-102,4-20 mA,Scaled 0-27648
-
 DO_P1_RunCmd,%Q0.0,Bool,Output,Pump 1 run command,0-1,,M-101,Contactor coil,
 DO_P2_RunCmd,%Q0.1,Bool,Output,Pump 2 run command,0-1,,M-102,Contactor coil,
 DO_Green_Lamp,%Q0.2,Bool,Output,System ready or running,0-1,,HL-101,Lamp,
