@@ -11,3 +11,6 @@
 | ASM-07 | Emergency stop is a logic simulation only | Not a safety chain |
 | ASM-08 | All KPIs are simulated and do not represent real plant availability | Never present them as field data |
 | ASM-09 | Initial thresholds: low 30 %, high 80 %, critical 95 %, source minimum 15 %, minimum flow 2 m3/h, flow validation 10 s, restart delay 30 s | To be refined in Mission 2 |
+| ASM-10 | V_tank = 10 m3 | Reference volume for the level model |
+| ASM-11 | Q_pump nominal = 12 m3/h | Simulated, not a real pump curve |
+| ASM-12 | Q_out = 3 m3/h constant. Time acceleration allowed. Delays expressed in simulated seconds | Constant drain is a simplification |
