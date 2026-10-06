@@ -1,0 +1,32 @@
+# Operating system
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editors
+.vscode/*
+!.vscode/settings.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Secrets (never commit credentials)
+.env
+!.env.example
+secrets.*
+!secrets.example
+*.pem
+*.key
+*.pfx
+
+# TIA Portal: binary project kept out of Git, archived in GitHub Releases
+03_plc/project/
+*.ap18
+*.zap18
+
+# Raw heavy media (final demo video is published separately)
+07_media/raw/
