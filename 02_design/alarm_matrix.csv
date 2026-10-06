@@ -1,16 +1,13 @@
 ID,Name,Priority,Condition,System_Reaction,Acknowledge,Reset,HMI_Text,Probable_Causes,Operator_Action
-
 ALM_001,Emergency stop sim,Critical,DI_EStop_Sim = FALSE,Stop all pump commands and go to FAULT,Required,E-stop released and Reset,"EMERGENCY STOP ACTIVE","Button pressed or wire break (simulated)","Check area then release E-stop and reset"
-ALM_002,Source low,High,DI_Source_Low = TRUE or source level < 15 percent,Stop pump and inhibit start,Required,Source level OK and Reset if latched,"SOURCE LEVEL LOW - DRY RUN RISK","Source empty or sensor fault","Check source supply and sensor"
+ALM_002,Source low,High,DI_Source_Low = TRUE or source level < 15 percent,Stop pump and inhibit start,Required,Source level OK and Reset if latched,"SOURCE LEVEL LOW: DRY RUN RISK","Source empty or sensor fault","Check source supply and sensor"
 ALM_003,Tank level critical high,Critical,Tank level > 95 percent,Stop all pumps and raise critical alarm,Required,Level below high threshold and Reset,"TANK LEVEL CRITICAL HIGH: OVERFLOW RISK","Pump not stopped at high level or level sensor drift","Check level sensor and stop logic, check consumption"
 ALM_004,Low flow P1,High,P1 running and validation delay elapsed and flow < 2 m3/h,P1 unavailable and P2 allowed if available,Required,Correction and Reset,"LOW FLOW ON PUMP 1","Closed valve or clogged filter or leak or dry run or sensor fault","Check valves and filter, inspect pump 1"
 ALM_005,Low flow P2,High,P2 running and validation delay elapsed and flow < 2 m3/h,P2 unavailable and P1 allowed if available,Required,Correction and Reset,"LOW FLOW ON PUMP 2","Closed valve or clogged filter or leak or dry run or sensor fault","Check valves and filter, inspect pump 2"
 ALM_006,Pump 1 fault,Medium,DI_P1_Fault = FALSE (NC contact),P1 unavailable,Required,Normal return and Reset,"PUMP 1 FAULT","Motor protection tripped or overload or wire break (simulated)","Inspect pump 1 and motor protection"
 ALM_007,Pump 2 fault,Medium,DI_P2_Fault = FALSE (NC contact),P2 unavailable,Required,Normal return and Reset,"PUMP 2 FAULT","Motor protection tripped or overload or wire break (simulated)","Inspect pump 2 and motor protection"
 ALM_008,Inconsistent sensor,Medium,Value out of range or below 4 mA or physically impossible,Warning or Fault depending on severity,Required,Consistent value and Reset,"SENSOR VALUE INCONSISTENT","Wire break or sensor failure or scaling error","Check wiring and sensor"
-ALM_009,No pump available,Critical,Pumping demand and P1 and P2 unavailable,Critical fault and no start,Required,Correction and Reset,"NO PUMP AVAILABLE","Both pumps faulted or low flow on both","Repair at least one pump, then reset"
-ALM_010,Frequent starts,Warning,Starts per window above threshold,Maintenance warning,Acknowledge after analysis,Self clearing,"FREQUENT PUMP STARTS","Tight thresholds or leak or small tank","Review thresholds and check for leaks"
-
-
-WRN_002,High motor current,Warning,Current above threshold,Information only and prepare maintenance,Not required,Self clearing,"HIGH MOTOR CURRENT","Overload or mechanical friction","Schedule inspection"
+ALM_009,No pump available,Critical,Pumping demand and P1 and P2 unavailable,Critical fault and no start,Required,Correction and Reset,"NO PUMP AVAILABLE","Both pumps faulted or low flow on both","Repair at least one pump then reset"
+ALM_010,Frequent starts,Warning,Starts per window above threshold,Maintenance warning,After analysis,Self clearing,"FREQUENT PUMP STARTS","Tight thresholds or leak or small tank","Review thresholds and check for leaks"
+WRN_002,High motor current,Warning,Current above threshold,Information and prepare maintenance,Not required,Self clearing,"HIGH MOTOR CURRENT","Overload or mechanical friction","Schedule inspection"
 WRN_003,Pump runtime threshold,Warning,Runtime above maintenance interval,Information only,Not required,Maintenance reset,"PUMP MAINTENANCE DUE","Preventive maintenance interval reached","Schedule maintenance"
