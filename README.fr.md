@@ -55,6 +55,10 @@ TIA Portal V18, S7-PLCSIM V18 SP2, Python 3.13, Git, VS Code. Voir [docs/worksta
 
 Signaux simulés uniquement. Aucun dimensionnement hydraulique réel, aucune fonction de sécurité certifiée, aucune conformité revendiquée à la norme IEC 62443. Détails dans [01_requirements/assumptions.md](01_requirements/assumptions.md).
 
+## Perspectives
+
+Cette simulation est une base. Les évolutions possibles incluent un modèle de variateur de fréquence, un échange de données OPC UA, une extension d'apprentissage automatique validée et un banc d'essai matériel en boucle.
+
 ## Licence
 
 MIT, voir [LICENSE](LICENSE).

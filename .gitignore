@@ -14,7 +14,7 @@ __pycache__/
 venv/
 .ipynb_checkpoints/
 
-# Secrets (never commit credentials)
+# Secrets 
 .env
 !.env.example
 secrets.*

@@ -55,6 +55,10 @@ TIA Portal V18, S7-PLCSIM V18 SP2, Python 3.13, Git, VS Code. See [docs/workstat
 
 Simulated signals only. No real hydraulic sizing, no certified safety function, no IEC 62443 claim. Details in [01_requirements/assumptions.md](01_requirements/assumptions.md).
 
+## Perspectives
+
+This simulation is a foundation. Possible next steps include a variable frequency drive model, OPC UA data exchange, a validated machine learning extension, and a hardware-in-the-loop test bench.
+
 ## License
 
 MIT, see [LICENSE](LICENSE).
