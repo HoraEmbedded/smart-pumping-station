@@ -6,11 +6,12 @@ DI_Reset_Alarm,%I0.2,Bool,Input,Alarm reset request,0-1,,HS-103,HMI or pushbutto
 DI_EStop_Sim,%I0.3,Bool,Input,Simulated emergency stop,0-1,,HS-104,Simulated,Sim only. NC contact logic
 DI_Mode_Auto,%I0.4,Bool,Input,Auto mode selection,0-1,,HS-105,Selector,
 DI_Mode_Manual,%I0.5,Bool,Input,Manual mode selection,0-1,,HS-105,Selector,
-DI_Source_Low,%I0.6,Bool,Input,Source level too low,0-1,,LSL-001,Level switch,
-DI_P1_Fault,%I0.7,Bool,Input,Pump 1 fault feedback,0-1,,M-101,Motor protection,
-DI_P2_Fault,%I1.0,Bool,Input,Pump 2 fault feedback,0-1,,M-102,Motor protection,
-DI_P1_RunFeedback,%I1.1,Bool,Input,Pump 1 run feedback,0-1,,M-101,Contactor aux contact,
-DI_P2_RunFeedback,%I1.2,Bool,Input,Pump 2 run feedback,0-1,,M-102,Contactor aux contact,
+DI_Mode_Maintenance,%I0.6,Bool,Input,Maintenance mode selection,0-1,,HS-105,Selector,
+DI_Source_Low,%I0.7,Bool,Input,Source level too low,0-1,,LSL-001,Level switch,
+DI_P1_Fault,%I1.0,Bool,Input,Pump 1 fault feedback,0-1,,M-101,Motor protection,NC contact: FALSE = fault
+DI_P2_Fault,%I1.1,Bool,Input,Pump 2 fault feedback,0-1,,M-102,Motor protection,NC contact: FALSE = fault
+DI_P1_RunFeedback,%I1.2,Bool,Input,Pump 1 run feedback,0-1,,M-101,Contactor aux contact,
+DI_P2_RunFeedback,%I1.3,Bool,Input,Pump 2 run feedback,0-1,,M-102,Contactor aux contact,
 
 AI_Tank_Level_pct,%IW64,Int,Input,Tank level,0-100,%,LT-101,4-20 mA,Scaled 0-27648
 AI_Source_Level_pct,%IW66,Int,Input,Source level,0-100,%,LT-001,4-20 mA,Scaled 0-27648
