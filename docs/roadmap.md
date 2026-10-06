@@ -1,6 +1,6 @@
 # Roadmap
 
-Planned over 14 weeks, one mission at a time, one commit per step.
+Planned over 14 weeks, one mission at a time, one commit per step. Source: unified project roadmap.
 
 | Week | Objective | Expected evidence |
 | --- | --- | --- |
@@ -18,3 +18,14 @@ Planned over 14 weeks, one mission at a time, one commit per step.
 | 12 | Python analysis and explainable anomalies (ANO_01 to ANO_06) | Notebook, charts, limits |
 | 13 | Test campaign and regression | Complete test report |
 | 14 | Portfolio packaging, report, video | Publishable project |
+
+## File name mapping (roadmap vs repository)
+
+| Roadmap name | Repository file |
+| --- | --- |
+| project_scope.md, cahier_des_charges.md | 01_requirements/scope.md, requirements.md |
+| pid_simplifie.pdf | 02_design/diagrams/pid_simplified.pdf |
+| grafcet_station.pdf | 02_design/diagrams/grafcet_station.* |
+| mode_state_description.md | 02_design/mode_state_description.md |
+| requirements_traceability_matrix.csv | 01_requirements/requirements_traceability_matrix.csv |
+| test_plan_v0.md | 06_tests/test_plan.md |
