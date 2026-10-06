@@ -1,0 +1,10 @@
+ID,Name,Priority,Condition,System_Reaction,Acknowledge,Reset,HMI_Text,Probable_Causes,Operator_Action
+
+ALM_001,Emergency stop sim,Critical,DI_EStop_Sim = FALSE,Stop all pump commands and go to FAULT,Required,E-stop released and Reset,"EMERGENCY STOP ACTIVE","Button pressed or wire break (simulated)","Check area then release E-stop and reset"
+ALM_002,Source low,High,DI_Source_Low = TRUE or source level < 15 percent,Stop pump and inhibit start,Required,Source level OK and Reset if latched,"SOURCE LEVEL LOW - DRY RUN RISK","Source empty or sensor fault","Check source supply and sensor"
+ALM_004,Low flow,High,Pump running and delay elapsed and flow < 2 m3/h,Stop affected pump and switch to standby if available,Required,Investigation and Reset,"LOW FLOW ON PUMP","Closed valve or clogged filter or leak or dry run or sensor fault","Check valves and filter, inspect pump"
+
+
+WRN_001,Frequent starts,Warning,Starts per hour above threshold,Information only,Not required,Self clearing,"FREQUENT PUMP STARTS","Tight thresholds or leak or small tank","Review thresholds and check for leaks"
+WRN_002,High motor current,Warning,Current above threshold,Information only and prepare maintenance,Not required,Self clearing,"HIGH MOTOR CURRENT","Overload or mechanical friction","Schedule inspection"
+WRN_003,Pump runtime threshold,Warning,Runtime above maintenance interval,Information only,Not required,Maintenance reset,"PUMP MAINTENANCE DUE","Preventive maintenance interval reached","Schedule maintenance"
