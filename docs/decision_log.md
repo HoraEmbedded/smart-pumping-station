@@ -20,3 +20,8 @@
 | DEC-016 | 2026-10-07 | docs/parameters.md is the single source of truth for thresholds, mirrored in DB_Parameters | Avoid hard-coded values | Constants inside Ladder | Change once, rerun affected tests |
 | DEC-017 | 2026-10-07 | One tag v0.N.0 per mission, v1.0.0 at final delivery, milestones V0 to V6 group the missions | Readable history and visible progress | One tag per milestone only | Each mission is a release, milestones show progress bars |
 | DEC-018 | 2026-10-07 | Tracker administration (labels, milestones, issues, releases) done with GitHub CLI scripts | Reproducible and fast | Manual clicks in the web interface | Setup commands documented in the mission files |
+| DEC-019 | 2026-10-07 | Every mode change passes through READY | Pumps are stopped before the new mode starts | Direct transitions between modes | 3 modes, 6 simple transitions |
+| DEC-020 | 2026-10-07 | Supervisor Grafcet G0 forces G1 for stop and fault (IEC 60848 forcing order) | Priority of stop and fault without crossing arrows | Transitions from every step to 0 and 90 | Clear and extendable hierarchy |
+| DEC-021 | 2026-10-07 | After a fault reset the station returns to STOPPED, no automatic restart | No unexpected restart | Return to READY | Operator must request a start again |
+| DEC-022 | 2026-10-07 | Tank level sensor inconsistency is critical, other sensors raise warnings | Level is the controlled variable | All sensor faults critical | Station keeps running on degraded non critical data |
+| DEC-023 | 2026-10-07 | Mermaid for the state diagram, Python for Grafcet | Mermaid cannot draw Grafcet notation | Mermaid only | Both versioned and readable |
