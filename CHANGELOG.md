@@ -18,3 +18,11 @@ All notable changes are documented here. Format inspired by Keep a Changelog.
 - Tank volume balance and reference cycle (33 min fill, 100 min drain, 0.45 starts per hour)
 - I/O list (24 signals), alarm matrix (10 alarms, 2 warnings), alarm philosophy
 - Use cases and roadmap aligned with the unified roadmap
+
+## [0.3.0] - 2026-10-06
+
+### Added
+- 32 testable requirements with verification methods
+- Requirements traceability matrix
+- Test plan v0 (32 tests) written before PLC coding
+- Parameter table (22 parameters) as single source of truth
