@@ -2,7 +2,7 @@
 from common import (SIGNAL, WATER, arrow, bubble, check, motor, new_canvas, pipe,
                     pump, save, sig, tank, thin, title_block, valve)
 
-fig, ax = new_canvas(17, 9.5, xlim=(-2, 184), ylim=(-6, 100))
+fig, ax = new_canvas(17, 12, xlim=(-2, 184), ylim=(-34, 100))
 ax.set_title("Simplified P&ID: utility pumping station", fontsize=12)
 
 # Tanks
@@ -22,14 +22,14 @@ for n, y in ((1, 70), (2, 10)):
     pipe(ax, [(42, y), (64, y)])
     pipe(ax, [(76, y), (108, y)])
     valve(ax, 50, y, f"V-10{n}")
-    pump(ax, 70, y, f"P-10{n}\nPump {n}", up=(n == 1))
+    pump(ax, 70, y, f"P-10{n}\nPump {n}", up=True)
     check(ax, 88, y, f"CV-10{n}")
     valve(ax, 98, y, f"V-10{n + 2}")
 
 valve(ax, 166, 30, "V-105")
 ax.text(170, 24, "consumption\n(simulated)", ha="center", va="top", fontsize=7)
 
-# Motors and their signals (pump 1 above the middle zone, pump 2 below it)
+# Pump 1: motor below the pump, signals go down into the middle zone
 motor(ax, 65, 58, 10, 6, "M-101")
 sig(ax, 66.5, 58, 51, "DO_P1_RunCmd", into=True)
 sig(ax, 70, 58, 51, "DI_P1_RunFeedback")
@@ -38,13 +38,14 @@ bubble(ax, 86, 61, "II-101")
 thin(ax, (82, 61), (75, 61))
 sig(ax, 86, 57, 51, "AI_P1_Current_A")
 
-motor(ax, 65, 16, 10, 6, "M-102")
-sig(ax, 66.5, 22, 26, "DO_P2_RunCmd", into=True)
-sig(ax, 70, 22, 26, "DI_P2_RunFeedback")
-sig(ax, 73.5, 22, 26, "DI_P2_Fault")
-bubble(ax, 86, 19, "II-102")
-thin(ax, (82, 19), (75, 19))
-sig(ax, 86, 23, 28, "AI_P2_Current_A")
+# Pump 2: motor below the pump, signals go down to the lower zone
+motor(ax, 65, -2, 10, 6, "M-102")
+sig(ax, 66.5, -2, -8, "DO_P2_RunCmd", into=True)
+sig(ax, 70, -2, -8, "DI_P2_RunFeedback")
+sig(ax, 73.5, -2, -8, "DI_P2_Fault")
+bubble(ax, 86, 1, "II-102")
+thin(ax, (82, 1), (75, 1))
+sig(ax, 86, -3, -8, "AI_P2_Current_A")
 
 # Process instruments
 bubble(ax, 11, 64, "LT-001")
@@ -65,11 +66,10 @@ bubble(ax, 146, 64, "LT-101")
 thin(ax, (146, 60), (146, 55))
 sig(ax, 146, 68, 74, "AI_Tank_Level_pct")
 
-# Legend
-ax.plot([100, 110], [-2, -2], color=WATER, lw=3)
-ax.text(112, -2, "water", va="center", fontsize=8)
-ax.plot([128, 138], [-2, -2], color=SIGNAL, lw=1.5, ls="--")
-ax.text(140, -2, "signal to or from PLC S7-1200 (tag names as in io_list.csv)", va="center", fontsize=8)
+ax.plot([100, 110], [-32, -32], color=WATER, lw=3)
+ax.text(112, -32, "water", va="center", fontsize=8)
+ax.plot([128, 138], [-32, -32], color=SIGNAL, lw=1.5, ls="--")
+ax.text(140, -32, "signal to or from PLC S7-1200 (tag names as in io_list.csv)", va="center", fontsize=8)
 
 title_block(fig, "pid_simplified")
 save(fig, "pid_simplified")

@@ -102,7 +102,7 @@ def sig(ax, x, y_dev, y_far, text, into=False):
 
 
 def title_block(fig, name):
-    stamp = f"{name} | {VERSION} | {date.today().isoformat()} | {AUTHOR} | educational, not for construction"
+    stamp = f"{name} | {VERSION} | {date.today().isoformat()} | {AUTHOR}"
     fig.text(0.99, 0.01, stamp, ha="right", va="bottom", fontsize=7, color="#333333")
 
 
