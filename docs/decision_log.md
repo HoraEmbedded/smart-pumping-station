@@ -17,3 +17,4 @@
 | DEC-013 | 2026-10-06 | Single unified roadmap is the reference, English file names kept | Previous roadmaps removed, new one uses French file names and is inconsistent on matrix location | Follow French names literally | Mapping table in docs/roadmap.md, traceability matrix in 01_requirements |
 | DEC-014 | 2026-10-06 | Export variables extended with currents, station state and simulated power | ANO_03, ANO_06 and specific energy need them | Export list exactly as in roadmap | Applied in Mission 10 |
 | DEC-015 | 2026-10-07 | Canonical test IDs follow the roadmap week 13 matrix, extended to T32 | Roadmap reuses T01 to T04 with different meanings in weeks 4 and 13 | Two numbering schemes | One ID per test for the whole project, V1 uses T01, T02, T11, T12 |
+| DEC-016 | 2026-10-07 | docs/parameters.md is the single source of truth for thresholds, mirrored in DB_Parameters | Avoid hard-coded values | Constants inside Ladder | Change once, rerun affected tests |
