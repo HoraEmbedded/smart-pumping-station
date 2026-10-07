@@ -2,6 +2,26 @@
 
 Planned over 14 weeks, one mission at a time, one commit per step. Source: unified project roadmap.
 
+## Mission plan
+
+| Mission | Week | Scope | Tag | Status |
+| --- | --- | --- | --- | --- |
+| M1 | 1 | Repository foundation and scope | v0.1.0 | Done |
+| M2 | 1 to 2 | Process study, P&ID, I/O list, alarm matrix | v0.2.0 | Done |
+| M3 | 2 | Requirements, traceability, test plan | v0.3.0 | Done |
+| M4 | 3 | Grafcet and state machine | v0.4.0 | In progress |
+| M5 | 4 | TIA project and V1 level control | v0.5.0 | Planned |
+| M6 | 5 | Modes, interlocks, critical faults | v0.6.0 | Planned |
+| M7 | 6 | Two pumps, alternation, backup | v0.7.0 | Planned |
+| M8 | 7 | Low flow, current, frequent starts | v0.8.0 | Planned |
+| M9 | 8 | HMI overview, commands, alarms | v0.9.0 | Planned |
+| M10 | 9 | HMI finalization and operator guide | v0.10.0 | Planned |
+| M11 | 10 | Historization and IIoT architecture | v0.11.0 | Planned |
+| M12 | 11 | Dashboard and KPI | v0.12.0 | Planned |
+| M13 | 12 | Python analytics and anomalies | v0.13.0 | Planned |
+| M14 | 13 | Test campaign and regression | v0.14.0 | Planned |
+| M15 | 14 | Packaging, report, video | v1.0.0 | Planned |
+
 | Week | Objective | Expected evidence |
 | --- | --- | --- |
 | 1 | Scope, process architecture, simplified P&ID | Scope, P&ID |
