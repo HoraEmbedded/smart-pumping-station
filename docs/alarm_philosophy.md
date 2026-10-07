@@ -1,6 +1,6 @@
 # Alarm Philosophy
 
-Inspired by ISA 18.2 principles, applied at educational scale.
+Inspired by ISA 18.2 principles.
 
 ## Rules
 

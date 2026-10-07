@@ -4,8 +4,6 @@
 
 [Version française](README.fr.md)
 
-> **Safety disclaimer.** This is an educational simulation. It is not a certified hydraulic, electrical or functional safety design, and must not be used to operate a real installation.
-
 ## Problem
 
 A factory utility station must keep a storage tank between two water levels while avoiding dry running, excessive starts, overflow and unsafe restarts after a critical fault.
@@ -50,10 +48,6 @@ A simulated two-pump station controlled by a Siemens S7-1200 (TIA Portal V18), w
 ## Tooling
 
 TIA Portal V18, S7-PLCSIM V18 SP2, Python 3.13, Git, VS Code. See [docs/workstation.md](docs/workstation.md).
-
-## Limitations
-
-Simulated signals only. No real hydraulic sizing, no certified safety function, no IEC 62443 claim. Details in [01_requirements/assumptions.md](01_requirements/assumptions.md).
 
 ## Perspectives
 

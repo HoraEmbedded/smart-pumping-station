@@ -24,7 +24,3 @@ The station transfers water from a low source to a storage tank. It keeps the ta
 - Industrial cybersecurity compliance (IEC 62443)
 - Connection of the PLC to the Internet
 - Connection to a real production SCADA
-
-## Claims policy
-
-This project does not claim real commissioning, validated electrical design, certified functional safety, or validated predictive maintenance on field sensors.
