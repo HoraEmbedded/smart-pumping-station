@@ -1,0 +1,33 @@
+Req_ID,Release,Method,Design_Ref,Test_IDs,Status
+REQ-001,V1,T,FC_LevelDemand;UC-01,T01,Planned
+REQ-002,V1,T,FC_LevelDemand;UC-02,T02,Planned
+REQ-003,V1,T,FC_ModeManager,T11,Planned
+REQ-004,V1,I;T,FC_ModeManager;mode_state_description.md,T11;T14,Planned
+REQ-005,V2,T,FB_PumpControl;FC_PumpAlternation,T16,Planned
+REQ-006,V2,T,FC_PumpAlternation,T03,Planned
+REQ-007,V2,T,FC_PumpAlternation;UC-03,T04,Planned
+REQ-008,V2,T,FB_PumpControl;ALM_006;ALM_007,T04;T18,Planned
+REQ-009,V2,T,FB_PumpControl,T17,Planned
+REQ-010,V1,T,FC_Interlocks;ALM_002;UC-04,T06,Planned
+REQ-011,V1,T,FC_Interlocks;ALM_001,T08,Planned
+REQ-012,V1,T,FC_Interlocks;ALM_003,T15,Planned
+REQ-013,V1,T,FC_Interlocks;FC_ModeManager,T13;T14,Planned
+REQ-014,V1,T,FC_AlarmManager;FC_ModeManager,T09;T12,Planned
+REQ-015,V2,T,FC_AlarmManager;ALM_009,T05,Planned
+REQ-016,V2,T,FB_PumpControl;ALM_004;ALM_005;UC-05,T07;T22,Planned
+REQ-017,V2,T,FC_ReadAndScaleInputs;ALM_008,T20,Planned
+REQ-018,V2,T,FB_RuntimeAndKPI;ALM_010,T21,Planned
+REQ-019,V2,T,FB_RuntimeAndKPI,T19,Planned
+REQ-020,V2,I,alarm_matrix.csv,T24,Planned
+REQ-021,V3,D,FC_HMIInterface;DB_HMI,T30,Planned
+REQ-022,V3,I;D,FC_HMIInterface,T23,Planned
+REQ-023,V3,T,FC_HMIInterface,T23,Planned
+REQ-024,V4,T,FC_DataInterface;DB_IIoTExport,T10,Planned
+REQ-025,V4,T,FC_DataInterface,T10,Planned
+REQ-026,V4,A;T,FB_RuntimeAndKPI;python,T25,Planned
+REQ-027,V5,A;T,python,T26,Planned
+REQ-028,V1,I;T,DB_Parameters;parameters.md,T27,Planned
+REQ-029,V1,I,TIA project,T31,Planned
+REQ-030,V6,D,documentation,T28,Planned
+REQ-031,V4,I,.gitignore;architecture,T29,Planned
+REQ-032,V0,I,this matrix,T32,Planned
