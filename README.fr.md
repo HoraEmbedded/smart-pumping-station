@@ -24,7 +24,7 @@ Une station simulée à deux pompes pilotée par un automate Siemens S7-1200 (TI
 
 | Version | Objectif | État |
 | --- | --- | --- |
-| V0 | Conception : exigences, P&ID, liste d'E/S, Grafcet, plan de test | En cours |
+| V0 | Conception : exigences, P&ID, liste d'E/S, Grafcet, plan de test | Terminé |
 | V1 | Contrôle d'une seule pompe | Prévu |
 | V2 | Deux pompes, alternance, gestion des défauts | Prévu |
 | V3 | IHM/SCADA | Prévu |
