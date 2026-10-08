@@ -31,3 +31,8 @@ REQ-029,V1,I,TIA project,T31,Planned
 REQ-030,V6,D,documentation,T28,Planned
 REQ-031,V4,I,.gitignore;architecture,T29,Planned
 REQ-032,V0,I,this matrix,T32,Planned
+REQ-033,V1,T,FC_ModeManager;TR01;TR02,T33,Planned
+REQ-034,V1,T,FC_ModeManager;TR03 to TR08,T34,Planned
+REQ-035,V1,T,FC_ModeManager;TR11,T35,Planned
+REQ-036,V1,T,FC_ModeManager;P25,T36,Planned
+REQ-037,V2,T,FB_PumpControl;P23;ALM_006;ALM_007,T37,Planned

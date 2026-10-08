@@ -26,8 +26,13 @@ Single source of truth for thresholds and delays. Mirrored in `DB_Parameters` (P
 | P20 | Drain_Flow_m3h | 3 | m3/h | Level model |
 | P21 | Sim_Step_s | 0.1 | s | Euler step |
 | P22 | Time_Accel | 60 | x | Simulation acceleration |
+| P23 | Run_Feedback_Timeout_s | 5 | s | Run feedback expected after a run command, IL-04 |
+| P24 | Init_Delay_s | 2 | s | Duration of INITIALIZING |
+| P25 | Maint_Test_Max_s | 60 | s | Maximum pump test in Maintenance |
+| P26 | Source_Hyst_pct | 5 | % | Hysteresis for source recovery, IL-02 |
 
 ## Formulas
 
     mA = 4 + Raw / 1728
     Value_eng = Min + (Raw / 27648) x (Max - Min)
+

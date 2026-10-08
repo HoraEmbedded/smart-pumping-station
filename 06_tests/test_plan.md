@@ -51,3 +51,8 @@ T01, T02, T06, T08, T09, T11, T12, T13, T15, T27, T31 passed.
 | T30 | HMI screens | 021 | V3 | Open the five screens | All present and navigable | Capture |
 | T31 | Code conventions | 029 | V1 | Review blocks and tags | Functional names, commented networks | Review note |
 | T32 | Traceability review | 032 | V0 | Run the check on the matrix | Every requirement has a test and every test a requirement | Command output |
+| T33 | Initialization sequence | 033 | V1 | Power cycle, start request | State goes 0, 10, then 20 only after Init_Delay_s | Capture |
+| T34 | Mode change stops pumps | 034 | V1 | Pump running in Auto, switch selector to Manual | Pump stops, state passes through READY, then Manual | Capture |
+| T35 | No restart after reset | 035 | V1 | Cause cleared, reset | State STOPPED, no pump command until a new start request | Capture |
+| T36 | Maintenance test limit | 036 | V1 | Maintenance mode, pump test command | Pump stops after Maint_Test_Max_s | Capture |
+| T37 | Run feedback timeout | 037 | V2 | Command a pump with feedback forced FALSE | After 5 s ALM_006, pump unavailable | Capture |
