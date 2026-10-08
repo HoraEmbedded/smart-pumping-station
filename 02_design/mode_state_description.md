@@ -65,6 +65,12 @@ An active warning turns the amber lamp on in any state. The audible alarm sounds
 
 An invalid selector (none or several modes selected) counts as "not selected": the station stays in or returns to READY.
 
+## Automatic cycle
+
+![Grafcet G3](diagrams/grafcet_auto_cycle.png)
+
+G3 is enclosed in step 30. Leaving step 30 resets G3 to step 0 and switches the run commands off.
+
 ## Allowed actions per state
 
 | Action | 0 | 10 | 20 | 30 | 40 | 50 | 90 |
