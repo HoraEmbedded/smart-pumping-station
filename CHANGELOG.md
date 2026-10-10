@@ -47,3 +47,15 @@ All notable changes are documented here. Format inspired by Keep a Changelog.
 ### Changed
 - Sources cleaned of internal references, blocks organized in groups
 - Repository vocabulary: missions renamed to iterations
+
+## [0.7.0] - 2026-10-10
+
+### Added
+- Second pump with automatic alternation after a normal cycle
+- Backup pump when the priority pump is unavailable, including mid-cycle takeover
+- Latched pump faults and a critical alarm when no pump is available
+- One-pump-at-a-time interlock and restart delay verified
+- Six new tests with evidence, regression of the single-pump tests
+
+### Changed
+- Level demand merged into the automatic cycle block

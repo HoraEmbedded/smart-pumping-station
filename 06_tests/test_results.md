@@ -1,4 +1,4 @@
-# Test Results
+# Test Results - Mission 7 Update
 
 | ID | Date | Result | Evidence | Notes |
 | --- | --- | --- | --- | --- |
@@ -10,12 +10,10 @@
 | T12 | 2026-10-10 | Pass | evidence/T12_reset_no_fault.png | Reset has no effect when no fault exists |
 | T27 | 2026-10-10 | Pass | evidence/T27_parameter_edit.png | Immediate threshold update without reload |
 | T31 | 2026-10-10 | Pass | Command output | No raw address in sources |
-| T06 | 2026-10-10 | Pass | evidence/T06_source_low.png | Interlock active on low source, hysteresis verified at 21% |
-| T13 | 2026-10-10 | Pass | evidence/T13_manual_refused.png | HMI command ignored if source low, runs when water returns |
-| T14 | 2026-10-10 | Pass | evidence/T14_maintenance.png | Auto mode isolated, manual control authorized |
-| T36 | 2026-10-10 | Pass | evidence/T36_test_limit.png | Maintenance pump runtime cutoff triggered after 10 s |
-| T08 | 2026-10-10 | Pass | evidence/T08_estop.png | Emergency stop forces state 90, red lamp and siren active |
-| T09 | 2026-10-10 | Pass | evidence/T09_reset_before_fix.png | Reset command rejected while E-stop button is pressed |
-| T35 | 2026-10-10 | Pass | evidence/T35_no_restart.png | Safe state 0 recovery on reset, no automatic pump restart |
-| T15 | 2026-10-10 | Pass | evidence/T15_level_critical.png | Tank overflow (96%) locks state 90, reset allowed below 95% |
-| T31b| 2026-10-10 | Pass | evidence/T31_bonus_sensor_fault.png | **Bonus:** Sensor open loop (-600 on %IW64) triggers state 90 |
+| T16 | 2026-10-10 | Pass | evidence/T16_one_pump.png | Mutual exclusion validated, pump 1 takes priority |
+| T17 | 2026-10-10 | Pass | evidence/T17_restart_delay.png | Anti-short cycle delay blocks restart for 30 s |
+| T18 | 2026-10-10 | Pass | evidence/T18_faulted_pump.png | Pump hardware faults are securely latched until reset |
+| T04 | 2026-10-10 | Pass | evidence/T04_backup.png | Automated switchover to backup pump 2 on P1 fault |
+| **T05** | 2026-10-10 | Pass | evidence/T05_no_pump.png | Dual fault locks state 90, single reset recovery works |
+| T03 | 2026-10-10 | Pass | evidence/T03_alternation.mp4 | Alternation swaps priority between pumps after normal cycle |
+| T04b| 2026-10-10 | Pass | evidence/T04b_mid_cycle_takeover.png | **Bonus:** Mid-cycle takeover verified, priority preserved |
