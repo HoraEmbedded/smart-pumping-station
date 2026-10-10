@@ -1,0 +1,37 @@
+﻿ORGANIZATION_BLOCK "Main"
+TITLE = "Main Program Sweep (Cycle)"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+
+BEGIN
+	"FC_ReadAndScaleInputs"();
+	"FC_Interlocks"();
+	"FC_AlarmLatch"();
+	
+	"DB_ModeManager"(StartReq := "DI_Start_System",
+	                 StopReq := "DI_Stop_System",
+	                 CriticalFault := "DB_Alarms".CriticalActive,
+	                 SelAuto := "DI_Mode_Auto",
+	                 SelManual := "DI_Mode_Manual",
+	                 SelMaint := "DI_Mode_Maintenance",
+	                 InitDelay := "DB_Parameters".Init_Delay,
+	                 State => "DB_StationState".StationState);
+	
+	"FC_LevelDemand"();
+	
+	"DB_Pump1"(Enable := ("DB_StationState".StationState >= 20) AND ("DB_StationState".StationState <= 50),
+	           AutoRequest := ("DB_StationState".StationState = 30) AND "DB_StationState".PumpingDemand,
+	           ManualRequest := ("DB_StationState".StationState = 40) AND "DB_HMI".P1_PumpCmd,
+	           TestRequest := ("DB_StationState".StationState = 50) AND "DB_HMI".P1_PumpCmd,
+	           FaultOK := "DI_P1_Fault",
+	           RunFeedback := "DB_Process".P1_RunFeedback,
+	           SourceOK := "DB_StationState".SourceOK,
+	           EStopOK := "DB_StationState".EStopOK,
+	           RestartDelay := "DB_Parameters".Restart_Delay,
+	           TestMax := "DB_Parameters".Maint_Test_Max,
+	           Clock1Hz := "Clock_1Hz");
+	
+	"FC_WriteOutputs"();
+	"FC_Indicators"();
+END_ORGANIZATION_BLOCK
+

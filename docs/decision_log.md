@@ -25,3 +25,4 @@
 | DEC-021 | 2026-10-07 | After a fault reset the station returns to STOPPED, no automatic restart | No unexpected restart | Return to READY | Operator must request a start again |
 | DEC-022 | 2026-10-07 | Tank level sensor inconsistency is critical, other sensors raise warnings | Level is the controlled variable | All sensor faults critical | Station keeps running on degraded non critical data |
 | DEC-023 | 2026-10-07 | Mermaid for the state diagram, Python for Grafcet | Mermaid cannot draw Grafcet notation | Mermaid only | Both versioned and readable |
+| DEC-024 | 2026-10-10 | Planned blocks reduced from 13 to 11: level demand, alternation and backup merge into FB_AutoCycle, HMI and data interfaces into FC_Interfaces | One block per diagram, less scattering | One block per function | FB_AutoCycle follows the automatic cycle Grafcet |

@@ -12,9 +12,20 @@
 | Clock memory | Byte MB0, Clock_1Hz = %M0.5 |
 | Simulation | S7-PLCSIM V18 SP2 |
 
-## Language and sources
+## Blocks and languages
 
-All logic is written in SCL (IEC 61131-3). Sources live in `03_plc/src/` and are imported with Generate blocks from source. After any edit made inside TIA, regenerate the source from the blocks and overwrite the file in the repository. The binary project is not versioned, it is archived in GitHub Releases.
+| Group | Block | Language | Role |
+| --- | --- | --- | --- |
+| Main | OB1 | SCL | Orchestration only |
+| IO | FC_ScaleAnalog, FC_ReadAndScaleInputs, FC_WriteOutputs | SCL | Scaling, effective values, pump outputs |
+| IO | FC_Indicators | LAD | Lamps and siren |
+| Control | FB_ModeManager | SCL | State machine |
+| Control | FC_Interlocks | SCL | Fault causes, source availability |
+| Control | FC_AlarmLatch | LAD | Latched critical alarms and reset |
+| Control | FC_LevelDemand, FB_PumpControl | SCL | Level hysteresis, pump logic |
+| Process_Sim | OB30, FC_SimulationModel | SCL | Tank model at 100 ms |
+
+SCL sources are in `03_plc/src` and are the reference. Ladder blocks are documented with screenshots in `captures/`.
 
 ## Naming
 
