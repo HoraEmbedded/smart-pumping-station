@@ -2,16 +2,20 @@ FUNCTION "FC_Interlocks" : Void
 { S7_Optimized_Access := 'TRUE' }
 VERSION : 0.1
 BEGIN
-	// IL-01: simulated E-stop, NC contact, FALSE means stop.
-	// Latching in FAULT and ALM_001 are added in Iteration 6.
-	"DB_StationState".EStopOK := "DI_EStop_Sim";
+    // Normally closed E-stop contact: FALSE means stop, a cut wire gives the same result.
+    "DB_StationState".EStopOK := "DI_EStop_Sim";
+    "DB_Alarms".EStopCause := NOT "DI_EStop_Sim";
 
-	// IL-02: source availability with hysteresis (P04 and P26).
-	IF "DI_Source_Low" OR NOT "DB_Process".SourceLevel_Valid
-	   OR ("DB_Process".SourceLevel_pct < "DB_Parameters".Source_Min) THEN
-	    "DB_StationState".SourceOK := FALSE;
-	ELSIF NOT "DI_Source_Low" AND "DB_Process".SourceLevel_Valid
-	   AND ("DB_Process".SourceLevel_pct >= "DB_Parameters".Source_Min + "DB_Parameters".Source_Hyst_pct) THEN
-	    "DB_StationState".SourceOK := TRUE;
-	END_IF;
+    "DB_Alarms".TankSensorCause := NOT "DB_Process".TankLevel_Valid;
+    "DB_Alarms".LevelCritCause := "DB_Process".TankLevel_Valid
+                                  AND ("DB_Process".TankLevel_pct > "DB_Parameters".Level_CritHigh);
+
+    // Source availability with hysteresis, so it does not chatter around the minimum.
+    IF "DI_Source_Low" OR NOT "DB_Process".SourceLevel_Valid
+       OR ("DB_Process".SourceLevel_pct < "DB_Parameters".Source_Min) THEN
+        "DB_StationState".SourceOK := FALSE;
+    ELSIF "DB_Process".SourceLevel_pct >= "DB_Parameters".Source_Min + "DB_Parameters".Source_Hyst_pct THEN
+        "DB_StationState".SourceOK := TRUE;
+    END_IF;
+    "DB_Alarms".SourceLowActive := NOT "DB_StationState".SourceOK;
 END_FUNCTION

@@ -2,15 +2,6 @@ FUNCTION "FC_WriteOutputs" : Void
 { S7_Optimized_Access := 'TRUE' }
 VERSION : 0.1
 BEGIN
-	// Maps logic results to physical outputs. P2 and the siren are added later.
-	"DO_P1_RunCmd" := "DB_Pump1".RunCommand;
-	"DO_P2_RunCmd" := FALSE;
-
-	// Lamps follow the state table of mode_state_description.md.
-	"DO_Green_Lamp" := ("DB_StationState".StationState = 20) OR ("DB_StationState".StationState = 30)
-	                   OR ("DB_StationState".StationState = 40)
-	                   OR (("DB_StationState".StationState = 10) AND "Clock_1Hz");
-	"DO_Amber_Lamp" := ("DB_StationState".StationState = 50);
-	"DO_Red_Lamp" := ("DB_StationState".StationState = 90);
-	"DO_Audible_Alarm" := FALSE;
+    "DO_P1_RunCmd" := "DB_Pump1".RunCommand;
+    "DO_P2_RunCmd" := FALSE;
 END_FUNCTION

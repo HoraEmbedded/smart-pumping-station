@@ -4,11 +4,14 @@ VERSION : 0.1
    VAR_INPUT 
       Enable : Bool;
       AutoRequest : Bool;
+      ManualRequest : Bool;
+      TestRequest : Bool;
       FaultOK : Bool;
       RunFeedback : Bool;
       SourceOK : Bool;
       EStopOK : Bool;
       RestartDelay : Time;
+      TestMax : Time;
       Clock1Hz : Bool;
    END_VAR
 
@@ -23,38 +26,45 @@ VERSION : 0.1
 
    VAR 
       tRestart : TOF_TIME;
+      tTest : TON_TIME;
       rStart : R_TRIG;
       fStop : F_TRIG;
       r1s : R_TRIG;
    END_VAR
 
+   VAR_TEMP 
+      request : Bool;
+   END_VAR
+
 BEGIN
-	// Pump available when enabled and the fault input is healthy (NC contact).
-	// Low flow and feedback timeout are added in Iterations 7 and 8.
-	#Available := #Enable AND #FaultOK;
+    // A pump is available when enabled and its protection contact is healthy (NC, TRUE = healthy).
+    #Available := #Enable AND #FaultOK;
 
-	// Anti-restart delay (IL-07): TOF output stays TRUE during RestartDelay after a stop.
-	#tRestart(IN := #RunCommand, PT := #RestartDelay);
+    // A maintenance test stops after TestMax and needs a new command to run again.
+    #tTest(IN := #TestRequest, PT := #TestMax);
+    #request := #AutoRequest OR #ManualRequest OR (#TestRequest AND NOT #tTest.Q);
 
-	// Run command: request, interlocks and restart delay satisfied.
-	IF #Available AND #AutoRequest AND #SourceOK AND #EStopOK AND (#RunCommand OR NOT #tRestart.Q) THEN
-	    #RunCommand := TRUE;
-	ELSE
-	    #RunCommand := FALSE;
-	END_IF;
+    // The output of the off-delay timer stays TRUE during the restart delay after a stop.
+    #tRestart(IN := #RunCommand, PT := #RestartDelay);
 
-	// Start and stop events on edges of the run command .
-	#rStart(CLK := #RunCommand);
-	#fStop(CLK := #RunCommand);
-	#StartEvent := #rStart.Q;
-	#StopEvent := #fStop.Q;
-	IF #StartEvent THEN
-	    #StartCount := #StartCount + 1;
-	END_IF;
+    IF #Available AND #request AND #SourceOK AND #EStopOK AND (#RunCommand OR NOT #tRestart.Q) THEN
+        #RunCommand := TRUE;
+    ELSE
+        #RunCommand := FALSE;
+    END_IF;
 
-	// Runtime in seconds
-	#r1s(CLK := #Clock1Hz);
-	IF #r1s.Q AND #RunFeedback THEN
-	    #Runtime_s := #Runtime_s + 1;
-	END_IF;
+    // Count starts on the edge of the command, not on every scan.
+    #rStart(CLK := #RunCommand);
+    #fStop(CLK := #RunCommand);
+    #StartEvent := #rStart.Q;
+    #StopEvent := #fStop.Q;
+    IF #StartEvent THEN
+        #StartCount := #StartCount + 1;
+    END_IF;
+
+    // Runtime in seconds, one tick per clock edge while the feedback is on.
+    #r1s(CLK := #Clock1Hz);
+    IF #r1s.Q AND #RunFeedback THEN
+        #Runtime_s := #Runtime_s + 1;
+    END_IF;
 END_FUNCTION_BLOCK

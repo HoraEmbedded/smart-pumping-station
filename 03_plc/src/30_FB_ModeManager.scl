@@ -4,8 +4,7 @@ VERSION : 0.1
    VAR_INPUT 
       StartReq : Bool;
       StopReq : Bool;
-      ResetReq : Bool;
-      EStopOK : Bool;
+      CriticalFault : Bool;
       SelAuto : Bool;
       SelManual : Bool;
       SelMaint : Bool;
@@ -29,58 +28,61 @@ VERSION : 0.1
    END_VAR
 
 BEGIN
-	// Station state machine. States: 0 STOPPED, 10 INITIALIZING, 20 READY,
-	// 30 AUTO_RUNNING, 40 MANUAL_RUNNING, 50 MAINTENANCE, 90 FAULT.
-	
-	#rStart(CLK := #StartReq);
-	#rStop(CLK := #StopReq);
-	#tInit(IN := (#State = 10), PT := #InitDelay);
+    // States: 0 stopped, 10 initializing, 20 ready, 30 auto, 40 manual, 50 maintenance, 90 fault
+    #rStart(CLK := #StartReq);
+    #rStop(CLK := #StopReq);
+    #tInit(IN := (#State = 10), PT := #InitDelay);
 
-	// A selector is valid only when exactly one mode is selected.
-	#onlyAuto := #SelAuto AND NOT #SelManual AND NOT #SelMaint;
-	#onlyManual := #SelManual AND NOT #SelAuto AND NOT #SelMaint;
-	#onlyMaint := #SelMaint AND NOT #SelAuto AND NOT #SelManual;
+    // A mode counts only when it is the single selected position.
+    #onlyAuto := #SelAuto AND NOT #SelManual AND NOT #SelMaint;
+    #onlyManual := #SelManual AND NOT #SelAuto AND NOT #SelMaint;
+    #onlyMaint := #SelMaint AND NOT #SelAuto AND NOT #SelManual;
 
-	CASE #State OF
-	    0:  // STOPPED, TR01
-	        IF #rStart.Q AND #EStopOK THEN
-	            #State := 10;
-	        END_IF;
-	    10: // INITIALIZING, TR02
-	        IF #tInit.Q AND #EStopOK THEN
-	            #State := 20;
-	        END_IF;
-	    20: // READY, TR03 to TR05 and TR09
-	        IF #rStop.Q THEN
-	            #State := 0;
-	        ELSIF #onlyAuto THEN
-	            #State := 30;
-	        ELSIF #onlyManual THEN
-	            #State := 40;
-	        ELSIF #onlyMaint THEN
-	            #State := 50;
-	        END_IF;
-	    30: // AUTO_RUNNING, TR06 and TR09
-	        IF #rStop.Q THEN
-	            #State := 0;
-	        ELSIF NOT #onlyAuto THEN
-	            #State := 20;
-	        END_IF;
-	    40: // MANUAL_RUNNING, TR07 and TR09
-	        IF #rStop.Q THEN
-	            #State := 0;
-	        ELSIF NOT #onlyManual THEN
-	            #State := 20;
-	        END_IF;
-	    50: // MAINTENANCE, TR08 and TR09
-	        IF #rStop.Q THEN
-	            #State := 0;
-	        ELSIF NOT #onlyMaint THEN
-	            #State := 20;
-	        END_IF;
-	    90: // FAULT
-	        #State := 90;
-	ELSE
-	    #State := 0;
-	END_CASE;
+    IF #CriticalFault THEN
+        #State := 90;
+    ELSE
+        CASE #State OF
+            0:
+                IF #rStart.Q THEN
+                    #State := 10;
+                END_IF;
+            10:
+                IF #tInit.Q THEN
+                    #State := 20;
+                END_IF;
+            20:
+                IF #rStop.Q THEN
+                    #State := 0;
+                ELSIF #onlyAuto THEN
+                    #State := 30;
+                ELSIF #onlyManual THEN
+                    #State := 40;
+                ELSIF #onlyMaint THEN
+                    #State := 50;
+                END_IF;
+            30:
+                IF #rStop.Q THEN
+                    #State := 0;
+                ELSIF NOT #onlyAuto THEN
+                    #State := 20;
+                END_IF;
+            40:
+                IF #rStop.Q THEN
+                    #State := 0;
+                ELSIF NOT #onlyManual THEN
+                    #State := 20;
+                END_IF;
+            50:
+                IF #rStop.Q THEN
+                    #State := 0;
+                ELSIF NOT #onlyMaint THEN
+                    #State := 20;
+                END_IF;
+            90:
+                // Faults are cleared: back to stopped, a new start request is required.
+                #State := 0;
+        ELSE
+            #State := 0;
+        END_CASE;
+    END_IF;
 END_FUNCTION_BLOCK
