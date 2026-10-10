@@ -1,0 +1,23 @@
+DATA_BLOCK "DB_Process"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR 
+      TankLevel_pct : Real;
+      TankLevel_Valid : Bool;
+      SourceLevel_pct : Real;
+      SourceLevel_Valid : Bool;
+      Flow_m3h : Real;
+      Flow_Valid : Bool;
+      Pressure_bar : Real;
+      Pressure_Valid : Bool;
+      P1_Current_A : Real;
+      P1_Current_Valid : Bool;
+      P2_Current_A : Real;
+      P2_Current_Valid : Bool;
+      P1_RunFeedback : Bool;
+      P2_RunFeedback : Bool;
+   END_VAR
+
+BEGIN
+
+END_DATA_BLOCK

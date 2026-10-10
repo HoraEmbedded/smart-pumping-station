@@ -1,0 +1,22 @@
+DATA_BLOCK "DB_Sim"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR 
+      Sim_Enable : Bool := TRUE;
+      Sim_Run : Bool := TRUE;
+      Sim_Reset : Bool := FALSE;
+      Drain_Enable : Bool := TRUE;
+      TankLevel_pct : Real := 50.0;
+      SourceLevel_pct : Real := 80.0;
+      Pressure_Run_bar : Real := 4.0;
+      Flow_m3h : Real := 0.0;
+      Pressure_bar : Real := 0.0;
+      P1_Current_A : Real := 0.0;
+      P2_Current_A : Real := 0.0;
+      P1_RunFeedback : Bool := FALSE;
+      P2_RunFeedback : Bool := FALSE;
+   END_VAR
+
+BEGIN
+
+END_DATA_BLOCK

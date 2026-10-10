@@ -1,0 +1,13 @@
+DATA_BLOCK "DB_StationState"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR 
+      StationState : Int := 0;
+      PumpingDemand : Bool := FALSE;
+      SourceOK : Bool := FALSE;
+      EStopOK : Bool := FALSE;
+   END_VAR
+
+BEGIN
+
+END_DATA_BLOCK

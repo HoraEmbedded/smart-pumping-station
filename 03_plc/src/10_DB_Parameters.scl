@@ -1,0 +1,35 @@
+DATA_BLOCK "DB_Parameters"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR 
+      Level_Low : Real := 30.0;               // P01 %
+      Level_High : Real := 80.0;              // P02 %
+      Level_CritHigh : Real := 95.0;          // P03 %
+      Source_Min : Real := 15.0;              // P04 %
+      Flow_Min : Real := 2.0;                 // P05 m3/h
+      Flow_Validation : Time := T#10s;        // P06
+      Restart_Delay : Time := T#30s;          // P07
+      FreqStarts_Max : Int := 3;              // P08
+      FreqStarts_Window_min : Int := 60;      // P09
+      Current_Nominal : Real := 10.0;         // P10 A
+      Current_High : Real := 12.0;            // P11 A
+      Current_High_Delay : Time := T#5s;      // P12
+      Maintenance_Interval_h : Real := 500.0; // P13
+      Raw_Low_Limit : Int := -500;            // P14
+      Raw_High_Limit : Int := 28500;          // P15
+      LevelRise_Window : Time := T#60s;       // P16
+      LevelRise_Min : Real := 0.5;            // P17 %
+      Tank_Volume : Real := 10.0;             // P18 m3
+      Pump_Flow : Real := 12.0;               // P19 m3/h
+      Drain_Flow : Real := 3.0;               // P20 m3/h
+      Sim_Step : Real := 0.1;                 // P21 s, equals the OB30 period
+      Time_Accel : Real := 1.0;               // P22
+      Run_Feedback_Timeout : Time := T#5s;    // P23
+      Init_Delay : Time := T#2s;              // P24
+      Maint_Test_Max : Time := T#60s;         // P25
+      Source_Hyst_pct : Real := 5.0;          // P26 %
+   END_VAR
+
+BEGIN
+
+END_DATA_BLOCK
