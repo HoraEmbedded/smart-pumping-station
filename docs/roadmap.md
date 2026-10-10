@@ -11,8 +11,8 @@ Planned over 14 weeks, one iteration at a time, one commit per step. Source: uni
 | I3 | 2 | Requirements, traceability, test plan | v0.3.0 | Done |
 | I4 | 3 | Grafcet and state machine | v0.4.0 | Done |
 | I5 | 4 | TIA project and V1 level control | v0.5.0 | Done |
-| I6 | 5 | Modes, interlocks, critical faults | v0.6.0 | In progress|
-| I7 | 6 | Two pumps, alternation, backup | v0.7.0 | Planned |
+| I6 | 5 | Modes, interlocks, critical faults | v0.6.0 | Done|
+| I7 | 6 | Two pumps, alternation, backup | v0.7.0 | In progress |
 | I8 | 7 | Low flow, current, frequent starts | v0.8.0 | Planned |
 | I9 | 8 | HMI overview, commands, alarms | v0.9.0 | Planned |
 | I10 | 9 | HMI finalization and operator guide | v0.10.0 | Planned |
