@@ -10,6 +10,14 @@ BEGIN
     "DB_Alarms".LevelCritCause := "DB_Process".TankLevel_Valid
                                   AND ("DB_Process".TankLevel_pct > "DB_Parameters".Level_CritHigh);
 
+    // Pump protection contacts are normally closed: FALSE means fault.
+    "DB_Alarms".P1FaultCause := NOT "DI_P1_Fault";
+    "DB_Alarms".P2FaultCause := NOT "DI_P2_Fault";
+
+    // Stays active after a trip while both protection contacts are still open.
+    "DB_Alarms".NoPumpCause := "DB_AutoCycle".NoPumpAvailable
+        OR ("DB_Alarms".NoPumpLatched AND "DB_Alarms".P1FaultCause AND "DB_Alarms".P2FaultCause);
+
     // Source availability with hysteresis, so it does not chatter around the minimum.
     IF "DI_Source_Low" OR NOT "DB_Process".SourceLevel_Valid
        OR ("DB_Process".SourceLevel_pct < "DB_Parameters".Source_Min) THEN

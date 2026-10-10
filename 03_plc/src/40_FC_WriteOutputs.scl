@@ -3,5 +3,5 @@ FUNCTION "FC_WriteOutputs" : Void
 VERSION : 0.1
 BEGIN
     "DO_P1_RunCmd" := "DB_Pump1".RunCommand;
-    "DO_P2_RunCmd" := FALSE;
+    "DO_P2_RunCmd" := "DB_Pump2".RunCommand;
 END_FUNCTION
