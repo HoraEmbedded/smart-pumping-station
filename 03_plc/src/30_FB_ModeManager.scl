@@ -1,0 +1,86 @@
+FUNCTION_BLOCK "FB_ModeManager"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      StartReq : Bool;
+      StopReq : Bool;
+      ResetReq : Bool;
+      EStopOK : Bool;
+      SelAuto : Bool;
+      SelManual : Bool;
+      SelMaint : Bool;
+      InitDelay : Time;
+   END_VAR
+
+   VAR_OUTPUT 
+      State : Int := 0;
+   END_VAR
+
+   VAR 
+      rStart : R_TRIG;
+      rStop : R_TRIG;
+      tInit : TON_TIME;
+   END_VAR
+
+   VAR_TEMP 
+      onlyAuto : Bool;
+      onlyManual : Bool;
+      onlyMaint : Bool;
+   END_VAR
+
+BEGIN
+	// Station state machine. States: 0 STOPPED, 10 INITIALIZING, 20 READY,
+	// 30 AUTO_RUNNING, 40 MANUAL_RUNNING, 50 MAINTENANCE, 90 FAULT.
+	
+	#rStart(CLK := #StartReq);
+	#rStop(CLK := #StopReq);
+	#tInit(IN := (#State = 10), PT := #InitDelay);
+
+	// A selector is valid only when exactly one mode is selected.
+	#onlyAuto := #SelAuto AND NOT #SelManual AND NOT #SelMaint;
+	#onlyManual := #SelManual AND NOT #SelAuto AND NOT #SelMaint;
+	#onlyMaint := #SelMaint AND NOT #SelAuto AND NOT #SelManual;
+
+	CASE #State OF
+	    0:  // STOPPED, TR01
+	        IF #rStart.Q AND #EStopOK THEN
+	            #State := 10;
+	        END_IF;
+	    10: // INITIALIZING, TR02
+	        IF #tInit.Q AND #EStopOK THEN
+	            #State := 20;
+	        END_IF;
+	    20: // READY, TR03 to TR05 and TR09
+	        IF #rStop.Q THEN
+	            #State := 0;
+	        ELSIF #onlyAuto THEN
+	            #State := 30;
+	        ELSIF #onlyManual THEN
+	            #State := 40;
+	        ELSIF #onlyMaint THEN
+	            #State := 50;
+	        END_IF;
+	    30: // AUTO_RUNNING, TR06 and TR09
+	        IF #rStop.Q THEN
+	            #State := 0;
+	        ELSIF NOT #onlyAuto THEN
+	            #State := 20;
+	        END_IF;
+	    40: // MANUAL_RUNNING, TR07 and TR09
+	        IF #rStop.Q THEN
+	            #State := 0;
+	        ELSIF NOT #onlyManual THEN
+	            #State := 20;
+	        END_IF;
+	    50: // MAINTENANCE, TR08 and TR09
+	        IF #rStop.Q THEN
+	            #State := 0;
+	        ELSIF NOT #onlyMaint THEN
+	            #State := 20;
+	        END_IF;
+	    90: // FAULT
+	        #State := 90;
+	ELSE
+	    #State := 0;
+	END_CASE;
+END_FUNCTION_BLOCK

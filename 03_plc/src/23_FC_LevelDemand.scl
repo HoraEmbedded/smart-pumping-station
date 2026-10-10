@@ -1,0 +1,18 @@
+FUNCTION "FC_LevelDemand" : Void
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+BEGIN
+	// Hysteresis: demand set at Level_Low (P01), cleared at Level_High (P02).
+	// Demand only exists in AUTO_RUNNING (state 30). Invalid tank level: no demand.
+	IF "DB_StationState".StationState <> 30 THEN
+	    "DB_StationState".PumpingDemand := FALSE;
+	ELSIF "DB_Process".TankLevel_Valid THEN
+	    IF "DB_Process".TankLevel_pct <= "DB_Parameters".Level_Low THEN
+	        "DB_StationState".PumpingDemand := TRUE;
+	    ELSIF "DB_Process".TankLevel_pct >= "DB_Parameters".Level_High THEN
+	        "DB_StationState".PumpingDemand := FALSE;
+	    END_IF;
+	ELSE
+	    "DB_StationState".PumpingDemand := FALSE;
+	END_IF;
+END_FUNCTION

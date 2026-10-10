@@ -1,0 +1,26 @@
+FUNCTION "FC_ScaleAnalog" : Void
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      Raw : Int;
+      EngMin : Real;
+      EngMax : Real;
+      LowLimit : Int;
+      HighLimit : Int;
+   END_VAR
+
+   VAR_OUTPUT 
+      Value : Real;
+      Valid : Bool;
+   END_VAR
+
+BEGIN
+	// Scale a 4-20 mA raw value (0 to 27648) to engineering units.
+	// Raw outside the limits means wire break or over-range: Valid = FALSE.
+	#Valid := (#Raw >= #LowLimit) AND (#Raw <= #HighLimit);
+	IF #Valid THEN
+	    #Value := #EngMin + (INT_TO_REAL(#Raw) / 27648.0) * (#EngMax - #EngMin);
+	ELSE
+	    #Value := #EngMin;
+	END_IF;
+END_FUNCTION
