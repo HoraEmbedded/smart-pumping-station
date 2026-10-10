@@ -4,6 +4,8 @@ VERSION : 0.1
    VAR 
       P1_PumpCmd : Bool;
       P2_PumpCmd : Bool;
+      MaintReset_P1 : Bool;
+      MaintReset_P2 : Bool;
    END_VAR
 
 BEGIN

@@ -15,6 +15,12 @@ VERSION : 0.1
       P2_Current_A : Real := 0.0;
       P1_RunFeedback : Bool := FALSE;
       P2_RunFeedback : Bool := FALSE;
+      Inject_P1_LowFlow : Bool;
+      Inject_P2_LowFlow : Bool;
+      Inject_P1_NoFeedback : Bool;
+      Inject_P2_NoFeedback : Bool;
+      Inject_P1_HighCurrent : Bool;
+      Inject_P2_HighCurrent : Bool;
    END_VAR
 
 BEGIN

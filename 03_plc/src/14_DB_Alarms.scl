@@ -7,12 +7,16 @@ VERSION : 0.1
       TankSensorCause : Bool;
       P1FaultCause : Bool;
       P2FaultCause : Bool;
+      P1LowFlowCause : Bool;
+      P2LowFlowCause : Bool;
       NoPumpCause : Bool;
       EStopLatched : Bool;
       LevelCritLatched : Bool;
       TankSensorLatched : Bool;
       P1FaultLatched : Bool;
       P2FaultLatched : Bool;
+      P1LowFlowLatched : Bool;
+      P2LowFlowLatched : Bool;
       NoPumpLatched : Bool;
       SourceLowActive : Bool;
       CriticalActive : Bool;

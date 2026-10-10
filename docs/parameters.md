@@ -30,6 +30,7 @@ Single source of truth for thresholds and delays. Mirrored in `DB_Parameters` (P
 | P24 | Init_Delay_s | 2 | s | Duration of INITIALIZING |
 | P25 | Maint_Test_Max_s | 60 | s | Maximum pump test in Maintenance |
 | P26 | Source_Hyst_pct | 5 | % | Hysteresis for source recovery, IL-02 |
+| P27 | Sim_HighCurrent_Factor | 1.3 | x | Current multiplier when a high current fault is injected |
 
 ## Formulas
 

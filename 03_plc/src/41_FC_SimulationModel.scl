@@ -5,6 +5,8 @@ VERSION : 0.1
       qIn : Real;
       qOut : Real;
       dLevel : Real;
+      p1Pumping : Bool;
+      p2Pumping : Bool;
    END_VAR
 
 BEGIN
@@ -15,11 +17,16 @@ BEGIN
         "DB_Sim".Sim_Reset := FALSE;
     END_IF;
 
-    "DB_Sim".P1_RunFeedback := "DB_Pump1".RunCommand;
-    "DB_Sim".P2_RunFeedback := "DB_Pump2".RunCommand;
+    // An injected fault keeps the contactor from closing: no feedback, no pumping.
+    "DB_Sim".P1_RunFeedback := "DB_Pump1".RunCommand AND NOT "DB_Sim".Inject_P1_NoFeedback;
+    "DB_Sim".P2_RunFeedback := "DB_Pump2".RunCommand AND NOT "DB_Sim".Inject_P2_NoFeedback;
+
+    // A blocked line gives no flow although the motor runs.
+    #p1Pumping := "DB_Sim".P1_RunFeedback AND NOT "DB_Sim".Inject_P1_LowFlow;
+    #p2Pumping := "DB_Sim".P2_RunFeedback AND NOT "DB_Sim".Inject_P2_LowFlow;
 
     #qIn := 0.0;
-    IF ("DB_Sim".P1_RunFeedback OR "DB_Sim".P2_RunFeedback) AND ("DB_Sim".SourceLevel_pct > 0.0) THEN
+    IF (#p1Pumping OR #p2Pumping) AND ("DB_Sim".SourceLevel_pct > 0.0) THEN
         #qIn := "DB_Parameters".Pump_Flow;
     END_IF;
     #qOut := 0.0;
@@ -39,13 +46,22 @@ BEGIN
     ELSE
         "DB_Sim".Pressure_bar := 0.0;
     END_IF;
+
     IF "DB_Sim".P1_RunFeedback THEN
-        "DB_Sim".P1_Current_A := "DB_Parameters".Current_Nominal;
+        IF "DB_Sim".Inject_P1_HighCurrent THEN
+            "DB_Sim".P1_Current_A := "DB_Parameters".Current_Nominal * "DB_Parameters".Sim_HighCurrent_Factor;
+        ELSE
+            "DB_Sim".P1_Current_A := "DB_Parameters".Current_Nominal;
+        END_IF;
     ELSE
         "DB_Sim".P1_Current_A := 0.0;
     END_IF;
     IF "DB_Sim".P2_RunFeedback THEN
-        "DB_Sim".P2_Current_A := "DB_Parameters".Current_Nominal;
+        IF "DB_Sim".Inject_P2_HighCurrent THEN
+            "DB_Sim".P2_Current_A := "DB_Parameters".Current_Nominal * "DB_Parameters".Sim_HighCurrent_Factor;
+        ELSE
+            "DB_Sim".P2_Current_A := "DB_Parameters".Current_Nominal;
+        END_IF;
     ELSE
         "DB_Sim".P2_Current_A := 0.0;
     END_IF;
