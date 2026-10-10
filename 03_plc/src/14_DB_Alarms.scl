@@ -5,9 +5,15 @@ VERSION : 0.1
       EStopCause : Bool;
       LevelCritCause : Bool;
       TankSensorCause : Bool;
+      P1FaultCause : Bool;
+      P2FaultCause : Bool;
+      NoPumpCause : Bool;
       EStopLatched : Bool;
       LevelCritLatched : Bool;
       TankSensorLatched : Bool;
+      P1FaultLatched : Bool;
+      P2FaultLatched : Bool;
+      NoPumpLatched : Bool;
       SourceLowActive : Bool;
       CriticalActive : Bool;
       ResetPulse : Bool;

@@ -1,0 +1,135 @@
+FUNCTION_BLOCK "FB_AutoCycle"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      Active : Bool;
+      Level : Real;
+      LevelValid : Bool;
+      LevelLow : Real;
+      LevelHigh : Real;
+      P1Available : Bool;
+      P2Available : Bool;
+      P1RestartDone : Bool;
+      P2RestartDone : Bool;
+      P1RunFeedback : Bool;
+      P2RunFeedback : Bool;
+   END_VAR
+
+   VAR_OUTPUT 
+      P1Request : Bool;
+      P2Request : Bool;
+      Demand : Bool;
+      NoPumpAvailable : Bool;
+      Step : Int;
+      Priority : Int := 1;
+   END_VAR
+
+   VAR 
+      selected : Int;
+      interrupted : Bool;
+   END_VAR
+
+   VAR_TEMP 
+      selAvailable : Bool;
+      selRestartDone : Bool;
+      selFeedback : Bool;
+   END_VAR
+
+BEGIN
+    // Demand: set at the low level, cleared at the high level.
+    IF NOT #Active OR NOT #LevelValid THEN
+        #Demand := FALSE;
+    ELSIF #Level <= #LevelLow THEN
+        #Demand := TRUE;
+    ELSIF #Level >= #LevelHigh THEN
+        #Demand := FALSE;
+    END_IF;
+
+    // Status of the selected pump.
+    IF #selected = 1 THEN
+        #selAvailable := #P1Available;
+        #selRestartDone := #P1RestartDone;
+        #selFeedback := #P1RunFeedback;
+    ELSIF #selected = 2 THEN
+        #selAvailable := #P2Available;
+        #selRestartDone := #P2RestartDone;
+        #selFeedback := #P2RunFeedback;
+    ELSE
+        #selAvailable := FALSE;
+        #selRestartDone := FALSE;
+        #selFeedback := FALSE;
+    END_IF;
+
+    #NoPumpAvailable := FALSE;
+
+    IF NOT #Active THEN
+        #Step := 0;
+        #selected := 0;
+        #interrupted := FALSE;
+    ELSE
+        CASE #Step OF
+            0:  // idle
+                IF #Demand THEN
+                    #Step := 1;
+                END_IF;
+            1:  // priority pump if available, otherwise the other one
+                IF NOT #Demand THEN
+                    #Step := 0;
+                ELSE
+                    IF (#Priority = 1) AND #P1Available THEN
+                        #selected := 1;
+                    ELSIF (#Priority = 2) AND #P2Available THEN
+                        #selected := 2;
+                    ELSIF #P1Available THEN
+                        #selected := 1;
+                    ELSIF #P2Available THEN
+                        #selected := 2;
+                    ELSE
+                        #selected := 0;
+                    END_IF;
+                    IF #selected = 0 THEN
+                        #NoPumpAvailable := TRUE;
+                    ELSE
+                        #Step := 2;
+                    END_IF;
+                END_IF;
+            2:  // restart delay of the selected pump
+                IF NOT #Demand THEN
+                    #Step := 0;
+                ELSIF NOT #selAvailable THEN
+                    #Step := 1;
+                ELSIF #selRestartDone THEN
+                    #Step := 3;
+                END_IF;
+            3:  // start, wait for the run feedback
+                IF NOT #selAvailable THEN
+                    #interrupted := TRUE;
+                    #Step := 1;
+                ELSIF #selFeedback THEN
+                    #Step := 4;
+                END_IF;
+            4:  // running
+                IF NOT #selAvailable THEN
+                    #interrupted := TRUE;
+                    #Step := 1;
+                ELSIF NOT #Demand THEN
+                    #Step := 5;
+                END_IF;
+            5:  // stop, wait for the feedback to drop
+                IF NOT #selFeedback THEN
+                    #Step := 6;
+                END_IF;
+            6:  // after a normal cycle the other pump gets the priority
+                IF NOT #interrupted THEN
+                    #Priority := 3 - #selected;
+                END_IF;
+                #interrupted := FALSE;
+                #Step := 0;
+        ELSE
+            #Step := 0;
+        END_CASE;
+    END_IF;
+
+    #P1Request := ((#Step = 3) OR (#Step = 4)) AND (#selected = 1);
+    #P2Request := ((#Step = 3) OR (#Step = 4)) AND (#selected = 2);
+END_FUNCTION_BLOCK

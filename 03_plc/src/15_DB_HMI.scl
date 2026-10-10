@@ -3,6 +3,7 @@ DATA_BLOCK "DB_HMI"
 VERSION : 0.1
    VAR 
       P1_PumpCmd : Bool;
+      P2_PumpCmd : Bool;
    END_VAR
 
 BEGIN
