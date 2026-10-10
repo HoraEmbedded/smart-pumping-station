@@ -3,7 +3,7 @@ FUNCTION "FC_Interlocks" : Void
 VERSION : 0.1
 BEGIN
 	// IL-01: simulated E-stop, NC contact, FALSE means stop.
-	// Latching in FAULT and ALM_001 are added in Mission 6.
+	// Latching in FAULT and ALM_001 are added in Iteration 6.
 	"DB_StationState".EStopOK := "DI_EStop_Sim";
 
 	// IL-02: source availability with hysteresis (P04 and P26).

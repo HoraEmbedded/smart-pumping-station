@@ -45,7 +45,7 @@ Une station simulée à deux pompes pilotée par un automate Siemens S7-1200 (TI
 | `07_media/` | Supports de démonstration |
 | `08_report/` | Rapport final |
 | `docs/` | Documentation transversale et journal des décisions |
-| `captures/` | Captures d'écran, classées par mission |
+| `captures/` | Captures d'écran, classées par iteration |
 
 ## Outils
 

@@ -43,7 +43,7 @@ A simulated two-pump station controlled by a Siemens S7-1200 (TIA Portal V18), w
 | `07_media/` | Demo material |
 | `08_report/` | Final report |
 | `docs/` | Cross-cutting documentation and decision log |
-| `captures/` | Screenshots, organized by mission |
+| `captures/` | Screenshots, organized by iteration |
 
 ## Tooling
 

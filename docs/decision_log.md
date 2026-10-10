@@ -6,7 +6,7 @@
 | DEC-002 | 2026-10-06 | English primary, French secondary | International portfolio audience | French only | Duplicate effort limited to README and summaries |
 | DEC-003 | 2026-10-06 | TIA project (.ap18) not versioned in Git | Binary format, no meaningful diff | Commit the whole project | Versioned exports and screenshots, full archive in Releases |
 | DEC-004 | 2026-10-06 | Conventional Commits | Readable history | Free-form messages | Predictable, searchable history |
-| DEC-005 | 2026-10-06 | Single `captures/` folder organized by mission | Simpler than screenshot folders in each module | `screenshots/` in each module | Less scattering, easier to link from the report |
+| DEC-005 | 2026-10-06 | Single `captures/` folder organized by iteration | Simpler than screenshot folders in each module | `screenshots/` in each module | Less scattering, easier to link from the report |
 | DEC-006 | 2026-10-06 | Roadmap update (sections 11 to 20) overrides the initial roadmap | Updated engineer profile and industrial approach | Initial 12-week plan | 14-week plan, modular PLC architecture |
 | DEC-007 | 2026-10-06 |HMI developed in WinCC Professional V18 with Runtime simulation. |  |  |
 | DEC-008 | 2026-10-06 | Iterative V-model, one V cycle per version | Learning project needing rigor and early feedback | Pure waterfall, pure V-model | Each version has its requirements, design, tests and evidence |
@@ -15,11 +15,11 @@
 | DEC-011 | 2026-10-06 | Euler explicit integration with dt = 0.1 s for tank model | Simple, sufficient for a level process | Higher-order solver | Easy to implement in PLC, small error acceptable |
 | DEC-012 | 2026-10-06 | Process simulated inside the PLC (FC_SimulationModel), Factory I/O deferred to Perspectives | Reproducible fault injection and consistent KPI | Factory I/O scene as main process model | Single process model, reproducible tests |
 | DEC-013 | 2026-10-06 | Single unified roadmap is the reference, English file names kept | Previous roadmaps removed, new one uses French file names and is inconsistent on matrix location | Follow French names literally | Mapping table in docs/roadmap.md, traceability matrix in 01_requirements |
-| DEC-014 | 2026-10-06 | Export variables extended with currents, station state and simulated power | ANO_03, ANO_06 and specific energy need them | Export list exactly as in roadmap | Applied in Mission 10 |
+| DEC-014 | 2026-10-06 | Export variables extended with currents, station state and simulated power | ANO_03, ANO_06 and specific energy need them | Export list exactly as in roadmap | Applied in Iteration 10 |
 | DEC-015 | 2026-10-07 | Canonical test IDs follow the roadmap week 13 matrix, extended to T32 | Roadmap reuses T01 to T04 with different meanings in weeks 4 and 13 | Two numbering schemes | One ID per test for the whole project, V1 uses T01, T02, T11, T12 |
 | DEC-016 | 2026-10-07 | docs/parameters.md is the single source of truth for thresholds, mirrored in DB_Parameters | Avoid hard-coded values | Constants inside Ladder | Change once, rerun affected tests |
-| DEC-017 | 2026-10-07 | One tag v0.N.0 per mission, v1.0.0 at final delivery, milestones V0 to V6 group the missions | Readable history and visible progress | One tag per milestone only | Each mission is a release, milestones show progress bars |
-| DEC-018 | 2026-10-07 | Tracker administration (labels, milestones, issues, releases) done with GitHub CLI scripts | Reproducible and fast | Manual clicks in the web interface | Setup commands documented in the mission files |
+| DEC-017 | 2026-10-07 | One tag v0.N.0 per iteration, v1.0.0 at final delivery, milestones V0 to V6 group the iterations | Readable history and visible progress | One tag per milestone only | Each iteration is a release, milestones show progress bars |
+| DEC-018 | 2026-10-07 | Tracker administration (labels, milestones, issues, releases) done with GitHub CLI scripts | Reproducible and fast | Manual clicks in the web interface | Setup commands documented in the iteration files |
 | DEC-019 | 2026-10-07 | Every mode change passes through READY | Pumps are stopped before the new mode starts | Direct transitions between modes | 3 modes, 6 simple transitions |
 | DEC-020 | 2026-10-07 | Supervisor Grafcet G0 forces G1 for stop and fault (IEC 60848 forcing order) | Priority of stop and fault without crossing arrows | Transitions from every step to 0 and 90 | Clear and extendable hierarchy |
 | DEC-021 | 2026-10-07 | After a fault reset the station returns to STOPPED, no automatic restart | No unexpected restart | Return to READY | Operator must request a start again |

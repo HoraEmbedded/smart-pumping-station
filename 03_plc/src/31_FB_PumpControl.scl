@@ -30,7 +30,7 @@ VERSION : 0.1
 
 BEGIN
 	// Pump available when enabled and the fault input is healthy (NC contact).
-	// Low flow and feedback timeout are added in Missions 7 and 8.
+	// Low flow and feedback timeout are added in Iterations 7 and 8.
 	#Available := #Enable AND #FaultOK;
 
 	// Anti-restart delay (IL-07): TOF output stays TRUE during RestartDelay after a stop.

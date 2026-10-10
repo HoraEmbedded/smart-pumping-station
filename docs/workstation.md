@@ -24,8 +24,8 @@ Baseline of the development environment. Update this file whenever a tool versio
 | VS Code | 1.139.1 | Documentation and scripts | Installed |
 | Python | 3.13.x (TO FILL) | KPI and anomaly analysis | Installed |
 | WinCC (within TIA) | V18 | HMI/SCADA |V18 |
-| Node-RED | n/a | Data flow | Planned (Mission 10) |
-| Grafana or equivalent | n/a | Dashboard | Planned (Mission 11) |
+| Node-RED | n/a | Data flow | Planned (Iteration 10) |
+| Grafana or equivalent | n/a | Dashboard | Planned (Iteration 11) |
 
 ## Notes
 

@@ -11,4 +11,4 @@
 | T27 | 2026-10-10 | Pass | evidence/T27_parameter_edit.png | |
 | T31 | 2026-10-10 | Pass | Command output | No raw address in sources |
 
-Remaining V1 tests (T06, T08, T09, T13, T15, T35, T36) are covered in Mission 6.
+Remaining V1 tests (T06, T08, T09, T13, T15, T35, T36) are covered in Iteration 6.
