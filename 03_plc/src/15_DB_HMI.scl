@@ -1,0 +1,10 @@
+DATA_BLOCK "DB_HMI"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR 
+      P1_PumpCmd : Bool;
+   END_VAR
+
+BEGIN
+
+END_DATA_BLOCK

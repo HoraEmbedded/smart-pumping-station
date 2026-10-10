@@ -1,0 +1,19 @@
+DATA_BLOCK "DB_Alarms"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR 
+      EStopCause : Bool;
+      LevelCritCause : Bool;
+      TankSensorCause : Bool;
+      EStopLatched : Bool;
+      LevelCritLatched : Bool;
+      TankSensorLatched : Bool;
+      SourceLowActive : Bool;
+      CriticalActive : Bool;
+      ResetPulse : Bool;
+      ResetEdgeMem : Bool;
+   END_VAR
+
+BEGIN
+
+END_DATA_BLOCK

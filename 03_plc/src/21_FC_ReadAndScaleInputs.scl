@@ -2,44 +2,42 @@ FUNCTION "FC_ReadAndScaleInputs" : Void
 { S7_Optimized_Access := 'TRUE' }
 VERSION : 0.1
 BEGIN
-	// Builds the effective process values in DB_Process.
-	// Sim_Enable = TRUE : values come from the process model (DB_Sim).
-	// Sim_Enable = FALSE: values come from the scaled analog inputs.
-	IF "DB_Sim".Sim_Enable THEN
-	    "DB_Process".TankLevel_pct := "DB_Sim".TankLevel_pct;
-	    "DB_Process".TankLevel_Valid := TRUE;
-	    "DB_Process".SourceLevel_pct := "DB_Sim".SourceLevel_pct;
-	    "DB_Process".SourceLevel_Valid := TRUE;
-	    "DB_Process".Flow_m3h := "DB_Sim".Flow_m3h;
-	    "DB_Process".Flow_Valid := TRUE;
-	    "DB_Process".Pressure_bar := "DB_Sim".Pressure_bar;
-	    "DB_Process".Pressure_Valid := TRUE;
-	    "DB_Process".P1_Current_A := "DB_Sim".P1_Current_A;
-	    "DB_Process".P1_Current_Valid := TRUE;
-	    "DB_Process".P2_Current_A := "DB_Sim".P2_Current_A;
-	    "DB_Process".P2_Current_Valid := TRUE;
-	    "DB_Process".P1_RunFeedback := "DB_Sim".P1_RunFeedback;
-	    "DB_Process".P2_RunFeedback := "DB_Sim".P2_RunFeedback;
-	ELSE
-	    "FC_ScaleAnalog"(Raw := "AI_Tank_Level_pct", EngMin := 0.0, EngMax := 100.0,
-	                     LowLimit := "DB_Parameters".Raw_Low_Limit, HighLimit := "DB_Parameters".Raw_High_Limit,
-	                     Value => "DB_Process".TankLevel_pct, Valid => "DB_Process".TankLevel_Valid);
-	    "FC_ScaleAnalog"(Raw := "AI_Source_Level_pct", EngMin := 0.0, EngMax := 100.0,
-	                     LowLimit := "DB_Parameters".Raw_Low_Limit, HighLimit := "DB_Parameters".Raw_High_Limit,
-	                     Value => "DB_Process".SourceLevel_pct, Valid => "DB_Process".SourceLevel_Valid);
-	    "FC_ScaleAnalog"(Raw := "AI_Flow_m3h", EngMin := 0.0, EngMax := 20.0,
-	                     LowLimit := "DB_Parameters".Raw_Low_Limit, HighLimit := "DB_Parameters".Raw_High_Limit,
-	                     Value => "DB_Process".Flow_m3h, Valid => "DB_Process".Flow_Valid);
-	    "FC_ScaleAnalog"(Raw := "AI_Pressure_bar", EngMin := 0.0, EngMax := 10.0,
-	                     LowLimit := "DB_Parameters".Raw_Low_Limit, HighLimit := "DB_Parameters".Raw_High_Limit,
-	                     Value => "DB_Process".Pressure_bar, Valid => "DB_Process".Pressure_Valid);
-	    "FC_ScaleAnalog"(Raw := "AI_P1_Current_A", EngMin := 0.0, EngMax := 20.0,
-	                     LowLimit := "DB_Parameters".Raw_Low_Limit, HighLimit := "DB_Parameters".Raw_High_Limit,
-	                     Value => "DB_Process".P1_Current_A, Valid => "DB_Process".P1_Current_Valid);
-	    "FC_ScaleAnalog"(Raw := "AI_P2_Current_A", EngMin := 0.0, EngMax := 20.0,
-	                     LowLimit := "DB_Parameters".Raw_Low_Limit, HighLimit := "DB_Parameters".Raw_High_Limit,
-	                     Value => "DB_Process".P2_Current_A, Valid => "DB_Process".P2_Current_Valid);
-	    "DB_Process".P1_RunFeedback := "DI_P1_RunFeedback";
-	    "DB_Process".P2_RunFeedback := "DI_P2_RunFeedback";
-	END_IF;
+    // Effective process values: from the model when Sim_Enable is set, else from the analog inputs.
+    IF "DB_Sim".Sim_Enable THEN
+        "DB_Process".TankLevel_pct := "DB_Sim".TankLevel_pct;
+        "DB_Process".TankLevel_Valid := TRUE;
+        "DB_Process".SourceLevel_pct := "DB_Sim".SourceLevel_pct;
+        "DB_Process".SourceLevel_Valid := TRUE;
+        "DB_Process".Flow_m3h := "DB_Sim".Flow_m3h;
+        "DB_Process".Flow_Valid := TRUE;
+        "DB_Process".Pressure_bar := "DB_Sim".Pressure_bar;
+        "DB_Process".Pressure_Valid := TRUE;
+        "DB_Process".P1_Current_A := "DB_Sim".P1_Current_A;
+        "DB_Process".P1_Current_Valid := TRUE;
+        "DB_Process".P2_Current_A := "DB_Sim".P2_Current_A;
+        "DB_Process".P2_Current_Valid := TRUE;
+        "DB_Process".P1_RunFeedback := "DB_Sim".P1_RunFeedback;
+        "DB_Process".P2_RunFeedback := "DB_Sim".P2_RunFeedback;
+    ELSE
+        "FC_ScaleAnalog"(Raw := "AI_Tank_Level_pct", EngMin := 0.0, EngMax := 100.0,
+                         LowLimit := "DB_Parameters".Raw_Low_Limit, HighLimit := "DB_Parameters".Raw_High_Limit,
+                         Value => "DB_Process".TankLevel_pct, Valid => "DB_Process".TankLevel_Valid);
+        "FC_ScaleAnalog"(Raw := "AI_Source_Level_pct", EngMin := 0.0, EngMax := 100.0,
+                         LowLimit := "DB_Parameters".Raw_Low_Limit, HighLimit := "DB_Parameters".Raw_High_Limit,
+                         Value => "DB_Process".SourceLevel_pct, Valid => "DB_Process".SourceLevel_Valid);
+        "FC_ScaleAnalog"(Raw := "AI_Flow_m3h", EngMin := 0.0, EngMax := 20.0,
+                         LowLimit := "DB_Parameters".Raw_Low_Limit, HighLimit := "DB_Parameters".Raw_High_Limit,
+                         Value => "DB_Process".Flow_m3h, Valid => "DB_Process".Flow_Valid);
+        "FC_ScaleAnalog"(Raw := "AI_Pressure_bar", EngMin := 0.0, EngMax := 10.0,
+                         LowLimit := "DB_Parameters".Raw_Low_Limit, HighLimit := "DB_Parameters".Raw_High_Limit,
+                         Value => "DB_Process".Pressure_bar, Valid => "DB_Process".Pressure_Valid);
+        "FC_ScaleAnalog"(Raw := "AI_P1_Current_A", EngMin := 0.0, EngMax := 20.0,
+                         LowLimit := "DB_Parameters".Raw_Low_Limit, HighLimit := "DB_Parameters".Raw_High_Limit,
+                         Value => "DB_Process".P1_Current_A, Valid => "DB_Process".P1_Current_Valid);
+        "FC_ScaleAnalog"(Raw := "AI_P2_Current_A", EngMin := 0.0, EngMax := 20.0,
+                         LowLimit := "DB_Parameters".Raw_Low_Limit, HighLimit := "DB_Parameters".Raw_High_Limit,
+                         Value => "DB_Process".P2_Current_A, Valid => "DB_Process".P2_Current_Valid);
+        "DB_Process".P1_RunFeedback := "DI_P1_RunFeedback";
+        "DB_Process".P2_RunFeedback := "DI_P2_RunFeedback";
+    END_IF;
 END_FUNCTION

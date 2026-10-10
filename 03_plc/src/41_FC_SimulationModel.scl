@@ -8,41 +8,38 @@ VERSION : 0.1
    END_VAR
 
 BEGIN
-	// Called from OB30 every 100 ms (Sim_Step, P21).
-	// Euler: Level[k+1] = Level[k] + dt x Accel x 100 x (Qin - Qout) / (3600 x V)
-	IF "DB_Sim".Sim_Reset THEN
-	    "DB_Sim".TankLevel_pct := 50.0;
-	    "DB_Sim".SourceLevel_pct := 80.0;
-	    "DB_Sim".Sim_Reset := FALSE;
-	END_IF;
+    // Called every 100 ms. Euler step: level += dt * 100 * (Qin - Qout) / (3600 * V)
+    IF "DB_Sim".Sim_Reset THEN
+        "DB_Sim".TankLevel_pct := 50.0;
+        "DB_Sim".SourceLevel_pct := 80.0;
+        "DB_Sim".Sim_Reset := FALSE;
+    END_IF;
 
-	// Simulated contactor feedback follows the run command.
-	"DB_Sim".P1_RunFeedback := "DB_Pump1".RunCommand;
-	"DB_Sim".P2_RunFeedback := FALSE;
+    "DB_Sim".P1_RunFeedback := "DB_Pump1".RunCommand;
+    "DB_Sim".P2_RunFeedback := FALSE;
 
-	#qIn := 0.0;
-	IF "DB_Sim".P1_RunFeedback AND ("DB_Sim".SourceLevel_pct > 0.0) THEN
-	    #qIn := "DB_Parameters".Pump_Flow;
-	END_IF;
-	#qOut := 0.0;
-	IF "DB_Sim".Drain_Enable THEN
-	    #qOut := "DB_Parameters".Drain_Flow;
-	END_IF;
+    #qIn := 0.0;
+    IF "DB_Sim".P1_RunFeedback AND ("DB_Sim".SourceLevel_pct > 0.0) THEN
+        #qIn := "DB_Parameters".Pump_Flow;
+    END_IF;
+    #qOut := 0.0;
+    IF "DB_Sim".Drain_Enable THEN
+        #qOut := "DB_Parameters".Drain_Flow;
+    END_IF;
 
-	IF "DB_Sim".Sim_Enable AND "DB_Sim".Sim_Run THEN
-	    #dLevel := "DB_Parameters".Sim_Step * "DB_Parameters".Time_Accel * 100.0
-	               * (#qIn - #qOut) / (3600.0 * "DB_Parameters".Tank_Volume);
-	    "DB_Sim".TankLevel_pct := LIMIT(MN := 0.0, IN := "DB_Sim".TankLevel_pct + #dLevel, MX := 100.0);
-	END_IF;
+    IF "DB_Sim".Sim_Enable AND "DB_Sim".Sim_Run THEN
+        #dLevel := "DB_Parameters".Sim_Step * "DB_Parameters".Time_Accel * 100.0
+                   * (#qIn - #qOut) / (3600.0 * "DB_Parameters".Tank_Volume);
+        "DB_Sim".TankLevel_pct := LIMIT(MN := 0.0, IN := "DB_Sim".TankLevel_pct + #dLevel, MX := 100.0);
+    END_IF;
 
-	// Simulated measurements.
-	"DB_Sim".Flow_m3h := #qIn;
-	IF #qIn > 0.0 THEN
-	    "DB_Sim".Pressure_bar := "DB_Sim".Pressure_Run_bar;
-	    "DB_Sim".P1_Current_A := "DB_Parameters".Current_Nominal;
-	ELSE
-	    "DB_Sim".Pressure_bar := 0.0;
-	    "DB_Sim".P1_Current_A := 0.0;
-	END_IF;
-	"DB_Sim".P2_Current_A := 0.0;
+    "DB_Sim".Flow_m3h := #qIn;
+    IF #qIn > 0.0 THEN
+        "DB_Sim".Pressure_bar := "DB_Sim".Pressure_Run_bar;
+        "DB_Sim".P1_Current_A := "DB_Parameters".Current_Nominal;
+    ELSE
+        "DB_Sim".Pressure_bar := 0.0;
+        "DB_Sim".P1_Current_A := 0.0;
+    END_IF;
+    "DB_Sim".P2_Current_A := 0.0;
 END_FUNCTION
