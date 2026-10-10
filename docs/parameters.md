@@ -25,7 +25,7 @@ Single source of truth for thresholds and delays. Mirrored in `DB_Parameters` (P
 | P19 | Pump_Flow_m3h | 12 | m3/h | Level model |
 | P20 | Drain_Flow_m3h | 3 | m3/h | Level model |
 | P21 | Sim_Step_s | 0.1 | s | Euler step |
-| P22 | Time_Accel | 60 | x | Simulation acceleration |
+| P22 | Time_Accel | 60 | x | Default 1, set to 60 for long runs |
 | P23 | Run_Feedback_Timeout_s | 5 | s | Run feedback expected after a run command, IL-04 |
 | P24 | Init_Delay_s | 2 | s | Duration of INITIALIZING |
 | P25 | Maint_Test_Max_s | 60 | s | Maximum pump test in Maintenance |
