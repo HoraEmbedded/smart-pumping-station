@@ -108,3 +108,6 @@ G3 is enclosed in step 30. Leaving step 30 resets G3 to step 0 and switches the 
 - **Pump available**: no latched fault, no latched low flow.
 - **Normal cycle**: start on a demand at Level_Low (P01), stop at Level_High (P02), with no fault and no low flow. The priority pump toggles only after a normal cycle (REQ-006).
 - **Manual mode** is not limited by P02 but is stopped by IL-03 at P03.
+- **Pump available**: enabled, protection contact healthy and no latched pump fault.
+- **Normal cycle**: start on a demand at the low level, stop at the high level, without interruption by a fault. After a normal cycle the other pump gets the priority. A cycle interrupted by a fault does not change the priority.
+- A pump fault is latched and cleared by a reset once the protection contact is healthy again.

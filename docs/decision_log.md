@@ -26,3 +26,6 @@
 | DEC-022 | 2026-10-07 | Tank level sensor inconsistency is critical, other sensors raise warnings | Level is the controlled variable | All sensor faults critical | Station keeps running on degraded non critical data |
 | DEC-023 | 2026-10-07 | Mermaid for the state diagram, Python for Grafcet | Mermaid cannot draw Grafcet notation | Mermaid only | Both versioned and readable |
 | DEC-024 | 2026-10-10 | Planned blocks reduced from 13 to 11: level demand, alternation and backup merge into FB_AutoCycle, HMI and data interfaces into FC_Interfaces | One block per diagram, less scattering | One block per function | FB_AutoCycle follows the automatic cycle Grafcet |
+| DEC-025 | 2026-10-10 | Pump faults are latched and cleared by a reset | A pump that rearms itself returns without anyone knowing why | Automatic return when the contact is healthy | Same reset rule as critical alarms |
+| DEC-026 | 2026-10-10 | One pump at a time: pump 2 is evaluated after pump 1 and reads its command | Deterministic outcome on simultaneous requests | Mutual exclusion flag | Pump 1 wins ties, no extra block |
+| DEC-027 | 2026-10-10 | After a normal cycle the other pump gets the priority, interrupted cycles do not swap | Balanced wear, backup cycles also pass the hand | Toggle after every cycle | Priority reflects who just completed a full cycle |

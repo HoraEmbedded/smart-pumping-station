@@ -17,16 +17,41 @@ BEGIN
 	                 InitDelay := "DB_Parameters".Init_Delay,
 	                 State => "DB_StationState".StationState);
 	
-	"FC_LevelDemand"();
+	"DB_AutoCycle"(Active := ("DB_StationState".StationState = 30),
+	               Level := "DB_Process".TankLevel_pct,
+	               LevelValid := "DB_Process".TankLevel_Valid,
+	               LevelLow := "DB_Parameters".Level_Low,
+	               LevelHigh := "DB_Parameters".Level_High,
+	               P1Available := "DB_Pump1".Available,
+	               P2Available := "DB_Pump2".Available,
+	               P1RestartDone := "DB_Pump1".RestartDone,
+	               P2RestartDone := "DB_Pump2".RestartDone,
+	               P1RunFeedback := "DB_Process".P1_RunFeedback,
+	               P2RunFeedback := "DB_Process".P2_RunFeedback);
+	"DB_StationState".PumpingDemand := "DB_AutoCycle".Demand;
 	
 	"DB_Pump1"(Enable := ("DB_StationState".StationState >= 20) AND ("DB_StationState".StationState <= 50),
-	           AutoRequest := ("DB_StationState".StationState = 30) AND "DB_StationState".PumpingDemand,
+	           AutoRequest := "DB_AutoCycle".P1Request,
 	           ManualRequest := ("DB_StationState".StationState = 40) AND "DB_HMI".P1_PumpCmd,
 	           TestRequest := ("DB_StationState".StationState = 50) AND "DB_HMI".P1_PumpCmd,
-	           FaultOK := "DI_P1_Fault",
+	           FaultOK := NOT "DB_Alarms".P1FaultLatched,
 	           RunFeedback := "DB_Process".P1_RunFeedback,
 	           SourceOK := "DB_StationState".SourceOK,
 	           EStopOK := "DB_StationState".EStopOK,
+	           OtherRunning := "DB_Pump2".RunCommand,
+	           RestartDelay := "DB_Parameters".Restart_Delay,
+	           TestMax := "DB_Parameters".Maint_Test_Max,
+	           Clock1Hz := "Clock_1Hz");
+	
+	"DB_Pump2"(Enable := ("DB_StationState".StationState >= 20) AND ("DB_StationState".StationState <= 50),
+	           AutoRequest := "DB_AutoCycle".P2Request,
+	           ManualRequest := ("DB_StationState".StationState = 40) AND "DB_HMI".P2_PumpCmd,
+	           TestRequest := ("DB_StationState".StationState = 50) AND "DB_HMI".P2_PumpCmd,
+	           FaultOK := NOT "DB_Alarms".P2FaultLatched,
+	           RunFeedback := "DB_Process".P2_RunFeedback,
+	           SourceOK := "DB_StationState".SourceOK,
+	           EStopOK := "DB_StationState".EStopOK,
+	           OtherRunning := "DB_Pump1".RunCommand,
 	           RestartDelay := "DB_Parameters".Restart_Delay,
 	           TestMax := "DB_Parameters".Maint_Test_Max,
 	           Clock1Hz := "Clock_1Hz");

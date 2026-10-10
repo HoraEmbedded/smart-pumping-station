@@ -22,8 +22,9 @@
 | Control | FB_ModeManager | SCL | State machine |
 | Control | FC_Interlocks | SCL | Fault causes, source availability |
 | Control | FC_AlarmLatch | LAD | Latched critical alarms and reset |
-| Control | FC_LevelDemand, FB_PumpControl | SCL | Level hysteresis, pump logic |
+| Control | FB_PumpControl | SCL | Level hysteresis, pump logic |
 | Process_Sim | OB30, FC_SimulationModel | SCL | Tank model at 100 ms |
+FC_Interlocks | FB_PumpControl (two instances) | FB_AutoCycle
 
 SCL sources are in `03_plc/src` and are the reference. Ladder blocks are documented with screenshots in `captures/`.
 
@@ -35,3 +36,19 @@ SCL sources are in `03_plc/src` and are the reference. Ladder blocks are documen
 | FB / FC | Function block / function |
 | DB | Data block |
 | DI_ AI_ DO_ | Digital input, analog input, digital output tags |
+
+## Call order in OB1
+
+```mermaid
+flowchart TD
+    A[FC_ReadAndScaleInputs] --> B[FC_Interlocks]
+    B --> C[FC_AlarmLatch]
+    C --> D[FB_ModeManager]
+    D --> E[FB_AutoCycle]
+    E --> F1[FB_PumpControl pump 1]
+    F1 --> F2[FB_PumpControl pump 2]
+    F2 --> G[FC_WriteOutputs]
+    G --> H[FC_Indicators]
+```
+
+Pump 2 is evaluated after pump 1 and reads its run command, so when both are requested in the same scan, pump 1 starts and pump 2 is refused.
