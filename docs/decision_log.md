@@ -29,3 +29,8 @@
 | DEC-025 | 2026-10-10 | Pump faults are latched and cleared by a reset | A pump that rearms itself returns without anyone knowing why | Automatic return when the contact is healthy | Same reset rule as critical alarms |
 | DEC-026 | 2026-10-10 | One pump at a time: pump 2 is evaluated after pump 1 and reads its command | Deterministic outcome on simultaneous requests | Mutual exclusion flag | Pump 1 wins ties, no extra block |
 | DEC-027 | 2026-10-10 | After a normal cycle the other pump gets the priority, interrupted cycles do not swap | Balanced wear, backup cycles also pass the hand | Toggle after every cycle | Priority reflects who just completed a full cycle |
+| DEC-028 | 2026-10-11 | Low flow and run feedback timeout detected in FB_PumpControl, latched in Ladder | Each pump knows its own command and feedback | Central diagnostic block | Per pump alarms, same reset rule as other faults |
+| DEC-029 | 2026-10-11 | Low flow reset allows a new attempt | Flow cannot be judged at standstill | Block restart until flow is proven | Cause proven by retrying, alarm returns if it persists |
+| DEC-030 | 2026-10-11 | Frequent starts measured on a sliding window over the last ten starts | Fixed windows miss bursts across two windows | Counter reset every hour | Reliable detection, FB_StationMonitor hosts it and later the KPI |
+| DEC-031 | 2026-10-11 | Fault injection bits in DB_Sim | Reproducible fault tests | Manual forcing of inputs | Same fault every run, usable by the regression tests |
+| DEC-032 | 2026-10-11 | Warnings clear themselves, operator acknowledgment arrives with the HMI | No alarm list to acknowledge yet | Latch every warning | Amber lamp from one WarningActive bit |

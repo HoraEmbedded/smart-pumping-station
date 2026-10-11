@@ -102,6 +102,8 @@ G3 is enclosed in step 30. Leaving step 30 resets G3 to step 0 and switches the 
 - After a valid reset the station goes to STOPPED. The operator must request a start again, and the station passes through INITIALIZING. There is no automatic restart.
 - A pump made unavailable by IL-04 or IL-05 stays unavailable until its cause is cleared and a reset is given. The station keeps running on the other pump.
 - Sensors: tank level inconsistent is critical. Source level inconsistent is treated as source low (IL-02). Flow, pressure and current inconsistent raise a warning only.
+- Low flow and missing run feedback are judged only while the pump runs. After the pump is stopped by the fault, a reset allows a new attempt. If the cause persists, the alarm returns after the validation delay.
+- An invalid non critical sensor (flow, pressure, source level, motor current) raises a warning. A low flow alarm is not raised while the flow signal is invalid, so one cause does not raise two alarms.
 
 ## Definitions
 

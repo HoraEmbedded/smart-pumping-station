@@ -47,8 +47,10 @@ flowchart TD
     D --> E[FB_AutoCycle]
     E --> F1[FB_PumpControl pump 1]
     F1 --> F2[FB_PumpControl pump 2]
-    F2 --> G[FC_WriteOutputs]
+    F2 --> M[FB_StationMonitor]
+    M --> G[FC_WriteOutputs]
     G --> H[FC_Indicators]
 ```
+
 
 Pump 2 is evaluated after pump 1 and reads its run command, so when both are requested in the same scan, pump 1 starts and pump 2 is refused.
