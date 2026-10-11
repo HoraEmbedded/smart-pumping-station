@@ -24,7 +24,7 @@ A simulated two-pump station controlled by a Siemens S7-1200 (TIA Portal V18), w
 | --- | --- | --- |
 | V0 | Design: requirements, P&ID, I/O list, Grafcet, test plan | Done|
 | V1 | Single pump control |Done |
-| V2 | Two pumps, alternation, faults | Planned |
+| V2 | Two pumps, alternation, faults |Done |
 | V3 | HMI/SCADA | Planned |
 | V4 | Data connection and dashboard | Planned |
 | V5 | Anomaly detection | Planned |

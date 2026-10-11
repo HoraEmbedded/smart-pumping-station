@@ -48,7 +48,7 @@ All notable changes are documented here. Format inspired by Keep a Changelog.
 - Sources cleaned of internal references, blocks organized in groups
 - Repository vocabulary: missions renamed to iterations
 
-## [0.7.0] - 2026-10-10
+## [0.6.0] - 2026-10-10
 
 ### Added
 - Second pump with automatic alternation after a normal cycle
@@ -59,3 +59,18 @@ All notable changes are documented here. Format inspired by Keep a Changelog.
 
 ### Changed
 - Level demand merged into the automatic cycle block
+
+## [0.7.0] - 2026-10-11
+
+### Added
+- Low flow detection per pump with a stabilization delay and latched alarms
+- Run feedback timeout treated as a pump fault
+- High current warning, maintenance due warning, level not rising warning
+- Frequent starts detection on a sliding window
+- Station monitoring block and a single warning bit driving the amber lamp
+- Fault injection in the process model
+- Fault causes guide and V2 test report
+- Eleven new tests, full regression of the previous tests
+
+### Changed
+- Retentive run hours and start counters
