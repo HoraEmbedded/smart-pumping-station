@@ -56,3 +56,10 @@ T01, T02, T06, T08, T09, T11, T12, T13, T15, T27, T31 passed.
 | T35 | No restart after reset | 035 | V1 | Cause cleared, reset | State STOPPED, no pump command until a new start request | Capture |
 | T36 | Maintenance test limit | 036 | V1 | Maintenance mode, pump test command | Pump stops after Maint_Test_Max_s | Capture |
 | T37 | Run feedback timeout | 037 | V2 | Command a pump with feedback forced FALSE | After 5 s ALM_006, pump unavailable | Capture |
+| T38 | High current warning | 038 | V2 | P1 running, high current injected | After the delay a warning is raised, the pump keeps running | Capture |
+| T39 | Maintenance due | 039 | V2 | Short interval, P1 runs, then maintenance reset | Warning raised, cleared by reset in Maintenance only | Capture |
+| T40 | Level not rising | 040 | V2 | Excess drain, pump running 60 s | Warning raised, cleared when the level rises again | Capture |
+
+## Exit criteria for V2
+
+T03 to T05, T07, T16 to T22, T24, T32, T37 to T40 passed, regression of the V1 tests passed.

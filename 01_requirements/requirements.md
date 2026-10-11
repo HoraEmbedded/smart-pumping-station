@@ -73,3 +73,6 @@ Statements use "shall". Method: T = Test, I = Inspection, A = Analysis, D = Demo
 | REQ-035 | After a fault reset the station shall return to STOPPED and shall not restart without a new start request | M | T | V1 |
 | REQ-036 | In Maintenance mode a pump test shall be limited to Maint_Test_Max_s | S | T | V1 |
 | REQ-037 | A run command without run feedback within Run_Feedback_Timeout_s shall make the pump unavailable and raise ALM_006 or ALM_007 | M | T | V2 |
+| REQ-038 | A running pump whose motor current stays above the high threshold for the delay shall raise a warning without stopping the pump | S | T | V2 |
+| REQ-039 | A pump whose runtime since the last service exceeds the maintenance interval shall raise a warning, cleared by a maintenance reset in Maintenance mode | S | T | V2 |
+| REQ-040 | A running pump with a tank level rise below the minimum over the window shall raise a warning | S | T | V2 |

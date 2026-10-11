@@ -13,3 +13,4 @@
 | MTBF | Mean Time Between Failures |
 | MTTR | Mean Time To Repair |
 | FAT / SAT | Factory / Site Acceptance Test |
+Sliding window (période glissante qui se termine à l’instant présent), Fault injection (forçage reproductible d’un défaut dans le modèle), Retentive memory (mémoire qui garde sa valeur à l’arrêt de l’automate), Self-clearing alarm (avertissement qui disparaît avec sa cause), Stabilization delay (délai avant de juger une mesure après un démarrage).
