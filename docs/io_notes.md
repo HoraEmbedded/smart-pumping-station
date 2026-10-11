@@ -18,3 +18,4 @@ Addresses are indicative and may be adjusted in TIA Portal. Names are the refere
 ## Operator commands
 
 There is no physical pump pushbutton in the I/O list. In Manual and Maintenance the run request comes from DB_HMI (P1_PumpCmd), written from the watch table now and from the HMI later.
+Start, stop, reset and mode selection can come from the local inputs or from the HMI (DB_HMI command bits). They are combined with a logical OR. The HMI mode selection behaves like a selector switch: it keeps its position. Two different mode positions at the same time (local and HMI) count as no selection, and the station stays in READY. Operator pump commands are cleared when the station leaves Manual and Maintenance.

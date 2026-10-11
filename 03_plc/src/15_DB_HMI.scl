@@ -6,6 +6,34 @@ VERSION : 0.1
       P2_PumpCmd : Bool;
       MaintReset_P1 : Bool;
       MaintReset_P2 : Bool;
+      Cmd_Start : Bool;
+      Cmd_Stop : Bool;
+      Cmd_Reset : Bool;
+      ModeSelect : Int;
+      StationState : Int;
+      AlarmLevel : Int;
+      AlarmCount : Int;
+      PriorityPump : Int;
+      TankLevel_pct : Real;
+      SourceLevel_pct : Real;
+      SourceOK : Bool;
+      Flow_m3h : Real;
+      Pressure_bar : Real;
+      P1_Current_A : Real;
+      P2_Current_A : Real;
+      P1_Status : Int;
+      P2_Status : Int;
+      P1_RunCmd : Bool;
+      P2_RunCmd : Bool;
+      P1_Feedback : Bool;
+      P2_Feedback : Bool;
+      P1_Runtime_h : Real;
+      P2_Runtime_h : Real;
+      P1_StartCount : UDInt;
+      P2_StartCount : UDInt;
+      Level_Low : Real;
+      Level_High : Real;
+      Level_CritHigh : Real;
    END_VAR
 
 BEGIN

@@ -8,12 +8,12 @@ BEGIN
 	"FC_Interlocks"();
 	"FC_AlarmLatch"();
 	
-	"DB_ModeManager"(StartReq := "DI_Start_System",
-	                 StopReq := "DI_Stop_System",
+	"DB_ModeManager"(StartReq := "DI_Start_System" OR "DB_HMI".Cmd_Start,
+	                 StopReq := "DI_Stop_System" OR "DB_HMI".Cmd_Stop,
 	                 CriticalFault := "DB_Alarms".CriticalActive,
-	                 SelAuto := "DI_Mode_Auto",
-	                 SelManual := "DI_Mode_Manual",
-	                 SelMaint := "DI_Mode_Maintenance",
+	                 SelAuto := "DI_Mode_Auto" OR ("DB_HMI".ModeSelect = 1),
+	                 SelManual := "DI_Mode_Manual" OR ("DB_HMI".ModeSelect = 2),
+	                 SelMaint := "DI_Mode_Maintenance" OR ("DB_HMI".ModeSelect = 3),
 	                 InitDelay := "DB_Parameters".Init_Delay,
 	                 State => "DB_StationState".StationState);
 	
@@ -34,11 +34,20 @@ BEGIN
 	           AutoRequest := "DB_AutoCycle".P1Request,
 	           ManualRequest := ("DB_StationState".StationState = 40) AND "DB_HMI".P1_PumpCmd,
 	           TestRequest := ("DB_StationState".StationState = 50) AND "DB_HMI".P1_PumpCmd,
-	           FaultOK := NOT "DB_Alarms".P1FaultLatched,
+	           FaultOK := NOT "DB_Alarms".P1FaultLatched AND NOT "DB_Alarms".P1LowFlowLatched,
 	           RunFeedback := "DB_Process".P1_RunFeedback,
 	           SourceOK := "DB_StationState".SourceOK,
 	           EStopOK := "DB_StationState".EStopOK,
 	           OtherRunning := "DB_Pump2".RunCommand,
+	           FlowRate := "DB_Process".Flow_m3h,
+	           FlowValid := "DB_Process".Flow_Valid,
+	           FlowMin := "DB_Parameters".Flow_Min,
+	           FlowValidation := "DB_Parameters".Flow_Validation,
+	           MotorCurrent := "DB_Process".P1_Current_A,
+	           CurrentValid := "DB_Process".P1_Current_Valid,
+	           CurrentHigh := "DB_Parameters".Current_High,
+	           CurrentHighDelay := "DB_Parameters".Current_High_Delay,
+	           FeedbackTimeout := "DB_Parameters".Run_Feedback_Timeout,
 	           RestartDelay := "DB_Parameters".Restart_Delay,
 	           TestMax := "DB_Parameters".Maint_Test_Max,
 	           Clock1Hz := "Clock_1Hz");
@@ -47,15 +56,51 @@ BEGIN
 	           AutoRequest := "DB_AutoCycle".P2Request,
 	           ManualRequest := ("DB_StationState".StationState = 40) AND "DB_HMI".P2_PumpCmd,
 	           TestRequest := ("DB_StationState".StationState = 50) AND "DB_HMI".P2_PumpCmd,
-	           FaultOK := NOT "DB_Alarms".P2FaultLatched,
+	           FaultOK := NOT "DB_Alarms".P2FaultLatched AND NOT "DB_Alarms".P2LowFlowLatched,
 	           RunFeedback := "DB_Process".P2_RunFeedback,
 	           SourceOK := "DB_StationState".SourceOK,
 	           EStopOK := "DB_StationState".EStopOK,
 	           OtherRunning := "DB_Pump1".RunCommand,
+	           FlowRate := "DB_Process".Flow_m3h,
+	           FlowValid := "DB_Process".Flow_Valid,
+	           FlowMin := "DB_Parameters".Flow_Min,
+	           FlowValidation := "DB_Parameters".Flow_Validation,
+	           MotorCurrent := "DB_Process".P2_Current_A,
+	           CurrentValid := "DB_Process".P2_Current_Valid,
+	           CurrentHigh := "DB_Parameters".Current_High,
+	           CurrentHighDelay := "DB_Parameters".Current_High_Delay,
+	           FeedbackTimeout := "DB_Parameters".Run_Feedback_Timeout,
 	           RestartDelay := "DB_Parameters".Restart_Delay,
 	           TestMax := "DB_Parameters".Maint_Test_Max,
 	           Clock1Hz := "Clock_1Hz");
 	
+	"DB_Monitor"(Clock1Hz := "Clock_1Hz",
+	             P1Start := "DB_Pump1".StartEvent,
+	             P2Start := "DB_Pump2".StartEvent,
+	             StartsMax := "DB_Parameters".FreqStarts_Max,
+	             WindowMin := "DB_Parameters".FreqStarts_Window_min,
+	             P1Runtime_s := "DB_Pump1".Runtime_s,
+	             P2Runtime_s := "DB_Pump2".Runtime_s,
+	             P1Running := "DB_Pump1".RunCommand,
+	             P2Running := "DB_Pump2".RunCommand,
+	             MaintInterval_h := "DB_Parameters".Maintenance_Interval_h,
+	             MaintResetP1 := ("DB_StationState".StationState = 50) AND "DB_HMI".MaintReset_P1,
+	             MaintResetP2 := ("DB_StationState".StationState = 50) AND "DB_HMI".MaintReset_P2,
+	             Level := "DB_Process".TankLevel_pct,
+	             LevelValid := "DB_Process".TankLevel_Valid,
+	             RiseWindow := "DB_Parameters".LevelRise_Window,
+	             RiseMin := "DB_Parameters".LevelRise_Min,
+	             FlowValid := "DB_Process".Flow_Valid,
+	             PressureValid := "DB_Process".Pressure_Valid,
+	             SourceValid := "DB_Process".SourceLevel_Valid,
+	             P1CurrentValid := "DB_Process".P1_Current_Valid,
+	             P2CurrentValid := "DB_Process".P2_Current_Valid,
+	             P1HighCurrent := "DB_Pump1".HighCurrentWarning,
+	             P2HighCurrent := "DB_Pump2".HighCurrentWarning,
+	             PumpFaultActive := "DB_Alarms".P1FaultLatched OR "DB_Alarms".P2FaultLatched
+	             OR "DB_Alarms".P1LowFlowLatched OR "DB_Alarms".P2LowFlowLatched);
+	
+	"FC_Interfaces"();
 	"FC_WriteOutputs"();
 	"FC_Indicators"();
 END_ORGANIZATION_BLOCK

@@ -36,6 +36,7 @@ SCL sources are in `03_plc/src` and are the reference. Ladder blocks are documen
 | FB / FC | Function block / function |
 | DB | Data block |
 | DI_ AI_ DO_ | Digital input, analog input, digital output tags |
+| IO | FC_Interfaces | SCL | Fills DB_HMI, clears operator pump commands outside Manual and Maintenance |
 
 ## Call order in OB1
 
@@ -48,9 +49,9 @@ flowchart TD
     E --> F1[FB_PumpControl pump 1]
     F1 --> F2[FB_PumpControl pump 2]
     F2 --> M[FB_StationMonitor]
-    M --> G[FC_WriteOutputs]
+    M --> I[FC_Interfaces]
+    I --> G[FC_WriteOutputs]
     G --> H[FC_Indicators]
 ```
-
 
 Pump 2 is evaluated after pump 1 and reads its run command, so when both are requested in the same scan, pump 1 starts and pump 2 is refused.

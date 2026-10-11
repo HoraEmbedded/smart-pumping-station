@@ -1,0 +1,71 @@
+FUNCTION "FC_Interfaces" : Void
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+BEGIN
+    // A pump command typed by the operator must not survive a mode change.
+    IF ("DB_StationState".StationState <> 40) AND ("DB_StationState".StationState <> 50) THEN
+        "DB_HMI".P1_PumpCmd := FALSE;
+        "DB_HMI".P2_PumpCmd := FALSE;
+    END_IF;
+
+    "DB_HMI".StationState := "DB_StationState".StationState;
+    "DB_HMI".PriorityPump := "DB_AutoCycle".Priority;
+    "DB_HMI".TankLevel_pct := "DB_Process".TankLevel_pct;
+    "DB_HMI".SourceLevel_pct := "DB_Process".SourceLevel_pct;
+    "DB_HMI".SourceOK := "DB_StationState".SourceOK;
+    "DB_HMI".Flow_m3h := "DB_Process".Flow_m3h;
+    "DB_HMI".Pressure_bar := "DB_Process".Pressure_bar;
+    "DB_HMI".P1_Current_A := "DB_Process".P1_Current_A;
+    "DB_HMI".P2_Current_A := "DB_Process".P2_Current_A;
+    "DB_HMI".P1_RunCmd := "DB_Pump1".RunCommand;
+    "DB_HMI".P2_RunCmd := "DB_Pump2".RunCommand;
+    "DB_HMI".P1_Feedback := "DB_Process".P1_RunFeedback;
+    "DB_HMI".P2_Feedback := "DB_Process".P2_RunFeedback;
+    "DB_HMI".P1_Runtime_h := UDINT_TO_REAL("DB_Pump1".Runtime_s) / 3600.0;
+    "DB_HMI".P2_Runtime_h := UDINT_TO_REAL("DB_Pump2".Runtime_s) / 3600.0;
+    "DB_HMI".P1_StartCount := "DB_Pump1".StartCount;
+    "DB_HMI".P2_StartCount := "DB_Pump2".StartCount;
+    "DB_HMI".Level_Low := "DB_Parameters".Level_Low;
+    "DB_HMI".Level_High := "DB_Parameters".Level_High;
+    "DB_HMI".Level_CritHigh := "DB_Parameters".Level_CritHigh;
+
+    // Pump status: 0 stopped, 1 running, 2 starting, 3 unavailable.
+    IF "DB_Alarms".P1FaultLatched OR "DB_Alarms".P1LowFlowLatched THEN
+        "DB_HMI".P1_Status := 3;
+    ELSIF "DB_Pump1".RunCommand AND "DB_Process".P1_RunFeedback THEN
+        "DB_HMI".P1_Status := 1;
+    ELSIF "DB_Pump1".RunCommand THEN
+        "DB_HMI".P1_Status := 2;
+    ELSE
+        "DB_HMI".P1_Status := 0;
+    END_IF;
+    IF "DB_Alarms".P2FaultLatched OR "DB_Alarms".P2LowFlowLatched THEN
+        "DB_HMI".P2_Status := 3;
+    ELSIF "DB_Pump2".RunCommand AND "DB_Process".P2_RunFeedback THEN
+        "DB_HMI".P2_Status := 1;
+    ELSIF "DB_Pump2".RunCommand THEN
+        "DB_HMI".P2_Status := 2;
+    ELSE
+        "DB_HMI".P2_Status := 0;
+    END_IF;
+
+    // Active alarms: latched faults plus the source low alarm.
+    "DB_HMI".AlarmCount := BOOL_TO_INT("DB_Alarms".EStopLatched)
+                           + BOOL_TO_INT("DB_Alarms".LevelCritLatched)
+                           + BOOL_TO_INT("DB_Alarms".TankSensorLatched)
+                           + BOOL_TO_INT("DB_Alarms".P1FaultLatched)
+                           + BOOL_TO_INT("DB_Alarms".P2FaultLatched)
+                           + BOOL_TO_INT("DB_Alarms".P1LowFlowLatched)
+                           + BOOL_TO_INT("DB_Alarms".P2LowFlowLatched)
+                           + BOOL_TO_INT("DB_Alarms".NoPumpLatched)
+                           + BOOL_TO_INT("DB_Alarms".SourceLowActive);
+
+    // Overall level for the header: 0 normal, 1 warning, 2 critical.
+    IF "DB_Alarms".CriticalActive THEN
+        "DB_HMI".AlarmLevel := 2;
+    ELSIF ("DB_HMI".AlarmCount > 0) OR "DB_Monitor".WarningActive THEN
+        "DB_HMI".AlarmLevel := 1;
+    ELSE
+        "DB_HMI".AlarmLevel := 0;
+    END_IF;
+END_FUNCTION

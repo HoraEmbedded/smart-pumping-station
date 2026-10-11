@@ -21,6 +21,7 @@ VERSION : 0.1
       SourceLowActive : Bool;
       CriticalActive : Bool;
       ResetPulse : Bool;
+      ResetRequest : Bool;
       ResetEdgeMem : Bool;
    END_VAR
 

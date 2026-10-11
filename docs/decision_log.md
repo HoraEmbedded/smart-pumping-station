@@ -34,3 +34,7 @@
 | DEC-030 | 2026-10-11 | Frequent starts measured on a sliding window over the last ten starts | Fixed windows miss bursts across two windows | Counter reset every hour | Reliable detection, FB_StationMonitor hosts it and later the KPI |
 | DEC-031 | 2026-10-11 | Fault injection bits in DB_Sim | Reproducible fault tests | Manual forcing of inputs | Same fault every run, usable by the regression tests |
 | DEC-032 | 2026-10-11 | Warnings clear themselves, operator acknowledgment arrives with the HMI | No alarm list to acknowledge yet | Latch every warning | Amber lamp from one WarningActive bit |
+| DEC-033 | 2026-10-12 | HMI on WinCC RT Professional (PC based), simulated with Runtime Professional Simulation V18 | The Advanced simulation installed is V17 only | Comfort panel | Same TIA project, PC runtime linked to PLCSIM |
+| DEC-034 | 2026-10-12 | The HMI exchanges data only through DB_HMI, filled by FC_Interfaces | Screens independent of the internal block structure | Direct HMI access to instance data blocks | Internal refactoring does not break the screens |
+| DEC-035 | 2026-10-12 | HMI commands are ORed with the local inputs, conflicting mode positions count as no selection | Same behavior as a physical selector, no hidden priority | HMI overrides the local selector | The safe default is READY |
+| DEC-036 | 2026-10-12 | Operator pump commands are cleared outside Manual and Maintenance | A stale command would start a pump on return to Manual | Keep the command bits | An explicit command is needed at each entry |
