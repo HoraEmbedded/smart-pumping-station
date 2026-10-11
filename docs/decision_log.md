@@ -38,3 +38,4 @@
 | DEC-034 | 2026-10-12 | The HMI exchanges data only through DB_HMI, filled by FC_Interfaces | Screens independent of the internal block structure | Direct HMI access to instance data blocks | Internal refactoring does not break the screens |
 | DEC-035 | 2026-10-12 | HMI commands are ORed with the local inputs, conflicting mode positions count as no selection | Same behavior as a physical selector, no hidden priority | HMI overrides the local selector | The safe default is READY |
 | DEC-036 | 2026-10-12 | Operator pump commands are cleared outside Manual and Maintenance | A stale command would start a pump on return to Manual | Keep the command bits | An explicit command is needed at each entry |
+| DEC-037 | 2026-10-12 | Fixed palette, status always as text with an ASCII symbol, never color alone | Readable in grayscale, on a projector and for color vision deficiency | Color only | Text lists carry the status, color is a second channel |
