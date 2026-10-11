@@ -11,8 +11,11 @@ BEGIN
                                   AND ("DB_Process".TankLevel_pct > "DB_Parameters".Level_CritHigh);
 
     // Pump protection contacts are normally closed: FALSE means fault.
-    "DB_Alarms".P1FaultCause := NOT "DI_P1_Fault";
-    "DB_Alarms".P2FaultCause := NOT "DI_P2_Fault";
+    // A run command without feedback counts as a pump fault.
+    "DB_Alarms".P1FaultCause := NOT "DI_P1_Fault" OR "DB_Pump1".NoFeedbackFault;
+    "DB_Alarms".P2FaultCause := NOT "DI_P2_Fault" OR "DB_Pump2".NoFeedbackFault;
+    "DB_Alarms".P1LowFlowCause := "DB_Pump1".LowFlowFault;
+    "DB_Alarms".P2LowFlowCause := "DB_Pump2".LowFlowFault;
 
     // Stays active after a trip while both protection contacts are still open.
     "DB_Alarms".NoPumpCause := "DB_AutoCycle".NoPumpAvailable

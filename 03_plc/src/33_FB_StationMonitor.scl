@@ -1,0 +1,116 @@
+FUNCTION_BLOCK "FB_StationMonitor"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      Clock1Hz : Bool;
+      P1Start : Bool;
+      P2Start : Bool;
+      StartsMax : Int;
+      WindowMin : Int;
+      P1Runtime_s : UDInt;
+      P2Runtime_s : UDInt;
+      P1Running : Bool;
+      P2Running : Bool;
+      MaintInterval_h : Real;
+      MaintResetP1 : Bool;
+      MaintResetP2 : Bool;
+      Level : Real;
+      LevelValid : Bool;
+      RiseWindow : Time;
+      RiseMin : Real;
+      FlowValid : Bool;
+      PressureValid : Bool;
+      SourceValid : Bool;
+      P1CurrentValid : Bool;
+      P2CurrentValid : Bool;
+      P1HighCurrent : Bool;
+      P2HighCurrent : Bool;
+      PumpFaultActive : Bool;
+   END_VAR
+
+   VAR_OUTPUT 
+      FrequentStarts : Bool;
+      MaintDueP1 : Bool;
+      MaintDueP2 : Bool;
+      LevelNotRising : Bool;
+      SensorWarning : Bool;
+      WarningActive : Bool;
+   END_VAR
+
+   VAR 
+      r1s : R_TRIG;
+      rReset1 : R_TRIG;
+      rReset2 : R_TRIG;
+      rRun : R_TRIG;
+      tRise : TON_TIME;
+      seconds : UDInt;
+      startTimes : Array[0..9] of UDInt;
+      startsSeen : Int;
+      serviceBase1 : UDInt;
+      serviceBase2 : UDInt;
+      refLevel : Real;
+   END_VAR
+
+   VAR_TEMP 
+      idx : Int;
+      i : Int;
+      anyRunning : Bool;
+      intervalS : UDInt;
+   END_VAR
+
+BEGIN
+    #r1s(CLK := #Clock1Hz);
+    IF #r1s.Q THEN
+        #seconds := #seconds + 1;
+    END_IF;
+
+    // Sliding window: remember the times of the last ten starts.
+    IF #P1Start OR #P2Start THEN
+        FOR #i := 9 TO 1 BY -1 DO
+            #startTimes[#i] := #startTimes[#i - 1];
+        END_FOR;
+        #startTimes[0] := #seconds;
+        IF #startsSeen < 10 THEN
+            #startsSeen := #startsSeen + 1;
+        END_IF;
+    END_IF;
+    // Too many starts means the (max + 1)th most recent start is still inside the window.
+    #idx := LIMIT(MN := 1, IN := #StartsMax, MX := 9);
+    #FrequentStarts := (#startsSeen > #idx)
+                       AND ((#seconds - #startTimes[#idx]) <= (INT_TO_UDINT(#WindowMin) * 60));
+
+    // Maintenance: runtime since the last service reset.
+    #rReset1(CLK := #MaintResetP1);
+    #rReset2(CLK := #MaintResetP2);
+    IF #rReset1.Q OR (#P1Runtime_s < #serviceBase1) THEN
+        #serviceBase1 := #P1Runtime_s;
+    END_IF;
+    IF #rReset2.Q OR (#P2Runtime_s < #serviceBase2) THEN
+        #serviceBase2 := #P2Runtime_s;
+    END_IF;
+    #intervalS := REAL_TO_UDINT(#MaintInterval_h * 3600.0);
+    #MaintDueP1 := (#P1Runtime_s - #serviceBase1) >= #intervalS;
+    #MaintDueP2 := (#P2Runtime_s - #serviceBase2) >= #intervalS;
+
+    // Level rise: while a pump runs, compare the level once per window.
+    // The timer output pulses once per window because the input drops when it fires.
+    #anyRunning := #P1Running OR #P2Running;
+    #rRun(CLK := #anyRunning);
+    #tRise(IN := #anyRunning AND NOT #tRise.Q, PT := #RiseWindow);
+    IF NOT #anyRunning OR NOT #LevelValid THEN
+        #LevelNotRising := FALSE;
+        #refLevel := #Level;
+    ELSIF #rRun.Q THEN
+        #refLevel := #Level;
+    ELSIF #tRise.Q THEN
+        #LevelNotRising := (#Level - #refLevel) < #RiseMin;
+        #refLevel := #Level;
+    END_IF;
+
+    // Non critical sensors: a warning only. The tank level sensor is critical elsewhere.
+    #SensorWarning := NOT #FlowValid OR NOT #PressureValid OR NOT #SourceValid
+                      OR NOT #P1CurrentValid OR NOT #P2CurrentValid;
+
+    #WarningActive := #SensorWarning OR #FrequentStarts OR #MaintDueP1 OR #MaintDueP2
+                      OR #LevelNotRising OR #P1HighCurrent OR #P2HighCurrent OR #PumpFaultActive;
+END_FUNCTION_BLOCK

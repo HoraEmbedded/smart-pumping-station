@@ -11,6 +11,15 @@ VERSION : 0.1
       SourceOK : Bool;
       EStopOK : Bool;
       OtherRunning : Bool;
+      FlowRate : Real;
+      FlowValid : Bool;
+      FlowMin : Real;
+      FlowValidation : Time;
+      MotorCurrent : Real;
+      CurrentValid : Bool;
+      CurrentHigh : Real;
+      CurrentHighDelay : Time;
+      FeedbackTimeout : Time;
       RestartDelay : Time;
       TestMax : Time;
       Clock1Hz : Bool;
@@ -22,6 +31,9 @@ VERSION : 0.1
       RestartDone : Bool;
       StartEvent : Bool;
       StopEvent : Bool;
+      LowFlowFault : Bool;
+      NoFeedbackFault : Bool;
+      HighCurrentWarning : Bool;
       Runtime_s : UDInt;
       StartCount : UDInt;
    END_VAR
@@ -29,6 +41,9 @@ VERSION : 0.1
    VAR 
       tRestart : TOF_TIME;
       tTest : TON_TIME;
+      tStab : TON_TIME;
+      tFeedback : TON_TIME;
+      tCurrent : TON_TIME;
       rStart : R_TRIG;
       fStop : F_TRIG;
       r1s : R_TRIG;
@@ -55,6 +70,18 @@ BEGIN
     ELSE
         #RunCommand := FALSE;
     END_IF;
+
+    // Flow is judged only once it has had time to settle after the start.
+    #tStab(IN := #RunCommand, PT := #FlowValidation);
+    #LowFlowFault := #tStab.Q AND #FlowValid AND (#FlowRate < #FlowMin);
+
+    // A run command that never gets its feedback is a pump fault.
+    #tFeedback(IN := #RunCommand AND NOT #RunFeedback, PT := #FeedbackTimeout);
+    #NoFeedbackFault := #tFeedback.Q;
+
+    // High current is a warning only, the pump keeps running.
+    #tCurrent(IN := #RunFeedback AND #CurrentValid AND (#MotorCurrent > #CurrentHigh), PT := #CurrentHighDelay);
+    #HighCurrentWarning := #tCurrent.Q;
 
     // Count starts on the edge of the command, not on every scan.
     #rStart(CLK := #RunCommand);
