@@ -74,3 +74,15 @@ All notable changes are documented here. Format inspired by Keep a Changelog.
 
 ### Changed
 - Retentive run hours and start counters
+
+## [0.8.0] - 2026-10-13
+
+### Added
+- HMI device (WinCC RT Professional) connected to the PLC, simulated with Runtime Professional Simulation
+- HMI interface data block and function block, operator commands from the HMI combined with the local inputs
+- Common template with header and navigation, station overview and commands screens
+- HMI design standard (palette, status always shown as text)
+- Five new tests with evidence
+
+### Changed
+- Operator pump commands are cleared when the station leaves Manual or Maintenance

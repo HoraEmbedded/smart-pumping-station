@@ -14,3 +14,6 @@
 | ASM-10 | V_tank = 10 m3 | Reference volume for the level model |
 | ASM-11 | Q_pump nominal = 12 m3/h | Simulated, not a real pump curve |
 | ASM-12 | Q_out = 3 m3/h constant. Time acceleration applies to the physical model only, protection delays run in PLC seconds and are tested at acceleration 1 | Constant drain is a simplification |
+| REQ-041 | Operator pump commands shall be cleared when the station leaves Manual or Maintenance mode | M | T | V3 |
+| REQ-042 | The HMI shall display the station state, tank and source levels, flow, pressure, motor currents and the status of each pump, from the PLC values | M | T | V3 |
+| REQ-043 | Start, stop, reset and mode selection shall be operable from the HMI and combined with the local inputs, conflicting mode positions counting as no selection | M | T | V3 |

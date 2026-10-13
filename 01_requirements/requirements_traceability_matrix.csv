@@ -28,7 +28,7 @@ REQ-026,V4,A;T,FB_StationMonitor;python,T25,Planned
 REQ-027,V5,A;T,python,T26,Planned
 REQ-028,V1,I;T,DB_Parameters;parameters.md,T27,Verified
 REQ-029,V1,I,TIA project,T31,Verified
-REQ-030,V6,D,documentation,T28,Verified
+REQ-030,V6,D,documentation,T28,Planned
 REQ-031,V4,I,.gitignore;architecture,T29,Planned
 REQ-032,V0,I,this matrix,T32,Verified
 REQ-033,V1,T,FB_ModeManager;TR01;TR02,T33,Planned
@@ -39,3 +39,6 @@ REQ-037,V2,T,FB_PumpControl;P23;ALM_006;ALM_007,T37,Verified
 REQ-038,V2,T,FB_PumpControl;WRN_002,T38,Verified
 REQ-039,V2,T,FB_StationMonitor;WRN_003,T39,Verified
 REQ-040,V2,T,FB_StationMonitor;WRN_004,T40,Verified
+REQ-041,V3,T,FC_Interfaces,T41,Verified
+REQ-042,V3,T,FC_Interfaces;Overview screen,T42;T45,Verified
+REQ-043,V3,T,FB_ModeManager;FC_Interfaces;Commands screen,T43,Verified

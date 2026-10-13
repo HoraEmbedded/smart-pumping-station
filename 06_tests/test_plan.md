@@ -59,6 +59,11 @@ T01, T02, T06, T08, T09, T11, T12, T13, T15, T27, T31 passed.
 | T38 | High current warning | 038 | V2 | P1 running, high current injected | After the delay a warning is raised, the pump keeps running | Capture |
 | T39 | Maintenance due | 039 | V2 | Short interval, P1 runs, then maintenance reset | Warning raised, cleared by reset in Maintenance only | Capture |
 | T40 | Level not rising | 040 | V2 | Excess drain, pump running 60 s | Warning raised, cleared when the level rises again | Capture |
+| T41 | Operator command cleared on mode change | 041 | V3 | Manual, pump 1 commanded and running, switch to Auto, then back to Manual | Command bit cleared, pump does not restart until commanded again | Capture |
+| T42 | HMI displays the PLC values | 042 | V3 | Auto cycle running, compare overview and watch table | State, levels, flow, pressure, currents and pump status match | Capture |
+| T43 | HMI commands and mode selection | 043 | V3 | Start, Auto, Manual, Stop from the HMI, then conflicting selector, E-stop and reset | States follow the state machine, conflict gives READY, reset refused until the cause is cleared | Capture |
+| T44 | Command distinct from feedback | 022 | V3 | Manual, feedback injected off, pump 1 commanded from the HMI | STARTING with command lit and feedback unlit, then UNAVAILABLE after the timeout | Capture |
+| T45 | Navigation | 021 | V3 | Press each navigation button | Correct screen opens, header and bar stay | Capture |
 
 ## Exit criteria for V2
 

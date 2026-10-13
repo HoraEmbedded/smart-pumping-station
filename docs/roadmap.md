@@ -14,7 +14,7 @@ Planned over 14 weeks, one iteration at a time, one commit per step. Source: uni
 | I6 | 5 | Modes, interlocks, critical faults | v0.6.0 | Done|
 | I7 | 6 | Two pumps, alternation, backup | v0.7.0 | Done |
 | I8 | 7 | Low flow, current, frequent starts | v0.8.0 | Done |
-| I9 | 8 | HMI overview, commands, alarms | v0.9.0 | Planned |
+| I9 | 8 | HMI overview, commands, alarms | v0.9.0 | Done |
 | I10 | 9 | HMI finalization and operator guide | v0.10.0 | Planned |
 | I11 | 10 | Historization and IIoT architecture | v0.11.0 | Planned |
 | I12 | 11 | Dashboard and KPI | v0.12.0 | Planned |
