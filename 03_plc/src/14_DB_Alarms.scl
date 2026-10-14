@@ -22,6 +22,15 @@ VERSION : 0.1
       CriticalActive : Bool;
       ResetPulse : Bool;
       ResetRequest : Bool;
+      ResetMem : Bool;
+      P1CmdMem : Bool;
+      P2CmdMem : Bool;
+      ClockMem : Bool;
+      SirenSilenced : Bool;
+      NewCritical : Bool;
+      PrevCriticalCount : Int;
+      EventMessage : Int;
+      EventHold : Int;
       ResetEdgeMem : Bool;
    END_VAR
 

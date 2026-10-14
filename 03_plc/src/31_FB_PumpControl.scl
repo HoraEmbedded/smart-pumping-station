@@ -34,6 +34,7 @@ VERSION : 0.1
       LowFlowFault : Bool;
       NoFeedbackFault : Bool;
       HighCurrentWarning : Bool;
+      TestTimeout : Bool;
       Runtime_s : UDInt;
       StartCount : UDInt;
    END_VAR
@@ -58,6 +59,7 @@ BEGIN
 
     // A maintenance test stops after TestMax and needs a new command to run again.
     #tTest(IN := #TestRequest, PT := #TestMax);
+    #TestTimeout := #TestRequest AND #tTest.Q;
     #request := #AutoRequest OR #ManualRequest OR (#TestRequest AND NOT #tTest.Q);
 
     // The off-delay output stays TRUE during the restart delay after a stop.
