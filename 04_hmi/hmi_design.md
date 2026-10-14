@@ -38,6 +38,21 @@ flowchart LR
 
 White text on green, orange, red and blue. Dark text on light blue and grey.
 
+## Alarm system
+
+| Class | Display name | Acknowledgment | Matrix priority |
+| --- | --- | --- | --- |
+| Critical | [ X ] CRITICAL | Required | Critical |
+| High | [ ! ] HIGH | Required | High |
+| Medium | [ ! ] MEDIUM | Required | Medium |
+| Warning | [ i ] WARNING | Not required | Warning |
+
+Sixteen discrete alarms are triggered by the bits of DB_HMI.AlarmWord1 and AlarmWord2, listed in hmi_alarms.csv. Each alarm has an info text with probable causes and the operator action, taken from the alarm matrix. Acknowledging an alarm in the HMI never clears a latched fault: only a reset with the cause cleared does.
+
+## Operator messages
+
+One message field in the template shows the reason of a refused or delayed action. Events (reset refused, command outside Manual or Maintenance, command in FAULT) stay for five seconds. Reasons for a held pump command (pump unavailable, source low, other pump running, restart delay, maximum test time) stay while the command is held.
+
 ## Rules
 
 - Color is never the only indicator. Every state also has a text, and warning and critical states carry an ASCII symbol: `[ OK ]`, `[ ! ]`, `[ X ]`.
