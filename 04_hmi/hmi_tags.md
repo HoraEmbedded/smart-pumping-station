@@ -17,6 +17,10 @@ All HMI tags are linked to DB_HMI through HMI_Connection_1, with a 500 ms acquis
 | P1_RunCmd, P2_RunCmd, P1_Feedback, P2_Feedback | Bool | Command and feedback indicators |
 | P1_Runtime_h, P2_Runtime_h, P1_StartCount, P2_StartCount | Real, UDInt | Maintenance screen |
 | Level_Low, Level_High, Level_CritHigh | Real | Limit lines on the level bar |
+|AlarmWord1, AlarmWord2 | Word |  |
+| OperatorMessage |  |  |
+| ActivePump |  |  |
+
 
 ## Written by the operator
 
