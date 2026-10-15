@@ -53,6 +53,8 @@ TIA Portal V18, S7-PLCSIM V18 SP2, Python 3.13, Git, VS Code. See [docs/workstat
 
 This simulation is a foundation. Possible next steps include a variable frequency drive model, OPC UA data exchange, a validated machine learning extension, and a hardware-in-the-loop test bench.
 
+OPC UA with encryption and certificates, Security assessment with zones and conduits (IEC 62443), Node-RED collector as an alternative
+
 ## License
 
 MIT, see [LICENSE](LICENSE).

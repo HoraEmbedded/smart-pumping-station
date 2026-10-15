@@ -59,6 +59,8 @@ Signaux simulés uniquement. Aucun dimensionnement hydraulique réel, aucune fon
 
 Cette simulation est une base. Les évolutions possibles incluent un modèle de variateur de fréquence, un échange de données OPC UA, une extension d'apprentissage automatique validée et un banc d'essai matériel en boucle.
 
+OPC UA avec chiffrement et certificats, Évaluation de sécurité par zones et conduits (IEC 62443), Collecteur Node-RED comme alternative
+
 ## Licence
 
 MIT, voir [LICENSE](LICENSE).
