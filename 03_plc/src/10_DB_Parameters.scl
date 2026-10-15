@@ -29,6 +29,8 @@ VERSION : 0.1
       Sim_Step : Real := 0.1;
       Time_Accel : Real := 1.0;
       Sim_HighCurrent_Factor : Real := 1.3;
+      Supply_Voltage : Real := 400.0;
+      Power_Factor : Real := 0.85;
    END_VAR
 
 BEGIN

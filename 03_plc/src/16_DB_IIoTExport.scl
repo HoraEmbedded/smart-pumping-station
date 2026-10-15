@@ -1,0 +1,43 @@
+DATA_BLOCK "DB_IIoTExport"
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 0.1
+   VAR 
+      TankLevel_pct : Real;
+      SourceLevel_pct : Real;
+      Flow_m3h : Real;
+      Pressure_bar : Real;
+      P1_Current_A : Real;
+      P2_Current_A : Real;
+      P1_RunHours : Real;
+      P2_RunHours : Real;
+      Power_kW : Real;
+      GT_Drain_m3h : Real;
+      P1_StartCount : UDInt;
+      P2_StartCount : UDInt;
+      SampleCounter : UDInt;
+      SimTime_s : LReal;
+      StationState : Int;
+      ActiveAlarmCount : Int;
+      AlarmWord1 : Word;
+      AlarmWord2 : Word;
+      P1_RunCmd : Bool;
+      P2_RunCmd : Bool;
+      P1_RunFeedback : Bool;
+      P2_RunFeedback : Bool;
+      P1_Fault : Bool;
+      P2_Fault : Bool;
+      SourceOK : Bool;
+      Demand : Bool;
+      GT_Inject_P1_LowFlow : Bool;
+      GT_Inject_P2_LowFlow : Bool;
+      GT_Inject_P1_NoFeedback : Bool;
+      GT_Inject_P2_NoFeedback : Bool;
+      GT_Inject_P1_HighCurrent : Bool;
+      GT_Inject_P2_HighCurrent : Bool;
+      Spare6 : Bool;
+      Spare7 : Bool;
+   END_VAR
+
+BEGIN
+
+END_DATA_BLOCK

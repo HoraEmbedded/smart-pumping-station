@@ -31,9 +31,12 @@ Single source of truth for thresholds and delays. Mirrored in `DB_Parameters` (P
 | P25 | Maint_Test_Max_s | 60 | s | Maximum pump test in Maintenance |
 | P26 | Source_Hyst_pct | 5 | % | Hysteresis for source recovery, IL-02 |
 | P27 | Sim_HighCurrent_Factor | 1.3 | x | Current multiplier when a high current fault is injected |
+| P28 | Supply_Voltage | 400 | V | Line-to-line voltage for the simulated power |
+| P29 | Power_Factor | 0.85 | none | Power factor of the simulated motor |
 
 ## Formulas
 
     mA = 4 + Raw / 1728
     Value_eng = Min + (Raw / 27648) x (Max - Min)
+    P_kW = sqrt(3) x Supply_Voltage x I x Power_Factor / 1000
 

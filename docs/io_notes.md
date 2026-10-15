@@ -23,3 +23,7 @@ Start, stop, reset and mode selection can come from the local inputs or from the
 ## Alarm and message interface
 
 Active alarms are published as bits of two Word tags in DB_HMI. AlarmWord1 carries the faults (bit 0 emergency stop to bit 8 no pump available), AlarmWord2 carries the warnings (bit 0 frequent starts to bit 6 non critical sensor). The mapping is listed in 04_hmi/hmi_alarms.csv. Cmd_Silence silences the siren without clearing any alarm. OperatorMessage carries the reason of a refused or delayed operator action.
+
+## Simulated field signals
+
+While DB_Sim.Sim_Inputs is TRUE, the emergency stop, the pump protection contacts and the source low signal come from DB_Sim (V_EStopOK, V_P1FaultOK, V_P2FaultOK, V_SourceLow), all starting at their healthy value. Setting Sim_Inputs to FALSE restores the physical inputs. Mode, start, stop and reset keep using the physical inputs combined with the HMI bits.

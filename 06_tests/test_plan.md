@@ -4,6 +4,10 @@
 
 TIA Portal V18, S7-PLCSIM V18 SP2, WinCC Runtime Professional Simulation V18, Python 3.13. Process model inside the PLC (FC_SimulationModel). Faults are injected through simulation control tags and the PLCSIM table. Time acceleration allowed, delays expressed in simulated seconds.
 
+## Simulated field signals
+
+While DB_Sim.Sim_Inputs is TRUE (default), procedures that name a physical input are carried out on the simulation bit: DI_EStop_Sim is DB_Sim.V_EStopOK, DI_P1_Fault is DB_Sim.V_P1FaultOK, DI_P2_Fault is DB_Sim.V_P2FaultOK, DI_Source_Low is DB_Sim.V_SourceLow. All start healthy, so no input needs to be set before a run.
+
 ## Rules
 
 - Every test has an ID, a linked requirement, a release, an expected result and an evidence file.

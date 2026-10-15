@@ -1,11 +1,32 @@
 FUNCTION "FC_Interlocks" : Void
 { S7_Optimized_Access := 'TRUE' }
 VERSION : 0.1
+   VAR_TEMP 
+      eStopOK : Bool;
+      p1FaultOK : Bool;
+      p2FaultOK : Bool;
+      sourceLow : Bool;
+   END_VAR
+
 BEGIN
-        "DB_Alarms".ResetRequest := "DI_Reset_Alarm" OR "DB_HMI".Cmd_Reset;
+    "DB_Alarms".ResetRequest := "DI_Reset_Alarm" OR "DB_HMI".Cmd_Reset;
+
+    // Field signals come from the simulation block while Sim_Inputs is set, else from the real inputs.
+    IF "DB_Sim".Sim_Inputs THEN
+        #eStopOK := "DB_Sim".V_EStopOK;
+        #p1FaultOK := "DB_Sim".V_P1FaultOK;
+        #p2FaultOK := "DB_Sim".V_P2FaultOK;
+        #sourceLow := "DB_Sim".V_SourceLow;
+    ELSE
+        #eStopOK := "DI_EStop_Sim";
+        #p1FaultOK := "DI_P1_Fault";
+        #p2FaultOK := "DI_P2_Fault";
+        #sourceLow := "DI_Source_Low";
+    END_IF;
+
     // Normally closed E-stop contact: FALSE means stop, a cut wire gives the same result.
-    "DB_StationState".EStopOK := "DI_EStop_Sim";
-    "DB_Alarms".EStopCause := NOT "DI_EStop_Sim";
+    "DB_StationState".EStopOK := #eStopOK;
+    "DB_Alarms".EStopCause := NOT #eStopOK;
 
     "DB_Alarms".TankSensorCause := NOT "DB_Process".TankLevel_Valid;
     "DB_Alarms".LevelCritCause := "DB_Process".TankLevel_Valid
@@ -13,8 +34,8 @@ BEGIN
 
     // Pump protection contacts are normally closed: FALSE means fault.
     // A run command without feedback counts as a pump fault.
-    "DB_Alarms".P1FaultCause := NOT "DI_P1_Fault" OR "DB_Pump1".NoFeedbackFault;
-    "DB_Alarms".P2FaultCause := NOT "DI_P2_Fault" OR "DB_Pump2".NoFeedbackFault;
+    "DB_Alarms".P1FaultCause := NOT #p1FaultOK OR "DB_Pump1".NoFeedbackFault;
+    "DB_Alarms".P2FaultCause := NOT #p2FaultOK OR "DB_Pump2".NoFeedbackFault;
     "DB_Alarms".P1LowFlowCause := "DB_Pump1".LowFlowFault;
     "DB_Alarms".P2LowFlowCause := "DB_Pump2".LowFlowFault;
 
@@ -23,7 +44,7 @@ BEGIN
         OR ("DB_Alarms".NoPumpLatched AND "DB_Alarms".P1FaultCause AND "DB_Alarms".P2FaultCause);
 
     // Source availability with hysteresis, so it does not chatter around the minimum.
-    IF "DI_Source_Low" OR NOT "DB_Process".SourceLevel_Valid
+    IF #sourceLow OR NOT "DB_Process".SourceLevel_Valid
        OR ("DB_Process".SourceLevel_pct < "DB_Parameters".Source_Min) THEN
         "DB_StationState".SourceOK := FALSE;
     ELSIF "DB_Process".SourceLevel_pct >= "DB_Parameters".Source_Min + "DB_Parameters".Source_Hyst_pct THEN

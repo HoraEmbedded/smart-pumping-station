@@ -75,6 +75,7 @@ BEGIN
 	           Clock1Hz := "Clock_1Hz");
 	
 	"DB_Monitor"(Clock1Hz := "Clock_1Hz",
+	             TimeScale := REAL_TO_INT("DB_Parameters".Time_Accel),
 	             P1Start := "DB_Pump1".StartEvent,
 	             P2Start := "DB_Pump2".StartEvent,
 	             StartsMax := "DB_Parameters".FreqStarts_Max,

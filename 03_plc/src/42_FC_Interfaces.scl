@@ -201,4 +201,46 @@ BEGIN
                   + BOOL_TO_INT("DB_Alarms".TankSensorLatched) + BOOL_TO_INT("DB_Alarms".NoPumpLatched);
     "DB_Alarms".NewCritical := #critCount > "DB_Alarms".PrevCriticalCount;
     "DB_Alarms".PrevCriticalCount := #critCount;
+    
+    // Export block: one sample per second, values copied every scan.
+    IF #rClock THEN
+        "DB_IIoTExport".SampleCounter := "DB_IIoTExport".SampleCounter + 1;
+    END_IF;
+    "DB_IIoTExport".TankLevel_pct := "DB_Process".TankLevel_pct;
+    "DB_IIoTExport".SourceLevel_pct := "DB_Process".SourceLevel_pct;
+    "DB_IIoTExport".Flow_m3h := "DB_Process".Flow_m3h;
+    "DB_IIoTExport".Pressure_bar := "DB_Process".Pressure_bar;
+    "DB_IIoTExport".P1_Current_A := "DB_Process".P1_Current_A;
+    "DB_IIoTExport".P2_Current_A := "DB_Process".P2_Current_A;
+    "DB_IIoTExport".P1_RunHours := "DB_HMI".P1_Runtime_h;
+    "DB_IIoTExport".P2_RunHours := "DB_HMI".P2_Runtime_h;
+    // Three-phase power: sqrt(3) x voltage x current x power factor. Only one pump runs at a time.
+    "DB_IIoTExport".Power_kW := SQRT(3.0) * "DB_Parameters".Supply_Voltage
+                                * ("DB_Process".P1_Current_A + "DB_Process".P2_Current_A)
+                                * "DB_Parameters".Power_Factor / 1000.0;
+    IF "DB_Sim".Drain_Enable THEN
+        "DB_IIoTExport".GT_Drain_m3h := "DB_Parameters".Drain_Flow;
+    ELSE
+        "DB_IIoTExport".GT_Drain_m3h := 0.0;
+    END_IF;
+    "DB_IIoTExport".P1_StartCount := "DB_Pump1".StartCount;
+    "DB_IIoTExport".P2_StartCount := "DB_Pump2".StartCount;
+    "DB_IIoTExport".StationState := "DB_StationState".StationState;
+    "DB_IIoTExport".ActiveAlarmCount := "DB_HMI".AlarmCount;
+    "DB_IIoTExport".AlarmWord1 := "DB_HMI".AlarmWord1;
+    "DB_IIoTExport".AlarmWord2 := "DB_HMI".AlarmWord2;
+    "DB_IIoTExport".P1_RunCmd := "DB_Pump1".RunCommand;
+    "DB_IIoTExport".P2_RunCmd := "DB_Pump2".RunCommand;
+    "DB_IIoTExport".P1_RunFeedback := "DB_Process".P1_RunFeedback;
+    "DB_IIoTExport".P2_RunFeedback := "DB_Process".P2_RunFeedback;
+    "DB_IIoTExport".P1_Fault := "DB_Alarms".P1FaultLatched;
+    "DB_IIoTExport".P2_Fault := "DB_Alarms".P2FaultLatched;
+    "DB_IIoTExport".SourceOK := "DB_StationState".SourceOK;
+    "DB_IIoTExport".Demand := "DB_StationState".PumpingDemand;
+    "DB_IIoTExport".GT_Inject_P1_LowFlow := "DB_Sim".Inject_P1_LowFlow;
+    "DB_IIoTExport".GT_Inject_P2_LowFlow := "DB_Sim".Inject_P2_LowFlow;
+    "DB_IIoTExport".GT_Inject_P1_NoFeedback := "DB_Sim".Inject_P1_NoFeedback;
+    "DB_IIoTExport".GT_Inject_P2_NoFeedback := "DB_Sim".Inject_P2_NoFeedback;
+    "DB_IIoTExport".GT_Inject_P1_HighCurrent := "DB_Sim".Inject_P1_HighCurrent;
+    "DB_IIoTExport".GT_Inject_P2_HighCurrent := "DB_Sim".Inject_P2_HighCurrent;
 END_FUNCTION

@@ -35,6 +35,7 @@ BEGIN
     END_IF;
 
     IF "DB_Sim".Sim_Enable AND "DB_Sim".Sim_Run THEN
+        "DB_IIoTExport".SimTime_s := "DB_IIoTExport".SimTime_s + REAL_TO_LREAL("DB_Parameters".Sim_Step * "DB_Parameters".Time_Accel);
         #dLevel := "DB_Parameters".Sim_Step * "DB_Parameters".Time_Accel * 100.0
                    * (#qIn - #qOut) / (3600.0 * "DB_Parameters".Tank_Volume);
         "DB_Sim".TankLevel_pct := LIMIT(MN := 0.0, IN := "DB_Sim".TankLevel_pct + #dLevel, MX := 100.0);

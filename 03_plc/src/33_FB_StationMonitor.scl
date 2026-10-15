@@ -3,6 +3,7 @@ FUNCTION_BLOCK "FB_StationMonitor"
 VERSION : 0.1
    VAR_INPUT 
       Clock1Hz : Bool;
+      TimeScale : Int;
       P1Start : Bool;
       P2Start : Bool;
       StartsMax : Int;
@@ -60,8 +61,9 @@ VERSION : 0.1
 
 BEGIN
     #r1s(CLK := #Clock1Hz);
+    // Window and rate timing follow simulated time: one tick per real second, times the acceleration.
     IF #r1s.Q THEN
-        #seconds := #seconds + 1;
+        #seconds := #seconds + INT_TO_UDINT(LIMIT(MN := 1, IN := #TimeScale, MX := 3600));
     END_IF;
 
     // Sliding window: remember the times of the last ten starts.

@@ -21,6 +21,11 @@ VERSION : 0.1
       Inject_P2_NoFeedback : Bool;
       Inject_P1_HighCurrent : Bool;
       Inject_P2_HighCurrent : Bool;
+      Sim_Inputs : Bool := TRUE;
+      V_EStopOK : Bool := TRUE;
+      V_P1FaultOK : Bool := TRUE;
+      V_P2FaultOK : Bool := TRUE;
+      V_SourceLow : Bool := FALSE;
    END_VAR
 
 BEGIN
