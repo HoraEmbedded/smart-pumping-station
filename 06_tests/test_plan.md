@@ -68,7 +68,15 @@ T01, T02, T06, T08, T09, T11, T12, T13, T15, T27, T31 passed.
 | T43 | HMI commands and mode selection | 043 | V3 | Start, Auto, Manual, Stop from the HMI, then conflicting selector, E-stop and reset | States follow the state machine, conflict gives READY, reset refused until the cause is cleared | Capture |
 | T44 | Command distinct from feedback | 022 | V3 | Manual, feedback injected off, pump 1 commanded from the HMI | STARTING with command lit and feedback unlit, then UNAVAILABLE after the timeout | Capture |
 | T45 | Navigation | 021 | V3 | Press each navigation button | Correct screen opens, header and bar stay | Capture |
+| T51 | Export block content and offsets | 049 | V4 | Compare the block to its sources, sample counter, simulated clock, power, ground truth bits | Values equal, counter plus 10 in 10 s, simulated time near plus 600 at acceleration 60, offsets as in the data dictionary | Capture |
+| T52 | Collector CSV | 049 | V4 | Frozen values, 15 s run | One row per sample, consecutive counter, no missed sample, values as in the watch table | Capture |
+| T53 | Dataset validation | 050 | V4 | Run the validator on the six datasets | All pass, no missed samples | Capture |
+| T54 | Frequent starts on simulated time | 018 | V4 | Acceleration 60 normal cycles, then narrow level band | No warning in normal operation, warning with the narrow band | Capture |
 
 ## Exit criteria for V2
 
 T03 to T05, T07, T16 to T22, T24, T32, T37 to T40 passed, regression of the V1 tests passed.
+
+## Exit criteria for V4
+
+T10, T25, T29, T51 to T54 passed, regression passed.

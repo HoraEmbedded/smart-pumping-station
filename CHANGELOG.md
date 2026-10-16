@@ -86,3 +86,16 @@ All notable changes are documented here. Format inspired by Keep a Changelog.
 
 ### Changed
 - Operator pump commands are cleared when the station leaves Manual or Maintenance
+
+## [0.9.0] - 2026-10-16
+
+### Added
+- Flat export block with fixed layout, sample counter and simulated clock
+- Simulated field signals in the process model
+- Read only OPC UA collector, dataset schema and validator
+- Six datasets: one normal and five fault scenarios with ground truth columns
+- Data architecture, data dictionary, OPC UA setup notes and security measures
+- Four new tests, regression of the previous tests
+
+### Changed
+- Frequent start window now follows simulated time
