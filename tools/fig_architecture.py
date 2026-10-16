@@ -3,7 +3,7 @@ from matplotlib.patches import Rectangle
 
 from common import arrow, box, new_canvas, save, title_block
 
-fig, ax = new_canvas(16, 7, xlim=(0, 170), ylim=(0, 70))
+fig, ax = new_canvas(18, 7, xlim=(0, 190), ylim=(0, 70))
 ax.set_title("OT / IT data architecture", fontsize=12)
 
 
@@ -12,25 +12,27 @@ def zone(x, y, w, h, label):
     ax.text(x + 2, y + h - 2, label, ha="left", va="top", fontsize=9, color="#555555")
 
 
-zone(2, 6, 38, 58, "OT zone")
-zone(88, 6, 80, 58, "IT zone (local)")
+zone(2, 6, 64, 58, "OT zone")
+zone(84, 6, 104, 58, "IT zone (local)")
 
-box(ax, 6, 36, 30, 16, "PLC S7-1200\nDB_IIoTExport", fc="#fdf2d9")
-box(ax, 6, 12, 30, 14, "HMI\nWinCC Runtime", fc="#e6f4e6")
-box(ax, 54, 30, 30, 16, "Collector\nPython, read only", fc="#e8f1fa")
-box(ax, 94, 30, 24, 16, "CSV datasets", fc="#f2f2f2")
-box(ax, 128, 40, 36, 14, "Dashboard and KPI", fc="#f2f2f2")
-box(ax, 128, 14, 36, 14, "Anomaly rules\n(Python)", fc="#f2f2f2")
+box(ax, 6, 36, 24, 16, "PLC S7-1200\nDB_IIoTExport", fc="#fdf2d9")
+box(ax, 38, 36, 24, 16, "WinCC Runtime\nOPC UA server", fc="#e6f4e6")
+box(ax, 38, 12, 24, 14, "HMI screens", fc="#e6f4e6")
+box(ax, 88, 32, 26, 16, "Collector\nPython, read only", fc="#e8f1fa")
+box(ax, 122, 32, 22, 16, "CSV datasets", fc="#f2f2f2")
+box(ax, 154, 42, 32, 14, "Dashboard and KPI", fc="#f2f2f2")
+box(ax, 154, 16, 32, 14, "Anomaly rules\n(Python)", fc="#f2f2f2")
 
-arrow(ax, (21, 26), (21, 36), both=True)
-ax.text(23, 31, "tags", ha="left", va="center", fontsize=8)
-arrow(ax, (36, 44), (54, 44))
-ax.text(45, 47, "S7 read, 1 s", ha="center", va="bottom", fontsize=8)
-arrow(ax, (84, 38), (94, 38))
-arrow(ax, (118, 42), (128, 46))
-arrow(ax, (118, 34), (128, 21))
+arrow(ax, (30, 44), (38, 44), both=True)
+ax.text(34, 47, "HMI link", ha="center", va="bottom", fontsize=8)
+arrow(ax, (50, 36), (50, 26), both=True)
+arrow(ax, (62, 44), (88, 44))
+ax.text(75, 47, "OPC UA, read only", ha="center", va="bottom", fontsize=8)
+arrow(ax, (114, 40), (122, 40))
+arrow(ax, (144, 42), (154, 49))
+arrow(ax, (144, 38), (154, 23))
 
-ax.text(4, 2, "Local lab network only, no Internet exposure. The collector only reads.", fontsize=8)
+ax.text(4, 2, "Local lab PC only, no Internet exposure. The collector only reads.", fontsize=8)
 
 title_block(fig, "architecture_ot_it")
 save(fig, "architecture_ot_it")

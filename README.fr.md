@@ -57,9 +57,7 @@ TIA Portal V18, S7-PLCSIM V18 SP2, Python 3.13, Git, VS Code. Voir [docs/worksta
 
 Cette simulation est une base. Les évolutions possibles incluent un modèle de variateur de fréquence, un échange de données OPC UA, une extension d'apprentissage automatique validée et un banc d'essai matériel en boucle.
 
-OPC UA avec chiffrement et certificats, Évaluation de sécurité par zones et conduits (IEC 62443), Collecteur Node-RED comme alternative
-
-Portage sur S7-1500 permettant PLCSIM Advanced, OPC UA et un collecteur externe
+Point d’accès OPC UA sécurisé par messages signés et chiffrés et gestion de la confiance des certificats, Évaluation de sécurité par zones et conduits (IEC 62443), Portage sur S7-1500 permettant PLCSIM Advanced, un serveur OPC UA natif et la publication MQTT.
 
 ## Licence
 

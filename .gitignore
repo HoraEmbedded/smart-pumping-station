@@ -22,10 +22,6 @@ secrets.*
 *.pem
 *.key
 *.pfx
-*.der
-*.crt
-*.cer
-*.p12
 
 # TIA Portal: binary project kept out of Git, archived in GitHub Releases
 03_plc/project/
@@ -34,3 +30,9 @@ secrets.*
 
 # Raw heavy media (final demo video is published separately)
 07_media/raw/
+
+# Certificates and keys
+*.der
+*.crt
+*.cer
+*.p12

@@ -7,13 +7,12 @@
 | Stage | Component | Role |
 | --- | --- | --- |
 | Source | PLC, DB_IIoTExport | Flat data block refreshed every scan, one sample per second |
-| Transport | S7 communication, read only | The collector reads 70 bytes every 0.5 s |
-| Collection | opcua_collector.py | Adds the PC timestamp, keeps only new samples, counts missed ones |
+| Transport | HMI connection, then OPC UA (read only) | The WinCC Runtime reads the block, its OPC UA server publishes the tags |
+| Collection | opcua_collector.py | Reads the 32 export tags twice per second, adds the PC timestamp, keeps only new samples, counts missed ones |
 | Storage | CSV files in 05_iiot_data/datasets | One file per run, one row per sample |
 | Use | Dashboard, KPI, anomaly rules | Read the CSV files |
-| WinCC OPC UA server and an OPC UA client | SCADA as gateway | Server present in the runtime settings (port 4861, security policies None, Basic128Rsa15, Basic256, Basic256Sha256). Feasibility test result: SUCCESSFULLY REACHED GATE 5 (All tags browsed and read under namespace 1). |
 
-The column list is in 05_iiot_data/data_dictionary.md.
+The column list is in 05_iiot_data/data_dictionary.md. Setup notes are in docs/opcua_setup.md.
 
 ## Time bases
 
@@ -33,9 +32,20 @@ One sample per second. The shortest protection delay is 5 s, so every delay span
 
 | Measure | How |
 | --- | --- |
-| No Internet exposure | PLC and collector on a local network with private addresses, no port forwarding |
-| Read only collector | The code only calls the block read function and has no write call |
-| PUT/GET access | Enabled on the CPU because S7 reading needs it. It has no authentication and gives access to any block by address, so the protection is the network isolation |
-| No secrets in the repository | Nothing in the code needs a credential, `.gitignore` excludes `.env`, keys and certificates, a repository scan is part of the tests |
-| Simulated field signals | Replaced by the physical inputs by switching `Sim_Inputs` off |
+| Lab PC only | The OPC UA endpoint is used locally, remote access is blocked at the firewall |
+| Read only collector | The code only calls read functions, it has no write call |
+| Anonymous policy | Accepted for the local test. The server also offers signed and encrypted policies, listed in the perspectives |
+| No external S7 access | PUT/GET is disabled on the CPU, data leaves the PLC only through the HMI connection |
+| No secrets in the repository | Nothing in the code needs a credential, certificates and keys are excluded by .gitignore, a repository scan is part of the tests |
+| Simulated field signals | Replaced by the physical inputs by switching Sim_Inputs off |
 
+## Alternatives considered
+
+| Route | Pattern | Status |
+| --- | --- | --- |
+| External S7 collector (Python) | Direct PLC read | Rejected: PLCSIM Advanced does not support the S7-1200, and the standard simulator is not reachable from outside |
+| NetToPLCSim network bridge | Third-party proxy for the simulator | Rejected: reported to work only with the S7-300 and S7-400 family on PLCSIM V5.x |
+| HMI runtime script writing a CSV | Local logging | Alternative: write test passed, not maintained |
+| SQL access to the WinCC archive | Historian queried by a database client | Not tested, access conditions unverified |
+| MQTT or web API from the PLC | Edge publishing | Not testable: needs a network-exposed controller |
+| WinCC OPC UA server and an OPC UA client | SCADA as gateway | Retained: feasibility test passed |

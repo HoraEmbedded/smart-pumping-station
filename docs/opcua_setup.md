@@ -19,9 +19,16 @@ Which of these steps was individually required was not isolated.
 | --- | --- |
 | Endpoint | opc.tcp://localhost:4861 |
 | Security used for the local test | Anonymous policy (None) |
-| Tag nodes | ns=1;s=t|<HMI tag name> |
-| Tag list node | ns=1;s=f|@LOCALMACHINE::List of all tags |
+| Tag nodes | ns=1;s=t\|<HMI tag name> |
+| Tag list node | ns=1;s=f\|@LOCALMACHINE::List of all tags |
 | Native PLC endpoint (port 4840) | Answers BadServiceUnsupported, the simulated S7-1200 does not serve OPC UA |
+
+## Checks before a collection run
+
+1. PLC simulation in RUN with the project loaded, runtime started.
+2. Port open: `netstat -ano | findstr LISTENING | findstr 4861`
+3. Export tags present in the HMI tag table and acquired cyclically in operation.
+4. Firewall: no inbound rule for port 4861 on the public profile.
 
 ## Housekeeping
 
