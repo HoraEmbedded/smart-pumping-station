@@ -22,6 +22,10 @@ secrets.*
 *.pem
 *.key
 *.pfx
+*.der
+*.crt
+*.cer
+*.p12
 
 # TIA Portal: binary project kept out of Git, archived in GitHub Releases
 03_plc/project/

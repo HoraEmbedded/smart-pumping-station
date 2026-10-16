@@ -55,6 +55,8 @@ This simulation is a foundation. Possible next steps include a variable frequenc
 
 OPC UA with encryption and certificates, Security assessment with zones and conduits (IEC 62443), Node-RED collector as an alternative
 
+S7-1500 port enabling PLCSIM Advanced, OPC UA and an external collector
+
 ## License
 
 MIT, see [LICENSE](LICENSE).

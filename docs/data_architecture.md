@@ -8,9 +8,10 @@
 | --- | --- | --- |
 | Source | PLC, DB_IIoTExport | Flat data block refreshed every scan, one sample per second |
 | Transport | S7 communication, read only | The collector reads 70 bytes every 0.5 s |
-| Collection | collector.py | Adds the PC timestamp, keeps only new samples, counts missed ones |
+| Collection | opcua_collector.py | Adds the PC timestamp, keeps only new samples, counts missed ones |
 | Storage | CSV files in 05_iiot_data/datasets | One file per run, one row per sample |
 | Use | Dashboard, KPI, anomaly rules | Read the CSV files |
+| WinCC OPC UA server and an OPC UA client | SCADA as gateway | Server present in the runtime settings (port 4861, security policies None, Basic128Rsa15, Basic256, Basic256Sha256). Feasibility test result: SUCCESSFULLY REACHED GATE 5 (All tags browsed and read under namespace 1). |
 
 The column list is in 05_iiot_data/data_dictionary.md.
 
@@ -37,3 +38,4 @@ One sample per second. The shortest protection delay is 5 s, so every delay span
 | PUT/GET access | Enabled on the CPU because S7 reading needs it. It has no authentication and gives access to any block by address, so the protection is the network isolation |
 | No secrets in the repository | Nothing in the code needs a credential, `.gitignore` excludes `.env`, keys and certificates, a repository scan is part of the tests |
 | Simulated field signals | Replaced by the physical inputs by switching `Sim_Inputs` off |
+
