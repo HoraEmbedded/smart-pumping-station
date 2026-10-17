@@ -49,3 +49,9 @@ One sample per second. The shortest protection delay is 5 s, so every delay span
 | SQL access to the WinCC archive | Historian queried by a database client | Not tested, access conditions unverified |
 | MQTT or web API from the PLC | Edge publishing | Not testable: needs a network-exposed controller |
 | WinCC OPC UA server and an OPC UA client | SCADA as gateway | Retained: feasibility test passed |
+
+## Dashboard
+
+`05_iiot_data/python/dashboard.py` serves one page on 127.0.0.1 (port 8050) and a JSON view of a CSV file. It reads the file written by the collector, so live display and replay of a recorded dataset use the same code. A pill shows LIVE, STALE (no new sample for more than 5 s) or REPLAY. The server answers GET requests only. The level guides at 30, 80 and 95 percent are the default thresholds, they do not follow a changed parameter.
+
+Live run: `opcua_collector.py --out ...\datasets\live.csv --duration 3600` in one terminal, `dashboard.py --csv ...\datasets\live.csv` in another.

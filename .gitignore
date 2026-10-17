@@ -36,3 +36,6 @@ secrets.*
 *.crt
 *.cer
 *.p12
+
+# Live collection output
+05_iiot_data/datasets/live.csv
