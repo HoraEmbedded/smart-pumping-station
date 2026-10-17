@@ -32,7 +32,8 @@ T01, T02, T06, T08, T09, T11, T12, T13, T15, T27, T31 passed.
 | T07 | Low flow P1 | 016 | V2 | P1 running, flow forced to 0 | After 10 s ALM_004, P1 unavailable | Capture |
 | T08 | Simulated E-stop | 011 | V1 | Pump running, DI_EStop_Sim set FALSE | Pumps stopped, FAULT, ALM_001 latched | Capture |
 | T09 | Reset before correction | 014 | V1 | Fault active, cause present, reset | Fault maintained | Capture |
-| T10 | PLC and dashboard consistency | 024, 025 | V4 | Change a variable in PLCSIM | Dashboard and CSV show the same value | Capture |
+| T10 | PLC, collector and dashboard consistency | 024, 025 | V4 | Force known values in the PLC simulation, then a pump fault | Watch table, last CSV row and dashboard show the same values within 2 s, the alarm appears and clears | Capture |
+| V4 | Change a variable in PLCSIM | Dashboard and CSV show the same value | Capture |
 | T11 | Normal stop | 003, 004 | V1 | Pump running, stop request | Pump stops, state STOPPED | Capture |
 | T12 | Reset without fault | 014 | V1 | No fault, reset | No change in behavior | Capture |
 | T13 | Manual refused with source low | 013 | V1 | Manual mode, source low, run command | Command refused | Capture |
@@ -47,7 +48,7 @@ T01, T02, T06, T08, T09, T11, T12, T13, T15, T27, T31 passed.
 | T22 | Low flow P2 | 016 | V2 | P2 running, flow forced to 0 | After 10 s ALM_005, P2 unavailable | Capture |
 | T23 | HMI command versus feedback | 022, 023 | V3 | Command without feedback, acknowledge alarms | Distinct displays, acknowledgment works, refusal message shown | Capture |
 | T24 | Alarm matrix completeness | 020 | V2 | Review alarm_matrix.csv | Every alarm has cause, reaction, text, reset | Review note |
-| T25 | KPI calculation | 026 | V4 | Dataset with known values | KPIs equal hand calculation | Notebook |
+| T25 | Indicator calculation | 026 | V4 | Dataset with known values, unit tests | Indicators equal the hand calculation of the worked example | Command output |
 | T26 | Anomaly rules | 027 | V5 | Normal and fault datasets | Fault periods flagged, false positives listed | Notebook |
 | T27 | Parameter editing | 028 | V1 | Change low threshold in DB_Parameters | New threshold applied, no logic edit | Capture |
 | T28 | Cold start reproducibility | 030 | V6 | Follow launch procedure from scratch | Same initial state each time | Video |
@@ -72,6 +73,9 @@ T01, T02, T06, T08, T09, T11, T12, T13, T15, T27, T31 passed.
 | T52 | Collector CSV | 049 | V4 | Frozen values, 15 s run | One row per sample, consecutive counter, no missed sample, values as in the watch table | Capture |
 | T53 | Dataset validation | 050 | V4 | Run the validator on the six datasets | All pass, no missed samples | Capture |
 | T54 | Frequent starts on simulated time | 018 | V4 | Acceleration 60 normal cycles, then narrow level band | No warning in normal operation, warning with the narrow band | Capture |
+| T55 | Stale data indicator | 051 | V4 | Stop the collector, then restart it | STALE shown within 7 s, LIVE again after the restart | Capture |
+| T56 | Indicators of the six datasets | 026 | V4 | Summary command on all datasets, compared to the written predictions | Each result explained against the prediction | Command output |
+| T57 | Dashboard exposure | 052 | V4 | Listening address check, POST request | Local address only, POST refused | Command output |
 
 ## Exit criteria for V2
 
@@ -79,4 +83,4 @@ T03 to T05, T07, T16 to T22, T24, T32, T37 to T40 passed, regression of the V1 t
 
 ## Exit criteria for V4
 
-T10, T25, T29, T51 to T54 passed, regression passed.
+T10, T25, T29, T51 to T57 passed. No change to the PLC in this iteration, the regression run of the previous iteration remains valid.

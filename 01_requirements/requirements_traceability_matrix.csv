@@ -23,8 +23,8 @@ REQ-021,V3,D,FC_HMIInterface;DB_HMI,T30,Planned
 REQ-022,V3,I;D,FC_HMIInterface,T23,Planned
 REQ-023,V3,T,FC_HMIInterface,T23,Planned
 REQ-024,V4,T,FC_Interfaces;DB_IIoTExport;opcua_collector.py,T10;T52,Planned
-REQ-025,V4,T,FC_DataInterface,T10,Planned
-REQ-026,V4,A;T,FB_StationMonitor;python,T25,Planned
+REQ-025,V4,T,FC_Interfaces;dashboard.py,T10,Planned
+REQ-026,V4,A;T,kpi.py;kpi_report.py,T25;T56,Planned
 REQ-027,V5,A;T,python,T26,Planned
 REQ-028,V1,I;T,DB_Parameters;parameters.md,T27,Verified
 REQ-029,V1,I,TIA project,T31,Verified
@@ -44,3 +44,5 @@ REQ-042,V3,T,FC_Interfaces;Overview screen,T42;T45,Verified
 REQ-043,V3,T,FB_ModeManager;FC_Interfaces;Commands screen,T43,Verified
 REQ-044,V4,T,FC_Interfaces;opcua_collector.py,T51;T52,Planned
 REQ-045,V4,T,opcua_collector.py;validate_dataset.py,T53,Planned
+REQ-051,V4,T,dashboard.py,T55,Planned
+REQ-052,V4,I,dashboard.py,T57,Planned

@@ -76,3 +76,7 @@ Statements use "shall". Method: T = Test, I = Inspection, A = Analysis, D = Demo
 | REQ-038 | A running pump whose motor current stays above the high threshold for the delay shall raise a warning without stopping the pump | S | T | V2 |
 | REQ-039 | A pump whose runtime since the last service exceeds the maintenance interval shall raise a warning, cleared by a maintenance reset in Maintenance mode | S | T | V2 |
 | REQ-040 | A running pump with a tank level rise below the minimum over the window shall raise a warning | S | T | V2 |
+| REQ-049 | The export shall carry a sample counter incremented once per real second and the simulated clock, and the collector shall keep only new samples and report missed ones | M | T | V4 |
+| REQ-050 | Datasets shall carry ground truth injection columns apart from measured signals and shall pass an automated consistency check | M | T | V4 |
+| REQ-051 | The dashboard shall indicate when no new sample has arrived for more than 5 seconds | M | T | V4 |
+| REQ-052 | The dashboard shall be reachable from the local machine only and shall not accept any command | M | I | V4 |
