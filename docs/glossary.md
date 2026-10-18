@@ -18,3 +18,5 @@ Sliding window (période glissante qui se termine à l’instant présent), Faul
 Runtime (programme qui exécute les écrans), HMI tag (variable de l’IHM reliée à une variable de l’automate), Acquisition cycle (période de lecture d’une variable), Text list (table valeur vers texte), Template (éléments communs à tous les écrans), HMI interface block (bloc de données qui sert d’unique interface entre automate et IHM).
 
 Availability, MTBF, MTTR, Duty, Specific energy, Time weighted sum, Redundancy, Loopback.
+
+Rule based detection, Persistence filter, Secondary symptom, Recall, Precision, False positive, Detection delay, Threshold margin
