@@ -80,3 +80,5 @@ Statements use "shall". Method: T = Test, I = Inspection, A = Analysis, D = Demo
 | REQ-050 | Datasets shall carry ground truth injection columns apart from measured signals and shall pass an automated consistency check | M | T | V4 |
 | REQ-051 | The dashboard shall indicate when no new sample has arrived for more than 5 seconds | M | T | V4 |
 | REQ-052 | The dashboard shall be reachable from the local machine only and shall not accept any command | M | I | V4 |
+| REQ-053 | Each period flagged by an anomaly rule shall carry a plain explanation with the measured values and the threshold crossed | M | T | V5 |
+| REQ-054 | The anomaly rules shall use measured signals only, the injected fault columns being used only to score them | M | T | V5 |

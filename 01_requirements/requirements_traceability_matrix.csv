@@ -25,7 +25,7 @@ REQ-023,V3,T,FC_HMIInterface,T23,Planned
 REQ-024,V4,T,FC_Interfaces;DB_IIoTExport;opcua_collector.py,T10;T52,Verified
 REQ-025,V4,T,FC_Interfaces;dashboard.py,T10,Verified
 REQ-026,V4,A;T,kpi.py;kpi_report.py,T25;T56,Verified
-REQ-027,V5,A;T,python,T26,Planned
+REQ-027,V5,A;T,anomaly_rules.py;anomaly_eval.py,T26;T58;T59,Verified
 REQ-028,V1,I;T,DB_Parameters;parameters.md,T27,Verified
 REQ-029,V1,I,TIA project,T31,Verified
 REQ-030,V6,D,documentation,T28,Planned
@@ -46,3 +46,5 @@ REQ-044,V4,T,FC_Interfaces;opcua_collector.py,T51;T52,Planned
 REQ-045,V4,T,opcua_collector.py;validate_dataset.py,T53,Planned
 REQ-051,V4,T,dashboard.py,T55,Verified
 REQ-052,V4,I,dashboard.py,T57,Verified
+REQ-053,V5,T,anomaly_rules.py;anomaly_report.py,T60,Verified
+REQ-054,V5,T,anomaly_rules.py,T58,Verified

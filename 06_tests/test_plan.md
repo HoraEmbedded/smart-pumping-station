@@ -49,7 +49,7 @@ T01, T02, T06, T08, T09, T11, T12, T13, T15, T27, T31 passed.
 | T23 | HMI command versus feedback | 022, 023 | V3 | Command without feedback, acknowledge alarms | Distinct displays, acknowledgment works, refusal message shown | Capture |
 | T24 | Alarm matrix completeness | 020 | V2 | Review alarm_matrix.csv | Every alarm has cause, reaction, text, reset | Review note |
 | T25 | Indicator calculation | 026 | V4 | Dataset with known values, unit tests | Indicators equal the hand calculation of the worked example | Command output |
-| T26 | Anomaly rules | 027 | V5 | Normal and fault datasets | Fault periods flagged, false positives listed | Notebook |
+| T26 | Anomaly rules on the datasets | 027 | V5 | Run the rules on the six datasets, compare with the expectation table and the written predictions | Every fault dataset triggers its expected rules, every deviation is explained in the analysis | Command output |
 | T27 | Parameter editing | 028 | V1 | Change low threshold in DB_Parameters | New threshold applied, no logic edit | Capture |
 | T28 | Cold start reproducibility | 030 | V6 | Follow launch procedure from scratch | Same initial state each time | Video |
 | T29 | Secret scan | 031 | V4 | Search repository for credentials | None found | Command output |
@@ -76,6 +76,9 @@ T01, T02, T06, T08, T09, T11, T12, T13, T15, T27, T31 passed.
 | T55 | Stale data indicator | 051 | V4 | Stop the collector, then restart it | STALE shown within 7 s, LIVE again after the restart | Capture |
 | T56 | Indicators of the six datasets | 026 | V4 | Summary command on all datasets, compared to the written predictions | Each result explained against the prediction | Command output |
 | T57 | Dashboard exposure | 052 | V4 | Listening address check, POST request | Local address only, POST refused | Command output |
+| T58 | Rule unit tests | 027, 054 | V5 | Run the unit tests on constructed values | All pass, the rule source names no ground truth column | Command output |
+| T59 | Normal dataset stays quiet | 027 | V5 | Count the flags on the normal dataset, read the threshold margins | No flag, margins documented | Command output |
+| T60 | Explanations | 053 | V5 | Count flagged periods without an explanation, read three of them | None without explanation, each gives the values and the threshold | Command output |
 
 ## Exit criteria for V2
 
@@ -84,3 +87,6 @@ T03 to T05, T07, T16 to T22, T24, T32, T37 to T40 passed, regression of the V1 t
 ## Exit criteria for V4
 
 T10, T25, T29, T51 to T57 passed. No change to the PLC in this iteration, the regression run of the previous iteration remains valid.
+
+## Exit criteria for V5
+T26, T58, T59, T60 passed. No change to the PLC in this iteration, the regression of the previous iteration remains valid.

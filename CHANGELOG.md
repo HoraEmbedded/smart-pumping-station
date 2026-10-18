@@ -99,3 +99,11 @@ All notable changes are documented here. Format inspired by Keep a Changelog.
 
 ### Changed
 - Frequent start window now follows simulated time
+
+## [0.13.0] - 2026-10-18
+
+### Added
+- Explainable anomaly rules ANO_01 to ANO_06 with explanations carrying the values and the threshold crossed
+- Evaluation against the injected faults, threshold margins, sensitivity table and figures for the six datasets
+- Unit tests on constructed values, analysis of false positives and blind spots
+- V5 test report

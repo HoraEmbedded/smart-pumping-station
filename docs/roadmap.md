@@ -18,7 +18,7 @@ Planned over 14 weeks, one iteration at a time, one commit per step. Source: uni
 | I10 | 9 | HMI finalization and operator guide | v0.10.0 | Planned |
 | I11 | 10 | Historization and IIoT architecture | v0.11.0 | Done |
 | I12 | 11 | Dashboard and KPI | v0.12.0 | Planned |
-| I13 | 12 | Python analytics and anomalies | v0.13.0 | Planned |
+| I13 | 12 | Python analytics and anomalies | v0.13.0 | Done |
 | I14 | 13 | Test campaign and regression | v0.14.0 | Planned |
 | I15 | 14 | Packaging, report, video | v1.0.0 | Planned |
 

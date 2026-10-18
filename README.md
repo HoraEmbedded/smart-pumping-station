@@ -25,10 +25,10 @@ A simulated two-pump station controlled by a Siemens S7-1200 (TIA Portal V18), w
 | V0 | Design: requirements, P&ID, I/O list, Grafcet, test plan | Done|
 | V1 | Single pump control |Done |
 | V2 | Two pumps, alternation, faults |Done |
-| V3 | HMI/SCADA | Planned |
-| V4 | Data connection and dashboard | Planned |
-| V5 | Anomaly detection | Planned |
-| V6 | Final report and portfolio | Planned |
+| V3 | HMI/SCADA | Done |
+| V4 | Data connection and dashboard | Done |
+| V5 | Anomaly detection | Done |
+| V6 | Final report and portfolio | In progress |
 
 ## Repository structure
 
@@ -52,10 +52,12 @@ TIA Portal V18, S7-PLCSIM V18 SP2, Python 3.13, Git, VS Code. See [docs/workstat
 ## Perspectives
 
 This simulation is a foundation. Possible next steps include a variable frequency drive model, OPC UA data exchange, a validated machine learning extension, and a hardware-in-the-loop test bench.
+- OPC UA endpoint secured with signed and encrypted messages and certificate trust management
+- Security assessment with zones and conduits (IEC 62443)
+- Port to an S7-1500 enabling PLCSIM Advanced, a native OPC UA server and MQTT publishing
+- Leak detection by mass balance residual (level change against integrated flow)
+- Statistical or learned detector evaluated against these rules on field data
 
-OPC UA with encryption and certificates, Security assessment with zones and conduits (IEC 62443), Node-RED collector as an alternative
-
-S7-1500 port enabling PLCSIM Advanced, OPC UA and an external collector
 
 ## License
 
