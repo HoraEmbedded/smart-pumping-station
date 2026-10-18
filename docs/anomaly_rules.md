@@ -35,4 +35,14 @@ Rules ANO_01 to ANO_06 are implemented in `05_iiot_data/python/anomaly_rules.py`
 
 ## Known false positives and blind spots
 
-(Completed after the evaluation, see the analysis step.)
+| Observation | Where | Explanation | Consequence |
+| --- | --- | --- | --- |
+| ANO_02 also fires on low flow faults | D02, D04 | With no flow the level cannot rise, it is a secondary symptom of the same cause | Two rules for one fault, counted as expected |
+| ANO_02 cannot judge short runs | D06 | A run shorter than the 5 minute window never reaches the evaluation | Narrow level bands are covered by ANO_04 instead |
+| ANO_02 cannot separate a leak from other causes | D05 | A level that does not rise says nothing on its origin | A mass balance residual (level change against integrated flow) would separate a leak from a flow sensor fault |
+| ANO_06 cannot judge the first run of a dataset | D03 | The rule compares with the other pump and has no reference yet | Recall below 100 percent, depends on which pump runs first |
+| ANO_06 does not say which pump deviates | D03 | It compares two pumps with each other | The flag names the pump drawing more current, a maintenance check decides |
+| ANO_06 misses two pumps that degrade equally | none | The comparison stays within 15 percent | A drift of the pair needs a long term trend on the nominal current |
+| ANO_01 sees the symptom while a pump runs only | D02, D04 | The PLC stops the pump after 10 s, the rule alerts after 5 s | A short observation window of about 5 samples |
+| ANO_05 state checks need 2 seconds | all | One sample can show a mixed state because the model and the export run in different cycles | Short real glitches stay unflagged |
+| Thresholds come from a noiseless simulation | all | No sensor noise, no pump wear, no real consumption profile | Margins have to be measured again on field data before any use |
