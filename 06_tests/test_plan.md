@@ -69,6 +69,11 @@ T01, T02, T06, T08, T09, T11, T12, T13, T15, T27, T31 passed.
 | T43 | HMI commands and mode selection | 043 | V3 | Start, Auto, Manual, Stop from the HMI, then conflicting selector, E-stop and reset | States follow the state machine, conflict gives READY, reset refused until the cause is cleared | Capture |
 | T44 | Command distinct from feedback | 022 | V3 | Manual, feedback injected off, pump 1 commanded from the HMI | STARTING with command lit and feedback unlit, then UNAVAILABLE after the timeout | Capture |
 | T45 | Navigation | 021 | V3 | Press each navigation button | Correct screen opens, header and bar stay | Capture |
+| T46 | HMI alarm display | 025 | V3 | Trigger each alarm from the PLC watch table | The alarm appears on the HMI banner with its text and severity color | Capture |
+| T47 | HMI navigation | 021 | V3 | Press each navigation button | Correct screen opens, header and bar stay | Capture |
+| T48 | HMI trend display | 026 | V3 | Open the trends screen while the pump is running | The curves show the running state and the level rises | Capture |
+| T49 | HMI setpoint change | 030 | V3 | Change Level_Low from 30 to 40 | The next pump start happens at 40 percent | Capture |
+| T50 | HMI reset behavior | 035 | V3 | Trigger a fault, then press Reset | The alarm clears and the pump can start again | Capture |
 | T51 | Export block content and offsets | 049 | V4 | Compare the block to its sources, sample counter, simulated clock, power, ground truth bits | Values equal, counter plus 10 in 10 s, simulated time near plus 600 at acceleration 60, offsets as in the data dictionary | Capture |
 | T52 | Collector CSV | 049 | V4 | Frozen values, 15 s run | One row per sample, consecutive counter, no missed sample, values as in the watch table | Capture |
 | T53 | Dataset validation | 050 | V4 | Run the validator on the six datasets | All pass, no missed samples | Capture |
@@ -79,6 +84,13 @@ T01, T02, T06, T08, T09, T11, T12, T13, T15, T27, T31 passed.
 | T58 | Rule unit tests | 027, 054 | V5 | Run the unit tests on constructed values | All pass, the rule source names no ground truth column | Command output |
 | T59 | Normal dataset stays quiet | 027 | V5 | Count the flags on the normal dataset, read the threshold margins | No flag, margins documented | Command output |
 | T60 | Explanations | 053 | V5 | Count flagged periods without an explanation, read three of them | None without explanation, each gives the values and the threshold | Command output |
+| T61 | Acceptance UC-01 normal start in Auto | 001, 004 | V6 | Cold start, Auto from the HMI, collector recording | Priority pump starts after the restart delay, feedback confirmed, level rises, no alarm | Capture and CSV |
+| T62 | Acceptance UC-02 fill and stop at high level | 002, 006 | V6 | Continue UC-01 up to the high level | Pump stops at 80 percent, the priority passes to the other pump, no alarm | Capture and CSV |
+| T63 | Acceptance UC-03 pump failure during operation | 007, 008, 015 | V6 | Auto with pump 1 running, its protection contact opened | Pump 1 stops and is locked out, pump 2 takes over, ALM_006 | Capture and CSV |
+| T64 | Acceptance UC-04 source water shortage | 010 | V6 | Pump running, source low signal set | Pump stops, starts inhibited until the source recovers, ALM_002 | Capture and CSV |
+| T65 | Acceptance UC-05 low flow detection | 016 | V6 | Pump 1 running, low flow injected | After 10 s pump 1 is unavailable, pump 2 is used, ALM_004 | Capture and CSV |
+| T66 | Restore from the release archive | 055 | V6 | Retrieve the project archive into a new folder, rebuild all | Zero compilation errors, one smoke test passes | Capture |
+| T67 | Clean clone verification | 055 | V6 | Fresh clone, new virtual environment, verification script in final mode | All checks pass | Command output |
 
 ## Exit criteria for V2
 
@@ -90,3 +102,7 @@ T10, T25, T29, T51 to T57 passed. No change to the PLC in this iteration, the re
 
 ## Exit criteria for V5
 T26, T58, T59, T60 passed. No change to the PLC in this iteration, the regression of the previous iteration remains valid.
+
+## Exit criteria for V6 and release 1.0
+
+All tests of the final campaign passed on the frozen build, every Must requirement verified, no open defect of severity critical or major, known minor defects listed in the defect log.
