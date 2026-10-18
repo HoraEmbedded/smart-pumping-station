@@ -39,3 +39,7 @@ secrets.*
 
 # Live collection output
 05_iiot_data/datasets/live.csv
+
+# Grafana local state (should never be versioned)
+docker/grafana/data/
+.env

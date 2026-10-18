@@ -1,0 +1,45 @@
+# Grafana stack for the Smart Pumping Station dashboard (V4.1).
+#
+# Run from the project root:
+#   docker compose up -d
+# Open http://localhost:3000 and log in with admin / admin.
+# Stop:
+#   docker compose down
+# Stop and wipe all data (dashboard edits, users):
+#   docker compose down -v
+
+services:
+  grafana:
+    image: grafana/grafana:11.6.11
+    container_name: sps-grafana
+    restart: unless-stopped
+    ports:
+      # 127.0.0.1 only, same principle as T57 for the Python dashboard:
+      # no remote access from the network.
+      - "127.0.0.1:3000:3000"
+    environment:
+      # Lab credentials. Change before exposing anything beyond localhost.
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: "false"
+
+    command:
+      - sh
+      - -c
+      - |
+        grafana-cli plugins install yesoreyeram-infinity-datasource
+        /run.sh
+    volumes:
+      
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning:ro
+      
+      - ./docker/grafana/dashboards:/var/lib/grafana/dashboards:ro
+     
+      - sps-grafana-data:/var/lib/grafana
+
+volumes:
+  sps-grafana-data:

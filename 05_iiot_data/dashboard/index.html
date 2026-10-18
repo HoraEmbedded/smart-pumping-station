@@ -3,57 +3,151 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Smart Pumping Station dashboard</title>
+<title>Smart Pumping Station HMI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#eceff1; --card:#ffffff; --text:#212121; --muted:#616161; --line:#cfd8dc;
-          --blue:#1565c0; --green:#2e7d32; --orange:#ef6c00; --red:#c62828; --grey:#757575; }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg:#1b1f23; --card:#263238; --text:#eceff1; --muted:#b0bec5; --line:#455a64; }
+  /* Thème sombre par défaut (appliqué à la balise <html>) */
+  :root { 
+    --bg: #0f172a; 
+    --card: #1e293b; 
+    --card-hover: #334155;
+    --text: #f8fafc; 
+    --muted: #94a3b8; 
+    --line: #334155;
+    --blue: #3b82f6; 
+    --green: #10b981; 
+    --orange: #f59e0b; 
+    --red: #ef4444; 
+    --purple: #8b5cf6;
+    --font-main: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
   }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--text); font-family:"Segoe UI", Arial, sans-serif; }
-  header { display:flex; flex-wrap:wrap; gap:10px; align-items:center; padding:12px 16px; background:var(--blue); color:#fff; }
-  header h1 { font-size:20px; margin:0 auto 0 0; }
-  .pill { padding:6px 12px; border-radius:4px; font-weight:600; background:var(--grey); color:#fff; }
-  .pill.green { background:var(--green); } .pill.orange { background:var(--orange); }
-  .pill.red { background:var(--red); } .pill.blue { background:#0d47a1; }
-  main { padding:12px 16px; }
-  h2 { font-size:16px; margin:18px 0 8px; }
-  .grid { display:grid; gap:10px; }
-  .now { grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); }
-  .kpis { grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); }
-  .charts { grid-template-columns:repeat(auto-fit,minmax(420px,1fr)); gap:12px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:6px; padding:10px 12px; }
-  .label { font-size:12px; color:var(--muted); }
-  .value { font-size:22px; font-weight:600; margin-top:2px; }
-  .unit { font-size:12px; color:var(--muted); margin-left:4px; font-weight:400; }
-  canvas { width:100%; height:220px; display:block; }
-  #alarms { display:flex; flex-wrap:wrap; gap:8px; min-height:34px; }
-  .chip { padding:5px 10px; border-radius:4px; font-weight:600; color:#fff; }
-  .chip.red { background:var(--red); } .chip.orange { background:var(--orange); } .chip.green { background:var(--green); }
-  footer { padding:10px 16px 20px; font-size:12px; color:var(--muted); }
+  
+  /* Thème clair (activé par le bouton) */
+  html.light-mode {
+    --bg: #f1f5f9; 
+    --card: #ffffff; 
+    --card-hover: #f8fafc;
+    --text: #0f172a; 
+    --muted: #475569; 
+    --line: #cbd5e1;
+    /* Les couleurs d'accent restent les mêmes pour la cohérence */
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: var(--font-main); 
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s, color 0.3s;
+  }
+  
+  /* Header */
+  header { 
+    display: flex; flex-wrap: wrap; gap: 16px; align-items: center; 
+    padding: 16px 24px; background: rgba(30, 41, 59, 0.8); 
+    backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 100;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  
+  /* Ajustement spécifique du header en mode clair */
+  html.light-mode header { background: rgba(255, 255, 255, 0.8); }
+  
+  header h1 { font-size: 20px; font-weight: 700; margin-right: auto; letter-spacing: -0.5px; }
+  
+  /* Bouton de thème */
+  .theme-btn {
+    background: var(--card); color: var(--text); border: 1px solid var(--line);
+    padding: 8px 16px; border-radius: 999px; cursor: pointer;
+    font-family: var(--font-main); font-weight: 600; font-size: 13px;
+    transition: all 0.2s; display: flex; align-items: center; gap: 8px;
+  }
+  .theme-btn:hover { background: var(--card-hover); border-color: var(--muted); }
+
+  /* Pastilles d'état */
+  .pill { 
+    padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: 13px;
+    display: flex; align-items: center; gap: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  }
+  .pill::before { content: ''; display: block; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .pill.green { background: rgba(16, 185, 129, 0.15); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
+  .pill.orange { background: rgba(245, 158, 11, 0.15); color: var(--orange); border: 1px solid rgba(245, 158, 11, 0.3); }
+  .pill.red { background: rgba(239, 68, 68, 0.15); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.3); }
+  .pill.blue { background: rgba(59, 130, 246, 0.15); color: var(--blue); border: 1px solid rgba(59, 130, 246, 0.3); }
+
+  main { padding: 24px; max-width: 1600px; margin: 0 auto; }
+  h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin: 24px 0 12px; font-weight: 600; }
+  
+  /* Grilles */
+  .grid { display: grid; gap: 16px; }
+  .now { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .kpis { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .charts { grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 16px; }
+  
+  /* Cartes */
+  .card { 
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px; 
+    padding: 20px; position: relative; overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.3s;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  .card:hover { transform: translateY(-2px); border-color: var(--card-hover); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2); }
+  .card::before { 
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; 
+    background: linear-gradient(90deg, var(--blue), var(--purple)); opacity: 0; transition: opacity 0.3s;
+  }
+  .card:hover::before { opacity: 1; }
+  
+  .label { font-size: 13px; color: var(--muted); font-weight: 500; margin-bottom: 8px; }
+  .value { font-family: var(--font-mono); font-size: 32px; font-weight: 700; display: flex; align-items: baseline; gap: 6px; }
+  .unit { font-family: var(--font-main); font-size: 14px; color: var(--muted); font-weight: 500; }
+  
+  /* Graphiques */
+  .chart-card { padding: 16px; }
+  canvas { width: 100%; height: 260px; display: block; }
+  
+  /* Alarmes */
+  #alarms { display: flex; flex-wrap: wrap; gap: 12px; min-height: 40px; }
+  .chip { 
+    padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 13px;
+    display: flex; align-items: center; gap: 8px; border: 1px solid transparent;
+  }
+  .chip.red { background: rgba(239, 68, 68, 0.1); color: var(--red); border-color: rgba(239, 68, 68, 0.2); }
+  .chip.orange { background: rgba(245, 158, 11, 0.1); color: var(--orange); border-color: rgba(245, 158, 11, 0.2); }
+  .chip.green { background: rgba(16, 185, 129, 0.1); color: var(--green); border-color: rgba(16, 185, 129, 0.2); }
+  
+  footer { padding: 24px; font-size: 12px; color: var(--muted); text-align: center; border-top: 1px solid var(--line); margin-top: 40px; }
 </style>
 </head>
 <body>
 <header>
   <h1>Smart Pumping Station</h1>
-  <div id="state" class="pill">STATE</div>
-  <div id="alarmcount" class="pill">ALARMS</div>
-  <div id="data" class="pill">DATA</div>
+  <div id="state" class="pill blue">STATE</div>
+  <div id="alarmcount" class="pill green">ALARMS</div>
+  <div id="data" class="pill orange">DATA</div>
+  <button id="theme-toggle" class="theme-btn">LIGHT MODE</button>
 </header>
 <main>
-  <h2>Now</h2>
+  <h2>Live Telemetry</h2>
   <section class="grid now" id="now"></section>
-  <h2>Active alarms</h2>
+  
+  <h2>Active Alarms</h2>
   <section id="alarms"></section>
-  <h2>Indicators</h2>
+  
+  <h2>Key Performance Indicators</h2>
   <section class="grid kpis" id="kpis"></section>
+  
   <h2>Trends</h2>
   <section class="grid charts">
-    <div class="card"><div class="label">Tank and source level (%)</div><canvas id="c_level"></canvas></div>
-    <div class="card"><div class="label">Flow (m3/h) and pressure (bar)</div><canvas id="c_flow"></canvas></div>
-    <div class="card"><div class="label">Motor currents (A)</div><canvas id="c_current"></canvas></div>
-    <div class="card"><div class="label">Pump running (1 = running)</div><canvas id="c_pumps"></canvas></div>
+    <div class="card chart-card"><div class="label">Tank and source level (%)</div><canvas id="c_level"></canvas></div>
+    <div class="card chart-card"><div class="label">Flow (m3/h) and pressure (bar)</div><canvas id="c_flow"></canvas></div>
+    <div class="card chart-card"><div class="label">Motor currents (A)</div><canvas id="c_current"></canvas></div>
+    <div class="card chart-card"><div class="label">Pump running (1 = running)</div><canvas id="c_pumps"></canvas></div>
   </section>
 </main>
 <footer id="foot"></footer>
@@ -100,6 +194,21 @@ function chip(parent, text, color) {
   const e = document.createElement("div"); e.className = "chip " + color; e.textContent = text; parent.append(e);
 }
 
+// GESTION DU THÈME DARK / LIGHT
+const themeBtn = $("theme-toggle");
+themeBtn.addEventListener("click", () => {
+  const html = document.documentElement;
+  html.classList.toggle("light-mode");
+  const isLight = html.classList.contains("light-mode");
+  themeBtn.textContent = isLight ? "DARK MODE" : "LIGHT MODE";
+  
+  // Forcer un redessin immédiat des graphiques pour appliquer les nouvelles couleurs
+  // On récupère la dernière réponse API stockée en cache et on relance render()
+  if (window.lastData) {
+    render(window.lastData);
+  }
+});
+
 function draw(id, xs, lines, guides, fixed) {
   const c = $(id), dpr = window.devicePixelRatio || 1;
   c.width = c.clientWidth * dpr; c.height = c.clientHeight * dpr;
@@ -108,7 +217,7 @@ function draw(id, xs, lines, guides, fixed) {
   const ml = 44 * dpr, mr = 10 * dpr, mt = 26 * dpr, mb = 22 * dpr;
   const w = c.width - ml - mr, h = c.height - mt - mb;
   g.clearRect(0, 0, c.width, c.height);
-  g.font = (11 * dpr) + "px Segoe UI, Arial, sans-serif";
+  g.font = (11 * dpr) + "px Inter, sans-serif";
   if (!xs.length) return;
   let lo, hi;
   if (fixed) { lo = fixed[0]; hi = fixed[1]; }
@@ -119,6 +228,8 @@ function draw(id, xs, lines, guides, fixed) {
   const x0 = xs[0]; let x1 = xs[xs.length - 1]; if (x1 <= x0) x1 = x0 + 1;
   const px = x => ml + (x - x0) / (x1 - x0) * w;
   const py = y => mt + h - (y - lo) / (hi - lo) * h;
+  
+  // Grille
   g.fillStyle = text; g.strokeStyle = grid; g.lineWidth = dpr; g.setLineDash([]);
   for (let i = 0; i <= 4; i++) {
     const v = lo + (hi - lo) * i / 4, y = py(v);
@@ -126,19 +237,35 @@ function draw(id, xs, lines, guides, fixed) {
     g.fillText(v.toFixed(hi - lo < 5 ? 1 : 0), 4 * dpr, y + 4 * dpr);
   }
   g.textAlign = "left"; g.fillText(x0.toFixed(0) + " min", ml, c.height - 6 * dpr);
-  g.textAlign = "right"; g.fillText(x1.toFixed(0) + " min (simulated)", ml + w, c.height - 6 * dpr);
+  g.textAlign = "right"; g.fillText(x1.toFixed(0) + " min (sim)", ml + w, c.height - 6 * dpr);
   g.textAlign = "left";
+  
   (guides || []).forEach(q => {
     g.setLineDash([3 * dpr, 4 * dpr]); g.strokeStyle = q.color; g.lineWidth = dpr;
     g.beginPath(); g.moveTo(ml, py(q.y)); g.lineTo(ml + w, py(q.y)); g.stroke();
     g.fillStyle = q.color; g.fillText(q.label, ml + 4 * dpr, py(q.y) - 3 * dpr);
   });
+  
+  // Lignes avec effet Glow
   lines.forEach(l => {
-    g.setLineDash(l.dash.map(d => d * dpr)); g.strokeStyle = l.color; g.lineWidth = 2 * dpr;
+    g.setLineDash(l.dash.map(d => d * dpr)); 
+    g.strokeStyle = l.color; 
+    g.lineWidth = 2.5 * dpr;
+    
+    if (l.dash.length === 0) {
+      g.shadowColor = l.color;
+      g.shadowBlur = 10 * dpr;
+    } else {
+      g.shadowBlur = 0;
+    }
+    
     g.beginPath();
     xs.forEach((x, i) => { const X = px(x), Y = py(l.ys[i]); if (i) g.lineTo(X, Y); else g.moveTo(X, Y); });
     g.stroke();
+    g.shadowBlur = 0; 
   });
+  
+  // Légende
   let lx = ml;
   lines.forEach(l => {
     g.setLineDash(l.dash.map(d => d * dpr)); g.strokeStyle = l.color; g.lineWidth = 2 * dpr;
@@ -161,8 +288,14 @@ function render(d) {
 
   NOW.forEach(([, key, dec]) => { $("now_" + key).textContent = fmt(L[key], dec); });
   const down = (word, a, b) => ((word >> a) & 1) || ((word >> b) & 1);
-  $("now_p1").textContent = L.p1 ? "RUNNING" : (down(L.aw1, 3, 5) ? "[ ! ] UNAVAILABLE" : "STOPPED");
-  $("now_p2").textContent = L.p2 ? "RUNNING" : (down(L.aw1, 4, 6) ? "[ ! ] UNAVAILABLE" : "STOPPED");
+  
+  const p1 = $("now_p1"); const p1Down = down(L.aw1, 3, 5);
+  p1.textContent = L.p1 ? "RUNNING" : (p1Down ? "UNAVAILABLE" : "STOPPED");
+  p1.style.color = L.p1 ? "var(--green)" : (p1Down ? "var(--red)" : "var(--text)");
+  
+  const p2 = $("now_p2"); const p2Down = down(L.aw1, 4, 6);
+  p2.textContent = L.p2 ? "RUNNING" : (p2Down ? "UNAVAILABLE" : "STOPPED");
+  p2.style.color = L.p2 ? "var(--green)" : (p2Down ? "var(--red)" : "var(--text)");
 
   const box = $("alarms"); box.replaceChildren();
   W1.forEach((name, i) => {
@@ -178,15 +311,15 @@ function render(d) {
 
   const s = d.series;
   draw("c_level", s.t,
-    [{ys: s.level, color: "#1565c0", dash: [], label: "Tank"}, {ys: s.source, color: "#2e7d32", dash: [6, 4], label: "Source"}],
-    [{y: 30, color: "#2e7d32", label: "30 start (default)"}, {y: 80, color: "#ef6c00", label: "80 stop (default)"},
-     {y: 95, color: "#c62828", label: "95 critical"}], [0, 100]);
+    [{ys: s.level, color: "#3b82f6", dash: [], label: "Tank"}, {ys: s.source, color: "#10b981", dash: [6, 4], label: "Source"}],
+    [{y: 30, color: "#10b981", label: "30 start"}, {y: 80, color: "#f59e0b", label: "80 stop"},
+     {y: 95, color: "#ef4444", label: "95 critical"}], [0, 100]);
   draw("c_flow", s.t,
-    [{ys: s.flow, color: "#1565c0", dash: [], label: "Flow"}, {ys: s.pressure, color: "#ef6c00", dash: [6, 4], label: "Pressure"}]);
+    [{ys: s.flow, color: "#3b82f6", dash: [], label: "Flow"}, {ys: s.pressure, color: "#f59e0b", dash: [6, 4], label: "Pressure"}]);
   draw("c_current", s.t,
-    [{ys: s.i1, color: "#1565c0", dash: [], label: "Pump 1"}, {ys: s.i2, color: "#ef6c00", dash: [6, 4], label: "Pump 2"}]);
+    [{ys: s.i1, color: "#3b82f6", dash: [], label: "Pump 1"}, {ys: s.i2, color: "#f59e0b", dash: [6, 4], label: "Pump 2"}]);
   draw("c_pumps", s.t,
-    [{ys: s.p1, color: "#1565c0", dash: [], label: "Pump 1"}, {ys: s.p2, color: "#ef6c00", dash: [6, 4], label: "Pump 2"}], [], [-0.1, 1.2]);
+    [{ys: s.p1, color: "#3b82f6", dash: [], label: "Pump 1"}, {ys: s.p2, color: "#f59e0b", dash: [6, 4], label: "Pump 2"}], [], [-0.1, 1.2]);
 
   $("foot").textContent = "Source: process simulation. Times and rates follow the simulated clock. File " + d.file + ", " +
     d.rows + " samples, last counter " + L.counter + ", simulated time " + L.sim_h.toFixed(2) + " h.";
@@ -194,11 +327,21 @@ function render(d) {
 
 async function tick() {
   try {
-    render(await (await fetch("/api", {cache: "no-store"})).json());
+    const res = await fetch("/api", {cache: "no-store"});
+    const data = await res.json();
+    window.lastData = data; // On garde en mémoire pour le bouton de thème
+    render(data);
   } catch (e) {
-    pill("data", "[ X ] DASHBOARD SERVER UNREACHABLE", "red");
+    pill("data", "[ X ] SERVER UNREACHABLE", "red");
   }
 }
+
+// Initialisation du thème au chargement (on vérifie si le navigateur préfère le mode clair)
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+  document.documentElement.classList.add("light-mode");
+  themeBtn.textContent = "DARK MODE";
+}
+
 setInterval(tick, 1000);
 tick();
 </script>
