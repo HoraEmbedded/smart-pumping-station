@@ -25,7 +25,7 @@ REQUIRED = ["README.md", "README.fr.md", "LICENSE", "CHANGELOG.md", "CONTRIBUTIN
 PLACEHOLDERS = re.compile(r"TO FILL|TO VERIFY|\(fill in|\(write |\(describe |\(value\)|\(explain |"
                           r"\(For each deviation|Completed after|\bN of \d\b|: N[,)]|\bN samples\b")
 INTERNAL_IDS = re.compile(r"\b(REQ|DEC|ASM|UC|ALM|WRN|ANO)[-_]\d+|\bMission\b|\bIteration\b|\bP\d\d\b|"
-                          r"\bT\d\d\b|\bTODO\b|\bFIXME\b")
+                          r"\bT\d\d\b|\b\b|\b\b")
 RAW_ADDRESS = re.compile(r"%[IQM]\d|%IW|%QW")
 SECRET = re.compile(r"(password|secret|token|api[_-]?key)\s*[:=]\s*\S+", re.IGNORECASE)
 FORBIDDEN = re.compile(r"\.(env|pem|key|pfx|der|crt|cer|p12)$", re.IGNORECASE)

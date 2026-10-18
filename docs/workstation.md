@@ -22,7 +22,7 @@ Baseline of the development environment. Update this file whenever a tool versio
 | Automation License Manager | V6.2 + SP5 | TIA license management | Installed |
 | Git for Windows | 2.53.0 | Version control | Installed |
 | VS Code | 1.139.1 | Documentation and scripts | Installed |
-| Python | 3.13.1 (TO FILL) | KPI and anomaly analysis | Installed |
+| Python | 3.13.1 | KPI and anomaly analysis | Installed |
 | WinCC (within TIA) | V18 | HMI/SCADA |V18 |
 | Node-RED | n/a | Data flow | Planned (Iteration 10) |
 | Grafana or equivalent | n/a | Dashboard | Planned (Iteration 11) |
