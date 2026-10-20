@@ -3,7 +3,7 @@ PASS no_placeholders: none
 FAIL code_conventions: 20_FC_ScaleAnalog.scl:1; 20_FC_ScaleAnalog.scl:2; 20_FC_ScaleAnalog.scl:3; 20_FC_ScaleAnalog.scl:4; 20_FC_ScaleAnalog.scl:5; 20_FC_ScaleAnalog.scl:6; 20_FC_ScaleAnalog.scl:7; 20_FC_ScaleAnalog.scl:8; 20_FC_ScaleAnalog.scl:9; 20_FC_ScaleAnalog.scl:10; 20_FC_ScaleAnalog.scl:12; 20_FC_ScaleAnalog.scl:13; 20_FC_ScaleAnalog.scl:14; 20_FC_ScaleAnalog.scl:15; 20_FC_ScaleAnalog.scl:17
 PASS csv_schemas: io list has 24 signals, field counts consistent
 PASS [T24] alarm_matrix: 13 alarms, incomplete: none
-FAIL [T32] traceability: tests missing from the matrix: T43
+PASS [T32] traceability: 47 requirements, 67 tests, both directions covered
 PASS decision_log: 55 decisions, duplicates none, gaps none
 PASS [T29] secrets: none
 PASS links: all local links resolve
