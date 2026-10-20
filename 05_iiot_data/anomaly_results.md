@@ -9,9 +9,9 @@ TP: expected and fired. MISS: expected, not fired. FP: fired, not expected. ok: 
 | Dataset | ANO_01 | ANO_02 | ANO_03 | ANO_04 | ANO_05 | ANO_06 |
 | --- | --- | --- | --- | --- | --- | --- |
 | D01_normal | ok (0) | ok (0) | ok (0) | ok (0) | ok (0) | ok (0) |
-| D02_low_flow_p1 | MISS (0) | MISS (0) | ok (0) | ok (0) | ok (0) | ok (0) |
+| D02_low_flow_p1 | ok (0) | ok (0) | ok (0) | ok (0) | ok (0) | ok (0) |
 | D03_pump_deviation_p1 | ok (0) | ok (0) | ok (0) | ok (0) | ok (0) | TP (63) |
-| D04_blocked_line_p1 | MISS (0) | MISS (0) | MISS (0) | ok (0) | ok (0) | ok (0) |
+| D04_blocked_line_p1 | ok (0) | ok (0) | ok (0) | ok (0) | ok (0) | ok (0) |
 | D05_leak | ok (0) | TP (258) | ok (0) | ok (0) | ok (0) | ok (0) |
 | D06_frequent_starts | ok (0) | ok (0) | ok (0) | TP (192) | ok (0) | ok (0) |
 

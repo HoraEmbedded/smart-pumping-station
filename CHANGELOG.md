@@ -100,6 +100,27 @@ All notable changes are documented here. Format inspired by Keep a Changelog.
 ### Changed
 - Frequent start window now follows simulated time
 
+## [0.11.0] - 2026-10-16
+
+### Added
+- Flat export block with fixed layout, sample counter and simulated clock
+- Simulated field signals in the process model
+- Read only OPC UA collector, dataset schema and validator
+- Six datasets: one normal and five fault scenarios with ground truth columns
+- Data architecture, data dictionary, OPC UA setup notes and security measures
+
+### Changed
+- Frequent start window now follows simulated time
+
+## [0.12.0] - 2026-10-17
+
+### Added
+- Indicator definitions and computation: availability, MTBF, MTTR, duty, start rate, flow, volume, energy, specific energy
+- Hand-checked unit test of the indicators and summary of the six datasets
+- Local read-only dashboard with live and replay modes and a freshness indicator
+- Dashboard consistency, freshness and exposure tests, V4 test report
+
+
 ## [0.13.0] - 2026-10-18
 
 ### Added

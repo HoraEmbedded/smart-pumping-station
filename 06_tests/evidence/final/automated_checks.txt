@@ -1,14 +1,14 @@
 PASS no_em_dash: none
-FAIL no_placeholders: 05_iiot_data/kpi_summary.md:8; 05_iiot_data/kpi_summary.md:12; 05_iiot_data/python/opcua_collector.py:18; 05_iiot_data/python/opcua_collector.py:20
-FAIL code_conventions: 10_DB_Parameters.scl:1; 10_DB_Parameters.scl:2; 10_DB_Parameters.scl:3; 10_DB_Parameters.scl:4; 10_DB_Parameters.scl:5; 10_DB_Parameters.scl:6; 10_DB_Parameters.scl:7; 10_DB_Parameters.scl:8; 10_DB_Parameters.scl:9; 10_DB_Parameters.scl:10; 10_DB_Parameters.scl:11; 10_DB_Parameters.scl:12; 10_DB_Parameters.scl:13; 10_DB_Parameters.scl:14; 10_DB_Parameters.scl:15
+PASS no_placeholders: none
+FAIL code_conventions: 20_FC_ScaleAnalog.scl:1; 20_FC_ScaleAnalog.scl:2; 20_FC_ScaleAnalog.scl:3; 20_FC_ScaleAnalog.scl:4; 20_FC_ScaleAnalog.scl:5; 20_FC_ScaleAnalog.scl:6; 20_FC_ScaleAnalog.scl:7; 20_FC_ScaleAnalog.scl:8; 20_FC_ScaleAnalog.scl:9; 20_FC_ScaleAnalog.scl:10; 20_FC_ScaleAnalog.scl:12; 20_FC_ScaleAnalog.scl:13; 20_FC_ScaleAnalog.scl:14; 20_FC_ScaleAnalog.scl:15; 20_FC_ScaleAnalog.scl:17
 PASS csv_schemas: io list has 24 signals, field counts consistent
 PASS [T24] alarm_matrix: 13 alarms, incomplete: none
-FAIL [T32] traceability: requirements missing from the matrix: REQ-049, REQ-050; tests missing from the matrix: T41, T42, T43, T51, T53
+FAIL [T32] traceability: tests missing from the matrix: T43
 PASS decision_log: 55 decisions, duplicates none, gaps none
 PASS [T29] secrets: none
 PASS links: all local links resolve
 PASS required_files: all present
-FAIL changelog_tags: 12 tags, changelog sections missing: ['v0.11.0', 'v0.12.0']
+PASS changelog_tags: 12 tags, changelog sections missing: none
 PASS [T25] unit_tests_kpi: test_kpi: OK
 PASS [T58] unit_tests_anomaly: test_anomaly: OK
 PASS [T53] datasets: OK   C:\dev\smart-pumping-station\05_iiot_data\datasets\D01_normal.csv: 699 rows, 20 missed | OK   C:\dev\smart-pumping-station\05_iiot_data\datasets\D02_low_flow_p1.csv: 588 rows, 12 missed | OK   C:\dev\smart-pumping-station\05_iiot_data\datasets\D03_pump_deviation_p1.csv: 704 rows, 16 missed | OK

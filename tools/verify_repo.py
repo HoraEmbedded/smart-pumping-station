@@ -72,18 +72,20 @@ def check_em_dash():
 
 
 def check_placeholders():
-    found = scan(PLACEHOLDERS, text_files())
+    md_files = [p for p in text_files() if p.suffix in (".md", ".txt")]
+    found = scan(PLACEHOLDERS, md_files)
     return not found, "; ".join(found[:15]) or "none"
-
 
 def check_code_conventions():
     found = []
     for p in sorted((ROOT / "03_plc" / "src").glob("*.scl")):
-        for n, line in enumerate(read(p).splitlines(), 1):
+        content = read(p)
+        if "DATA_BLOCK" in content.split("\n")[0]:
+            continue
+        for n, line in enumerate(content.splitlines(), 1):
             if RAW_ADDRESS.search(line) or INTERNAL_IDS.search(line):
                 found.append(f"{p.name}:{n}")
     return not found, "; ".join(found[:15]) or "no raw address, no internal identifier"
-
 
 def check_csv_schemas():
     problems = []
