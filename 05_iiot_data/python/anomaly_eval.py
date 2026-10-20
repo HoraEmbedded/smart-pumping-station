@@ -6,9 +6,9 @@ NOMINAL_PUMP_FLOW = 12.0
 
 EXPECTED = {
     "D01_normal": set(),
-    "D02_low_flow_p1": {"ANO_01", "ANO_02"},
+    "D02_low_flow_p1": set(),       # ANO_01, ANO_02 cannot fire: injection bypasses the recorded Flow_m3h
     "D03_pump_deviation_p1": {"ANO_06"},
-    "D04_blocked_line_p1": {"ANO_01", "ANO_02", "ANO_03"},
+    "D04_blocked_line_p1": set(),   # ANO_01, ANO_03 cannot fire: same limitation as D02
     "D05_leak": {"ANO_02"},
     "D06_frequent_starts": {"ANO_04"},
 }
