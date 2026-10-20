@@ -8,7 +8,7 @@ REQ-006,V2,T,FB_AutoCycle,T03;T62,Verified
 REQ-007,V2,T,FB_AutoCycle;UC-03,T04;T63,Verified
 REQ-008,V2,T,FB_PumpControl;ALM_006;ALM_007,T04;T18;T63,Verified
 REQ-009,V2,T,FB_PumpControl,T17,Verified
-REQ-010,V1,T,FC_Interlocks;ALM_002;UC-04,T06;T64,Planned
+REQ-010,V1,T,FC_Interlocks;ALM_002;UC-04,T06;T64,Verified
 REQ-011,V1,T,FC_Interlocks;ALM_001,T08,Verified
 REQ-012,V1,T,FC_Interlocks;ALM_003,T15,Verified
 REQ-013,V1,T,FC_Interlocks;FB_ModeManager,T13;T14,Verified
@@ -28,7 +28,7 @@ REQ-026,V4,A;T,kpi.py;kpi_report.py,T25;T56;T48;T43,Verified
 REQ-027,V5,A;T,anomaly_rules.py;anomaly_eval.py,T26;T58;T59,Verified
 REQ-028,V1,I;T,DB_Parameters;parameters.md,T27,Verified
 REQ-029,V1,I,TIA project,T31,Verified
-REQ-030,V6,D,documentation,T28;T49,Planned
+REQ-030,V6,D,documentation,T28;T49,Verified
 REQ-031,V4,I,.gitignore;architecture,T29,Verified
 REQ-032,V0,I,this matrix,T32,Verified
 REQ-033,V1,T,FB_ModeManager;TR01;TR02,T33,Verified

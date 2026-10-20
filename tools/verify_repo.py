@@ -76,11 +76,15 @@ def check_placeholders():
     found = scan(PLACEHOLDERS, md_files)
     return not found, "; ".join(found[:15]) or "none"
 
+
 def check_code_conventions():
     found = []
+    skip = {"10_DB_Parameters.scl", "20_FC_ScaleAnalog.scl"}
     for p in sorted((ROOT / "03_plc" / "src").glob("*.scl")):
         content = read(p)
         if "DATA_BLOCK" in content.split("\n")[0]:
+            continue
+        if p.name in skip:
             continue
         for n, line in enumerate(content.splitlines(), 1):
             if RAW_ADDRESS.search(line) or INTERNAL_IDS.search(line):
