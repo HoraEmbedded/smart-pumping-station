@@ -19,9 +19,9 @@ REQ-017,V2,T,FC_ReadAndScaleInputs;ALM_008,T20,Verified
 REQ-018,V2,T,FB_StationMonitor;ALM_010,T21;T54,Verified
 REQ-019,V2,T,FB_PumpControl,T19,Verified
 REQ-020,V2,I,alarm_matrix.csv,T24,Verified
-REQ-021,V3,D,FC_HMIInterface;DB_HMI,T30,Planned
-REQ-022,V3,I;D,FC_HMIInterface,T23,Planned
-REQ-023,V3,T,FC_HMIInterface,T23,Planned
+REQ-021,V3,D,FC_HMIInterface;DB_HMI,T30;T45,Verified
+REQ-022,V3,I;D,FC_HMIInterface,T23,Verified
+REQ-023,V3,T,FC_HMIInterface,T23,Verified
 REQ-024,V4,T,FC_Interfaces;DB_IIoTExport;opcua_collector.py,T10;T52,Verified
 REQ-025,V4,T,FC_Interfaces;dashboard.py,T10,Verified
 REQ-026,V4,A;T,kpi.py;kpi_report.py,T25;T56,Verified
