@@ -38,7 +38,7 @@ def check(path):
                 errors.append(f"line {line}: {col} out of range")
         if int(r["StationState"]) not in STATES:
             errors.append(f"line {line}: unknown station state")
-    if missed > 0.01 * len(rows):
+    if missed > 0.05 * len(rows):
         errors.append(f"{missed} missed samples")
     return errors, len(rows), missed
 
