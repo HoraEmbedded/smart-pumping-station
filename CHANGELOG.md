@@ -129,3 +129,18 @@ All notable changes are documented here. Format inspired by Keep a Changelog.
 - Unit tests on constructed values, analysis of false positives and blind spots
 - V5 test report
 
+## [1.0.0] - 2026-10-23
+
+### Added
+- HMI emergency stop request on the Commands screen and in the template, acting like the emergency stop contact
+- Confirmation before the release of the emergency stop
+- Two tests (T68, T69) and full level 1 regression after the change
+- Final technical report in LaTeX, with its PDF, including a system modelling chapter (context diagram, use cases, functional layers, sequence diagram)
+- Demonstration script and video (4 min 56, published on YouTube)
+- Final README in English and French following the project headings
+
+### Changed
+- Project status: all versions V0 to V6 delivered
+
+### Fixed
+- LaTeX table of contents rendering (titletoc and section formatting)
