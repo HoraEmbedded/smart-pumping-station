@@ -1,0 +1,988 @@
+% =====================================================================
+% Smart Pumping Station: technical report
+% Compile with pdfLaTeX, two passes. Figures in 08_report/images/
+% =====================================================================
+\documentclass[11pt,a4paper]{report}
+
+% ---------- Fonts, language, layout ----------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{libertine}
+\usepackage[scaled=0.88]{beramono}
+\usepackage[french,english]{babel}
+\usepackage{microtype}
+\usepackage[a4paper,left=2.8cm,right=2.8cm,top=2.8cm,bottom=2.8cm]{geometry}
+\usepackage{amsmath,graphicx,float,booktabs,array,tabularx,enumitem,caption,xcolor,longtable}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes,fit}
+\usepackage{pdfpages}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{subcaption}
+
+\linespread{1.08}
+\setlength{\headheight}{14pt}
+\definecolor{linkblue}{RGB}{37,69,150}
+\hypersetup{colorlinks=true,linkcolor=linkblue,citecolor=linkblue,urlcolor=linkblue,
+	pdftitle={Smart Pumping Station},pdfauthor={Horacia AZONHOUMON}}
+
+\setlist{itemsep=2pt,topsep=4pt}
+\captionsetup{font=small,labelfont=bf,labelsep=period}
+\captionsetup[table]{position=top}
+\captionsetup[figure]{position=bottom}
+\renewcommand{\arraystretch}{1.18}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+% ---------- Macros ----------
+\newcommand{\AuthorName}{Houénoumè Horacia Gloriéta AZONHOUMON}
+\newcommand{\tg}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\frontsection}[1]{\chapter*{#1}}
+
+\newcommand{\figplace}[5][0.92]{%
+	\begin{figure}[H]
+		\centering
+		\IfFileExists{images/#2}{\includegraphics[width=#1\linewidth,height=0.7\textheight,keepaspectratio]{images/#2}}{%
+			\fbox{\parbox[c][4.5cm][c]{0.85\linewidth}{\centering
+					\textbf{SCREENSHOT TO INSERT}\\[3pt]
+					\texttt{\detokenize{images/#2}}\\[3pt]
+					\small #5}}}
+		\caption{#4}\label{fig:#3}
+\end{figure}}
+
+\newcommand{\includedrawing}[1]{%
+	\IfFileExists{images/#1}{%
+		\includepdf[pages=-,fitpaper=true,pagecommand={\thispagestyle{empty}}]{images/#1}}{%
+		\begin{center}\fbox{\parbox{0.85\linewidth}{\centering
+					\textbf{DRAWING TO INSERT}\\\texttt{\detokenize{images/#1}}}}\end{center}}}
+
+% ---------- Headings and page styles ----------
+\titleformat{\chapter}[display]
+{\normalfont\sffamily\bfseries}
+{\large\MakeUppercase{\chaptertitlename}\ \thechapter}
+{10pt}
+{\Huge}
+
+\titlespacing*{\chapter}{0pt}{0pt}{26pt}
+\titleformat{\section}{\normalfont\sffamily\Large\bfseries}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\normalfont\sffamily\large\bfseries}{\thesubsection}{0.8em}{}
+\titlespacing*{\section}{0pt}{18pt}{6pt}
+\titlespacing*{\subsection}{0pt}{14pt}{4pt}
+
+\fancypagestyle{plain}{%
+	\fancyhf{}%
+	\renewcommand{\headrulewidth}{0pt}%
+	\fancyfoot[C]{\small\thepage}}
+
+% =====================================================================
+\begin{document}
+	\pagenumbering{roman}
+	
+	% ---------- Title page ----------
+	\begin{titlepage}
+		\thispagestyle{empty}
+		\centering
+		\vspace*{1.5cm}
+		{\sffamily\large Personal Project Report\par}
+		\vspace{2.2cm}
+		{\sffamily\bfseries\fontsize{28}{34}\selectfont Smart Pumping\\ Station\par}
+		\vspace{0.8cm}
+		{\sffamily\Large PLC Control, HMI, Reliability Monitoring\\and Explainable Anomaly Detection\\[0.3cm]with TIA Portal, S7-1200 and OPC UA\par}
+		\vspace{3cm}
+		{\Large \AuthorName\par}
+		\vspace{0.6cm}
+		{\large October 2026\par}
+		\vfill
+		{\small This report describes a personal project conducted independently.\par}
+		\vspace{0.3cm}
+		{\footnotesize Repository: \url{https://github.com/HoraEmbedded/smart-pumping-station}\par}
+	\end{titlepage}
+	
+	\pagestyle{plain}
+	
+	% ---------- Abstracts ----------
+	\frontsection{Résumé}
+	\begin{otherlanguage}{french}
+		Ce rapport présente la conception, la réalisation et la vérification en simulation d'une station de pompage d'utilité industrielle. Deux pompes, l'une de service et l'autre de secours, maintiennent un réservoir entre deux niveaux d'eau. Un automate Siemens S7-1200 programmé sous TIA Portal V18 gère les modes de fonctionnement, les interverrouillages, l'alternance des pompes, les diagnostics et les alarmes. Une IHM WinCC Runtime Professional offre cinq écrans et un système d'alarmes natif, avec un bouton d'arrêt d'urgence dont le relâchement est confirmé. Un collecteur OPC UA en lecture seule alimente des indicateurs de fiabilité, un tableau de bord local et six règles explicables de détection d'anomalies. La démarche suit un cycle en V itératif avec 56 exigences, 69 tests, une matrice de traçabilité dans les deux sens et un journal de décisions de 61 entrées. L'ensemble est validé en simulation.
+		
+		\medskip\noindent\textbf{Mots-clés :} automatisation industrielle, API, TIA Portal, S7-1200, OPC UA, IHM, fiabilité, détection d'anomalies.
+	\end{otherlanguage}
+	
+	\frontsection{Abstract}
+	This report describes the design, implementation and verification in simulation of an industrial utility pumping station. Two pumps, one duty and one standby, keep a storage tank between two water levels. A Siemens S7-1200 controller programmed in TIA Portal V18 handles operating modes, interlocks, pump alternation, diagnostics and alarms. A WinCC Runtime Professional HMI gives the operator five screens and a native alarm system, with an emergency stop button whose release requires confirmation. A read-only OPC UA collector records datasets that feed reliability indicators, a local dashboard and six explainable anomaly rules. The work follows an iterative V-model with 56 requirements, 69 tests, a bidirectional traceability matrix and a decision log of 61 entries. It is validated in simulation.
+	
+	\medskip\noindent\textbf{Keywords:} industrial automation, PLC, TIA Portal, S7-1200, OPC UA, HMI, reliability, anomaly detection.
+	
+	% ---------- Tables of contents ----------
+	\clearpage
+	\tableofcontents
+	
+	\listoffigures
+	
+	\listoftables
+	
+	
+	\chapter*{List of abbreviations}
+	\begin{tabular}{@{}p{3cm}p{11.5cm}@{}}
+		API & Automate Programmable Industriel\\
+		DB & Data Block\\
+		DI, DQ & Digital Input, Digital Output\\
+		FB & Function Block\\
+		FC & Function\\
+		GRAFCET & Graphe Fonctionnel de Commande des Étapes et Transitions\\
+		HMI & Human-Machine Interface\\
+		I/O & Inputs and Outputs\\
+		IEC & International Electrotechnical Commission\\
+		ISA & International Society of Automation\\
+		ISO & International Organization for Standardization\\
+		KPI & Key Performance Indicator\\
+		LAD & Ladder Diagram\\
+		MTBF & Mean Time Between Failures\\
+		MTTR & Mean Time To Repair\\
+		OB & Organization Block\\
+		OPC UA & Open Platform Communications Unified Architecture\\
+		PLC & Programmable Logic Controller\\
+		P\&ID & Piping and Instrumentation Diagram\\
+		SCADA & Supervisory Control and Data Acquisition\\
+		SCL & Structured Control Language\\
+		SysML & Systems Modeling Language\\
+		TIA & Totally Integrated Automation\\
+		UML & Unified Modeling Language\\
+	\end{tabular}
+	
+	% =====================================================================
+	% PARTIE 2 / 5
+	% =====================================================================
+	
+	% ---------- Word-like bordered tables for the rest of the document ----------
+	% booktabs rules are redefined to draw full horizontal lines, and each
+	% table adds vertical rules in its column specification.
+	\makeatletter
+	\def\toprule{\hline}
+	\def\midrule{\hline}
+	\def\bottomrule{\hline}
+	\makeatother
+	
+	% =====================================================================
+	% Main matter
+	% =====================================================================
+	\clearpage
+	\pagenumbering{arabic}
+	\pagestyle{fancy}
+	\fancyhf{}
+	\fancyhead[L]{\small\leftmark}
+	\fancyhead[R]{\small\thepage}
+	\renewcommand{\headrulewidth}{0.4pt}
+	\renewcommand{\chaptermark}[1]{\markboth{Chapter \thechapter.\ #1}{}}
+	
+	% =====================================================================
+	\chapter{Industrial context and need}\label{ch:context}
+	
+	A factory utility station moves water from a source to a storage tank that feeds the plant. The station must keep the tank between a low and a high level while avoiding four situations: a pump running dry when the source is empty, too many starts that wear motors and contactors, an overflow of the tank, and an unsafe restart after a critical fault.
+	
+	This project treats the station as a complete engineering case, from the requirements to the verification. It covers:
+	\begin{itemize}
+		\item the process study, the P\&ID, the I/O list and the alarm philosophy;
+		\item requirements, a test plan written before the code and a traceability matrix;
+		\item the PLC logic: state machine, level control, two-pump alternation, interlocks and diagnostics;
+		\item the operator HMI with a native alarm system and an emergency stop whose release is confirmed;
+		\item data export, reliability indicators, a local dashboard and explainable anomaly rules;
+		\item a final test campaign on a frozen build and five end-to-end acceptance scenarios.
+	\end{itemize}
+	
+	The project is delivered in fifteen iterations, each closed by a tagged release (Table~\ref{tab:iterations}).
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|l|Y|}
+			\hline
+			Iteration & Tag & Content \\
+			\hline
+			1 & v0.1.0 & Repository foundation, scope, simulation assumptions \\
+			2 & v0.2.0 & Process study, P\&ID, I/O list, alarm matrix \\
+			3 & v0.3.0 & Requirements, traceability matrix, test plan before coding \\
+			4 & v0.4.0 & Grafcet and state machine \\
+			5 & v0.5.0 & TIA Portal project and level control \\
+			6 & v0.6.0 & Modes, interlocks, latched critical faults \\
+			7 & v0.7.0 & Two pumps, alternation, backup \\
+			8 & v0.8.0 & Diagnostics and monitoring \\
+			9 & v0.9.0 & HMI overview and commands \\
+			10 & v0.10.0 & Alarm system, maintenance and trend screens, operator guide \\
+			11 & v0.11.0 & Data export and datasets \\
+			12 & v0.12.0 & Indicators and dashboard \\
+			13 & v0.13.0 & Explainable anomaly rules \\
+			14 & v0.14.0 & Final test campaign and regression \\
+			15 & v1.0.0 & Report, demonstration video, packaging, HMI emergency stop \\
+			\hline
+		\end{tabularx}
+		\caption{Iterations and releases.}\label{tab:iterations}
+	\end{table}
+	
+	% =====================================================================
+	\chapter{Requirements and method}\label{ch:req}
+	
+	\section{Iterative V-model}
+	
+	Each version is a small V cycle: requirements, design, implementation, then tests that mirror each design level. The final project has 56 requirements and 69 tests. Every requirement is linked to its design reference and its tests in a traceability matrix, checked by script in both directions: no requirement without a test, no test absent from the matrix. Every decision is recorded in a log of 61 entries with its context, the alternative rejected and the consequence.
+	
+	\section{Requirements}
+	
+	Requirements are written with ``shall'', one idea each, with a measurable condition and a verification method: test, inspection, analysis or demonstration. Two examples:
+	
+	\begin{itemize}
+		\item \textbf{REQ-011:} The simulated emergency stop shall stop all pump commands and latch the station in FAULT.
+		\item \textbf{REQ-056:} The HMI shall provide an emergency stop request that stops all pumps on a single action without confirmation, acts as the emergency stop contact, and stays engaged until released after a confirmation.
+	\end{itemize}
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|Y|}
+			\hline
+			Group & Requirement identifiers \\
+			\hline
+			Control and modes & REQ-001 to 009, 033 to 036 \\
+			Interlocks and faults & REQ-010 to 015 \\
+			Diagnostics and counters & REQ-016 to 020, 037 to 040 \\
+			HMI and alarms & REQ-021 to 023, 056 \\
+			Data and analytics & REQ-024 to 027, 049 to 054 \\
+			Quality and release & REQ-028 to 032, 055 \\
+			\hline
+		\end{tabularx}
+		\caption{The 56 requirements by group.}\label{tab:req}
+	\end{table}
+	
+	The first version had 32 requirements. The others came out of the design and implementation work (state machine, pump logic, HMI interface, diagnostics, emergency stop request), each added with an identifier, a test and a matrix line.
+	
+	\section{Traceability in both directions}
+	
+	The traceability matrix links every requirement to its design reference and to its tests. A script checks both directions: no requirement without a test, no test absent from the matrix. When the code changes, an impact analysis script lists the tests to replay from the matrix, and a shared block such as the HMI interface data block triggers a full level~1 regression.
+	
+	% =====================================================================
+	% PARTIE 3 / 5
+	% =====================================================================
+	
+	\chapter{Modeling assumptions}\label{ch:model}
+	
+	The process is simulated inside the PLC (an interrupt of 100~ms), so that faults can be injected reproducibly and the same program can later read real inputs. The model rests on the assumptions of Table~\ref{tab:model}.
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|Y|}
+			\hline
+			Item & Assumption \\
+			\hline
+			Storage tank & Volume 10~m$^3$, level normalized from 0 to 100\,\% \\
+			Pump & Delivers 12~m$^3$/h while its run feedback is on and the source is available \\
+			Consumption & Constant drain of 3~m$^3$/h \\
+			Motor current & Nominal 10~A, multiplied by 1.3 when a high-current fault is injected \\
+			Electrical power & $P=\sqrt{3}\,U\,I\cos\varphi/1000$ in kW, $U=400$~V, $\cos\varphi=0.85$ \\
+			Analog signals & 4--20~mA, ranges realistic but not calibrated for a physical plant \\
+			Time & Process dynamics can be accelerated (factor 60), protection delays run in PLC real time \\
+			\hline
+		\end{tabularx}
+		\caption{Simulation assumptions.}\label{tab:model}
+	\end{table}
+	
+	\section{Volume balance}
+	
+	The tank level follows a volume balance. With flows in m$^3$/h, one explicit Euler step of $\Delta t=0.1$~s gives the update executed by the PLC:
+	\begin{equation}
+		\frac{dV}{dt}=Q_{in}-Q_{out},\qquad
+		L_{k+1}=L_k+\Delta t\,\frac{100\,(Q_{in}-Q_{out})}{3600\,V_{tank}}
+	\end{equation}
+	
+	\begin{table}[H]\centering\small
+		\begin{tabular}{|l|r|}
+			\hline
+			Quantity & Value \\
+			\hline
+			Rise rate, one pump running & 0.025~\%/s (1.5~\%/min) \\
+			Fall rate, no pump & 0.0083~\%/s (0.5~\%/min) \\
+			Fill time, 30 to 80\,\% & about 33~min \\
+			Drain time, 80 to 30\,\% & about 100~min \\
+			Cycle duration & about 133~min \\
+			Pump duty & about 25\,\% \\
+			Reference start rate & about 0.45 starts per hour \\
+			\hline
+		\end{tabular}
+		\caption{Reference scenario computed from the volume balance.}\label{tab:cycle}
+	\end{table}
+	
+	\figplace[0.85]{volume_balance_cycle.png}{cycle}{Reference cycle of the tank level between the start and stop thresholds.}{Plot of the tank level over two full cycles, with the 30 and 80\,\% thresholds marked.}
+	
+	The cycle time depends on the consumption. With a band volume $V_{band}$ between the two thresholds,
+	\begin{equation}
+		T_{cycle}=\frac{V_{band}\,Q_{pump}}{Q_{out}\,(Q_{pump}-Q_{out})},\qquad
+		T_{min}=\frac{4\,V_{band}}{Q_{pump}}\ \text{at } Q_{out}=\frac{Q_{pump}}{2}
+	\end{equation}
+	For $V_{band}=5$~m$^3$ and $Q_{pump}=12$~m$^3$/h the shortest healthy cycle lasts 100 minutes, so a healthy station never starts more than 0.6 times per hour. The alarm threshold of 3 starts per hour is five times this maximum, which makes it a real anomaly and not a consumption fluctuation.
+	
+	% =====================================================================
+	\chapter{System modelling}\label{ch:sysmodel}
+	
+	This chapter presents the station as a system: the actors around it, the five use cases that structure the design, the functional decomposition between the PLC, the HMI, the collector and the rules, and one sequence diagram for the most critical case.
+	
+	\section{Context diagram}
+	
+	The station sits between the process (the water it moves) and the operators (the people who use and maintain it), and it exchanges data with the plant information layer. Figure~\ref{fig:context} shows the actors and the main flows. The dashed line is the OT/IT boundary: to the left, the process and the controller; to the right, the monitoring and analytics that read but never write.
+	
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[
+			node distance=1.6cm and 2.2cm,
+			actor/.style={draw, rounded corners=2pt, minimum width=3.2cm, minimum height=1.1cm, align=center, font=\small, fill=black!5},
+			sys/.style={draw, thick, rounded corners=4pt, minimum width=4cm, minimum height=2.4cm, align=center, font=\small\bfseries, fill=blue!8},
+			arr/.style={-Stealth, thick},
+			darr/.style={Stealth-Stealth, thick, dashed},
+			lab/.style={font=\scriptsize, fill=white, inner sep=1pt}]
+			
+			\node[actor] (operator) at (0,4)   {Operator};
+			\node[actor] (maint)    at (0,0)   {Maintenance};
+			\node[sys]   (station)  at (6,2)   {Smart Pumping\\Station};
+			\node[actor] (process)  at (12,4)  {Water process\\source, tank, drain};
+			\node[actor] (plant)    at (12,0)  {Plant information\\layer (KPI, rules)};
+			
+			\draw[arr]  (operator) -- node[lab, above] {commands, modes} (station);
+			\draw[arr]  (maint)    -- node[lab, above] {run hours, alarms} (station);
+			\draw[darr] (station)  -- node[lab, above] {measurements, commands} (process);
+			\draw[darr] (station)  -- node[lab, above] {datasets, indicators} (plant);
+			
+			\draw[dashed, gray, thick] (9,-1.8) -- (9,5.6);
+			\node[font=\scriptsize, gray, rotate=90] at (9.3,-0.8) {OT / IT boundary};
+		\end{tikzpicture}
+		\caption{Context diagram of the smart pumping station. Commands flow from the actors to the controller; measurements flow from the process; datasets and indicators cross the OT/IT boundary in read-only mode.}\label{fig:context}
+	\end{figure}
+	
+	\section{Use cases}
+	
+	The design is organised around five use cases, each with a nominal scenario and an acceptance test that replays it end to end (Chapter~\ref{ch:tests}). Table~\ref{tab:usecases} summarises them.
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|l|Y|l|}
+			\hline
+			ID & Actor & Nominal scenario & Test \\
+			\hline
+			UC-01 & Operator & Start the station in Auto, the priority pump starts at the low level and the level rises & T61 \\
+			\hline
+			UC-02 & Operator & Continue until the high level, the pump stops and the priority passes to the other pump & T62 \\
+			\hline
+			UC-03 & Process & A pump fails during operation, the backup takes over and the station keeps running & T63 \\
+			\hline
+			UC-04 & Process & The source runs low, the pump stops, starts are inhibited until the source recovers & T64 \\
+			\hline
+			UC-05 & Process & A blocked flow is detected after the validation delay, the pump is locked out, the backup takes over & T65 \\
+			\hline
+		\end{tabularx}
+		\caption{The five use cases and their acceptance tests.}\label{tab:usecases}
+	\end{table}
+	
+	\section{Functional decomposition}
+	
+	The five use cases are realised by four functional layers, each with its own responsibility (Table~\ref{tab:layers}). This separation is what allows the anomaly rules to be added later without touching the PLC program.
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|Y|l|}
+			\hline
+			Layer & Responsibility & Implementation \\
+			\hline
+			Control & Level control, pump choice, alternation, interlocks, state machine, latched faults & PLC, SCL and Ladder \\
+			\hline
+			Supervision & Screens, commands, alarms, emergency stop request with confirmed release & WinCC Runtime \\
+			\hline
+			Acquisition & Read the export block once per second, write a CSV with the PC timestamp & OPC UA collector, Python \\
+			\hline
+			Analysis & Indicators, dashboard, explainable anomaly rules on the recorded data & Python scripts, offline \\
+			\hline
+		\end{tabularx}
+		\caption{Functional layers of the station.}\label{tab:layers}
+	\end{table}
+	
+	\section{Sequence diagram: pump failure (UC-03)}
+	
+	Figure~\ref{fig:sequence} shows the most critical use case: a pump fails while it is the one running. The operator does not act; the process and the PLC handle the situation. The station must keep running, the backup pump must take over within a second, and the alarm must appear in the HMI.
+	
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[
+			lifeline/.style={draw, thick, minimum width=2.4cm, minimum height=0.8cm, align=center, font=\small},
+			msg/.style={-Stealth, thick},
+			ret/.style={Stealth-, dashed, thick},
+			lab/.style={font=\scriptsize, above}]
+			
+			\node[lifeline, fill=black!5] (proc)   at (0,0)   {Process};
+			\node[lifeline, fill=blue!8]  (plc)    at (4.5,0) {PLC};
+			\node[lifeline, fill=green!8] (hmi)    at (9,0)   {HMI};
+			\node[lifeline, fill=orange!10](coll)  at (13.5,0){Collector};
+			
+			\foreach \x in {0,4.5,9,13.5} {
+				\draw[dashed] (\x,-0.5) -- (\x,-9);
+			}
+			
+			\draw[msg] (0,-1)   -- node[lab] {P1 protection opens} (4.5,-1);
+			\draw[msg] (4.5,-2) -- node[lab] {stop P1, lock out}   (4.5,-2);
+			\draw[msg] (4.5,-3) -- node[lab] {start P2}            (0,-3);
+			\draw[ret] (0,-4)   -- node[lab] {P2 running, flow 12} (4.5,-4);
+			\draw[msg] (4.5,-5) -- node[lab] {ALM\_006 latched}    (9,-5);
+			\draw[msg] (4.5,-6) -- node[lab] {export block update} (13.5,-6);
+			\draw[msg] (9,-7)   -- node[lab] {operator sees PUMP 1 FAULT} (9,-7);
+			
+			\node[font=\scriptsize, align=center, below] at (6.5,-9.3) {Station stays in AUTO RUNNING, service continues on P2};
+		\end{tikzpicture}
+		\caption{Sequence diagram of UC-03: pump 1 fails while running, pump 2 takes over within a second, and the alarm reaches the HMI.}\label{fig:sequence}
+	\end{figure}
+	
+	\section{Link with the following chapters}
+	
+	The context, the use cases and the layers above drive the chapters that follow. Chapter~\ref{ch:process} describes the process architecture; Chapter~\ref{ch:io} lists the I/O and the alarms; Chapter~\ref{ch:modes} presents the operating modes and the Grafcet; Chapter~\ref{ch:plc} describes the PLC blocks; Chapter~\ref{ch:hmi} presents the HMI; Chapter~\ref{ch:data} covers the data path, the indicators and the rules; Chapter~\ref{ch:tests} reports the final campaign.
+	
+	
+	% =====================================================================
+	% PARTIE 4 / 5
+	% =====================================================================
+	
+	\chapter{Process architecture and P\&ID}\label{ch:process}
+	
+	Water flows from a low source tank through one of two parallel pumps to a storage tank, then to a simulated consumption. Each pump has suction and discharge isolation valves, a check valve prevents backflow, and the instruments follow the ISA 5.1 tag convention.
+	
+	\figplace[0.98]{pid_simplified.png}{pid}{Simplified P\&ID with the PLC tag name of every signal.}{Simplified P\&ID of the station: source, two parallel pumps, storage tank, drain, and the instrument tags.}
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|l|Y|}
+			\hline
+			Tag & Measurement & PLC tag \\
+			\hline
+			LSL-001, LT-001 & Source level, switch and analog & \tg{DI_Source_Low}, \tg{AI_Source_Level_pct} \\
+			LT-101 & Tank level & \tg{AI_Tank_Level_pct} \\
+			FT-101 & Discharge flow & \tg{AI_Flow_m3h} \\
+			PT-101 & Discharge pressure & \tg{AI_Pressure_bar} \\
+			II-101, II-102 & Motor currents & \tg{AI_P1_Current_A}, \tg{AI_P2_Current_A} \\
+			\hline
+		\end{tabularx}
+		\caption{Instruments and their PLC tags.}\label{tab:instruments}
+	\end{table}
+	
+	% =====================================================================
+	\chapter{I/O list and alarms}\label{ch:io}
+	
+	\section{I/O list}
+	
+	The I/O list is the contract between the process, the PLC, the HMI and the tests: 24 signals, 12 digital inputs, 6 analog inputs and 6 digital outputs. Nothing is programmed without being listed there, and no raw address appears in the code.
+	
+	\textbf{Analog scaling.} A 4--20~mA signal is converted to an integer from 0 to 27648:
+	\begin{equation}
+		x = x_{min}+\frac{raw}{27648}\,(x_{max}-x_{min}),\qquad mA = 4+\frac{raw}{1728}
+	\end{equation}
+	The live zero at 4~mA separates a measurement at zero from a cut wire: a raw value under the low limit (default $-500$ counts, about 3.7~mA) marks the signal invalid.
+	
+	\textbf{Fail-safe wiring.} The emergency stop and the pump protection contacts are normally closed, so a cut wire and a pressed button give the same result, the stop.
+	
+	\section{Alarm philosophy}
+	
+	The alarm design follows the principles of ISA-18.2 at the scale of this station:
+	\begin{itemize}
+		\item every alarm requires an operator action, otherwise it is a message;
+		\item every alarm has a priority, probable causes, a system reaction, an HMI text and a reset condition;
+		\item critical faults latch, and nothing restarts automatically after one;
+		\item a dependent alarm is suppressed when a higher one already explains it.
+	\end{itemize}
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|c|Y|}
+			\hline
+			Class & Alarms & Acknowledgment \\
+			\hline
+			Critical & 4 & Required \\
+			High & 3 & Required \\
+			Medium & 2 & Required \\
+			Warning & 4 & Not required, clears by itself \\
+			\hline
+		\end{tabularx}
+		\caption{The 13 alarms by class. The full list is in Appendix~\ref{app:alarms}.}\label{tab:alarmclass}
+	\end{table}
+	
+	% =====================================================================
+	\chapter{Operating modes and Grafcet}\label{ch:modes}
+	
+	The station is always in exactly one of seven states (Table~\ref{tab:states}).
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|r|l|Y|}
+			\hline
+			Code & State & Pumps \\
+			\hline
+			0 & STOPPED & Off, known state \\
+			10 & INITIALIZING & Off, inputs checked for 2~s \\
+			20 & READY & Off, waiting for a mode \\
+			30 & AUTO\_RUNNING & Automatic level control \\
+			40 & MANUAL\_RUNNING & On operator command \\
+			50 & MAINTENANCE & Pump tests limited to 60~s \\
+			90 & FAULT & Off, waiting for correction and reset \\
+			\hline
+		\end{tabularx}
+		\caption{Station states.}\label{tab:states}
+	\end{table}
+	
+	The numbers step by ten so that a state can be inserted without renumbering the HMI and the exports. Every mode change passes through READY, so the pumps stop before the new mode starts. If two mode positions are active at once, the station counts it as no selection and stays in READY.
+	
+	\figplace[0.82]{grafcet_station.png}{grafcet}{Grafcet of the station: modes (G1) and supervisor (G0) forcing the stop and the fault.}{Grafcet of the station: modes and supervisor, with the forcing order to STOPPED and FAULT.}
+	
+	The Grafcet (IEC 60848) uses a supervisor G0 that forces G1 to step 0 on a stop request and to step 90 on a critical fault, so that stop and fault always win without an arrow from every step.
+	
+	\section{Interlocks}
+	
+	Interlocks act in every state and every mode. Manual and maintenance requests go through the same path to the pump output as the automatic request, so none of them bypasses an interlock.
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|Y|l|l|}
+			\hline
+			Interlock & Effect & Alarm \\
+			\hline
+			Emergency stop contact open, or HMI request engaged & All pumps off, FAULT latched & ALM\_001 \\
+			Source low, with hysteresis & Pumps stop, starts inhibited & ALM\_002 \\
+			Tank level above the critical threshold & All pumps off, FAULT latched & ALM\_003 \\
+			Pump protection open or no run feedback & That pump unavailable & ALM\_006, 007 \\
+			Low flow after the validation delay & That pump unavailable & ALM\_004, 005 \\
+			Demand and no pump available & FAULT latched & ALM\_009 \\
+			Tank level signal invalid & FAULT latched & ALM\_008 \\
+			Another pump already running & Second run command refused & none \\
+			Restart delay not elapsed & Start refused & none \\
+			\hline
+		\end{tabularx}
+		\caption{Interlocks.}\label{tab:interlocks}
+	\end{table}
+	
+	\section{Faults, reset and pumps}
+	
+	A fault is stored in two variables: the cause, which follows the process, and the latch, which remembers it. The reset acts on a rising edge and only clears a latch whose cause is gone. After a valid reset the station returns to STOPPED and a new start request is required, so nothing restarts by itself.
+	
+	Only one pump runs at a time. The priority pump changes after each completed normal cycle, start at the low threshold and stop at the high threshold without an interruption by a fault. If the priority pump is unavailable the other one is used, also in the middle of a cycle, and an interrupted cycle does not swap the priority.
+	
+	\figplace[0.55]{grafcet_auto_cycle.png}{g3}{Grafcet of the automatic pumping cycle, enclosed in the automatic state.}{Grafcet of the automatic pumping cycle, with the start at 30\,\% and the stop at 80\,\%.}
+	
+	% =====================================================================
+	\chapter{PLC architecture}\label{ch:plc}
+	
+	The controller is a Siemens S7-1200, CPU 1214C DC/DC/DC with two 4-channel analog input modules, programmed in TIA Portal V18 and simulated with S7-PLCSIM V18 SP2. Languages are chosen block by block: Ladder for the latched alarms and the indicators, which maintenance staff read, and SCL for the state machine and the calculations, because it exports as plain text and gives readable differences in Git.
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|l|Y|}
+			\hline
+			Block & Language & Role \\
+			\hline
+			\tg{OB1} & SCL & Orchestration only \\
+			\tg{OB30} & SCL & Cyclic interrupt, 100~ms, process model \\
+			\tg{FB_ModeManager} & SCL & State machine \\
+			\tg{FB_AutoCycle} & SCL & Level demand, pump choice, alternation, backup \\
+			\tg{FB_PumpControl} & SCL & Run command, restart delay, flow and feedback checks, counters \\
+			\tg{FB_StationMonitor} & SCL & Frequent starts, maintenance due, level rise, sensor warnings \\
+			\tg{FC_ScaleAnalog} & SCL & 4--20~mA scaling and validity \\
+			\tg{FC_ReadAndScaleInputs} & SCL & Effective process values, from the model or the inputs \\
+			\tg{FC_Interlocks} & SCL & Fault causes, source availability, HMI E-stop request \\
+			\tg{FC_AlarmLatch} & Ladder & Latched alarms and conditional reset \\
+			\tg{FC_Indicators} & Ladder & Lamps and siren \\
+			\tg{FC_Interfaces} & SCL & HMI interface, export block, operator messages \\
+			\tg{FC_WriteOutputs} & SCL & Pump outputs \\
+			\tg{FC_SimulationModel} & SCL & Tank model, fault injection \\
+			\hline
+		\end{tabularx}
+		\caption{The 14 code blocks.}\label{tab:blocks}
+	\end{table}
+	
+	Seven global data blocks hold the parameters, the effective process values, the simulation, the station state, the alarms, the HMI interface and the export block. \tg{OB1} calls the blocks in this order: input scaling, interlocks, alarm latches, mode manager, automatic cycle, pump 1, pump 2, station monitor, interfaces, outputs, indicators. Pump 2 is evaluated after pump 1 and reads its command, so when both are requested in the same scan, pump 1 starts and pump 2 is refused.
+	
+	All thresholds and delays live in the parameter data block (Appendix~\ref{app:params}). The SCL sources are the reference and are versioned in text. The binary TIA project is archived in each GitHub release.
+	
+	% =====================================================================
+	\chapter{HMI and supervision}\label{ch:hmi}
+	
+	The operator interface is built in WinCC Runtime Professional V18 and simulated against the PLC simulation. It reads and writes only the HMI interface data block, filled by one function, so the screens do not depend on the internal block structure.
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|Y|}
+			\hline
+			Screen & Purpose \\
+			\hline
+			Overview & Source, pumps with command and feedback shown apart, tank, measurements, global state \\
+			Commands & Start, stop, reset, mode selection, manual pump commands, silence, emergency stop \\
+			Alarms & Active alarms with class, time and info text \\
+			Maintenance & Run hours, start counts, current, service status, validity of every signal \\
+			Trends & Tank level, flow, pressure and active pump over time \\
+			\hline
+		\end{tabularx}
+		\caption{HMI screens.}\label{tab:screens}
+	\end{table}
+	
+	\figplace[0.92]{overview.png}{overview}{Overview screen with the station running.}{Overview screen with the station running, pumps and tank visible.}
+	
+	Design rules: every state is written as text with a symbol, so the colour is a second channel, and a pump command without feedback shows STARTING, then UNAVAILABLE after the timeout.
+	
+	The native WinCC alarm system carries 13 discrete alarms in four classes, triggered by the bits of two status words. Each alarm has an info text with probable causes and the action to take. Acknowledging means ``seen'' and never clears a fault: only a reset with the cause removed does, and the screen says why when it refuses. The siren can be silenced and sounds again for any new critical alarm.
+	
+	An emergency stop request is available on every screen: it acts on a single press without confirmation, like the emergency stop contact, and its release asks for a confirmation. The emergency stop button is red, large and apart from the other commands, so that a single press stops all pumps at once, latches ALM\_001 and puts the station in FAULT.
+	
+	\figplace[0.92]{alarms.png}{alarms}{Alarm screen with an active alarm.}{Alarm screen with an active critical alarm and its info text.}
+	
+	% =====================================================================
+	% PARTIE 5 / 5
+	% =====================================================================
+	
+	\chapter{Data, indicators and anomaly detection}\label{ch:data}
+	
+	\section{Data architecture}
+	
+	\figplace[0.98]{architecture_ot_it.png}{arch}{OT and IT architecture: the collector only reads.}{OT and IT architecture: PLC, HMI runtime OPC UA server, read-only Python collector, CSV datasets, dashboard and anomaly rules.}
+	
+	The PLC publishes a flat export block (70 bytes, fixed layout). It carries a sample counter that increases once per real second and the simulated clock. The two clocks matter: protection delays run in real PLC seconds, while process dynamics and rates run on simulated time.
+	
+	\textbf{Route taken.} The first plan was to read the PLC directly from Python. A short feasibility test showed that the advanced simulator does not support the S7-1200 and that the standard one cannot be reached from outside. After comparing alternatives, the retained route is the OPC UA server of the WinCC Runtime, read by a Python client in read-only mode.
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|Y|Y|}
+			\hline
+			Dataset & Scenario & Injection \\
+			\hline
+			D01 & Five normal cycles with alternation & None \\
+			D02 & Blocked flow on pump 1 until a reset & Low flow on pump 1 \\
+			D03 & Pump 1 draws more current than pump 2 & High current on pump 1 \\
+			D04 & High current and low flow together & Both on pump 1 \\
+			D05 & Drain larger than the pump flow & Drain of 13~m$^3$/h \\
+			D06 & Narrow level band, short restart delay & Level 48 to 52\,\% \\
+			\hline
+		\end{tabularx}
+		\caption{The six datasets. Ground-truth columns are kept apart from the measurements.}\label{tab:datasets}
+	\end{table}
+	
+	\section{Reliability indicators and dashboard}
+	
+	Indicators are time-weighted sums over the intervals of the simulated clock, so a paused clock or a gap in the samples distorts nothing. Availability has two levels: with a backup pump a pump failure does not stop the service, and the gap between the two measures the value of the backup.
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|Y|}
+			\hline
+			Indicator & Formula \\
+			\hline
+			Duty & $100\,t_{run}/t_{total}$ \\
+			Start rate & $(n_{P1}+n_{P2})/t_{hours}$ \\
+			Station availability & $100\,(1-t_{fault}/t_{started})$ \\
+			Pump availability & $100\,(1-t_{unavailable}/t_{total})$ \\
+			MTBF, MTTR & $t_{run}/n_{failures}$, mean duration of the completed repairs \\
+			Mean flow while pumping & $\sum Q\,\Delta t\,/\sum \Delta t$ over the pumping intervals \\
+			Volume, energy, specific energy & $\sum Q\,\Delta t/3600$, $\sum P\,\Delta t/3600$, $E/V$ \\
+			\hline
+		\end{tabularx}
+		\caption{Indicator definitions.}\label{tab:kpi}
+	\end{table}
+	
+	The computation has a unit test checked against a calculation done by hand (3 tests pass on the test suite).
+	
+	\begin{table}[H]\centering\small
+		\begin{tabular}{|l|c|c|c|c|}
+			\hline
+			Dataset & Station avail. (\%) & Pump 1 avail. (\%) & Starts/h & kWh/m$^3$ \\
+			\hline
+			D01 & 100.0 & 100.0 & 0.417 & 0.491 \\
+			D02 & 100.0 & 41.04 & 0.501 & 0.491 \\
+			D03 & 100.0 & 100.0 & 0.835 & 0.565 \\
+			D04 & 100.0 & 5.00  & 0.572 & 0.510 \\
+			D05 & 100.0 & 100.0 & 0.201 & 0.491 \\
+			D06 & 100.0 & 100.0 & 5.641 & 0.491 \\
+			\hline
+		\end{tabular}
+		\caption{Indicators of the six datasets (from \texttt{kpi\_summary.md} and \texttt{kpi\_summary.csv}).}\label{tab:kpivalues}
+	\end{table}
+	
+	The gap between station availability and pump 1 availability in D02 is 59 points: the station stayed at 100\,\% because pump 2 took over when pump 1 was faulted. That gap is the value of the backup pump. The same gap appears in D04 where pump 1 is unavailable almost the whole run.
+	
+	\figplace[0.95]{dashboard_live.png}{dashboard}{Local read-only dashboard in live mode.}{Local dashboard on \texttt{http://127.0.0.1:8050}, with the LIVE pill, the four trend charts and the KPI cards.}
+	
+	The dashboard is a Python standard-library server on the local address. It only answers read requests, loads no external resource, and a pill shows STALE when no new sample has arrived for five seconds.
+	
+	\section{Explainable anomaly rules}
+	
+	Six rules read the measured signals only. Each flag gives the values and the threshold crossed. The injected-fault columns are used by the evaluation module only, and a unit test checks that the rules never name them. No machine learning is used: the roadmap makes it conditional on a documented limit of the rules.
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|Y|l|}
+			\hline
+			Rule & Condition & Persistence \\
+			\hline
+			ANO\_01 & Pump running and flow below the minimum & 5~s \\
+			ANO\_02 & Same pump running for the window, level rise under 0.5\,\%/min & 5 simulated min \\
+			ANO\_03 & Motor current above 12~A with low flow & 5~s \\
+			ANO\_04 & More than 3 starts in the trailing window & 60 simulated min \\
+			ANO\_05 & Value out of range, or inconsistent state & range: none, states: 2~s \\
+			ANO\_06 & One pump draws over 15\,\% more current than the other & settled 2~s \\
+			\hline
+		\end{tabularx}
+		\caption{Anomaly rules.}\label{tab:rules}
+	\end{table}
+	
+	Thresholds shared with the PLC keep the PLC value. The analysis delay of 5~s is half of the 10~s PLC validation delay, so the rule sees the symptom before the protection trips. The margin of every threshold is measured on the normal dataset, and a sensitivity table shows what changes when a threshold is halved or doubled.
+	
+	\begin{table}[H]\centering\small
+		\begin{tabular}{|l|c|c|c|c|c|c|}
+			\hline
+			Dataset & ANO\_01 & ANO\_02 & ANO\_03 & ANO\_04 & ANO\_05 & ANO\_06 \\
+			\hline
+			D01 & ok & ok & ok & ok & ok & ok \\
+			D02 & ok & ok & ok & ok & ok & ok \\
+			D03 & ok & ok & ok & ok & ok & TP \\
+			D04 & ok & ok & ok & ok & ok & ok \\
+			D05 & ok & TP & ok & ok & ok & ok \\
+			D06 & ok & ok & ok & TP & ok & ok \\
+			\hline
+		\end{tabular}
+		\caption{Rule outcome per dataset (TP: expected rule fired, ok: neither expected nor fired).}\label{tab:matrix}
+	\end{table}
+	
+	Two rules illustrate the result. ANO\_06 fires on D03 with 63 flagged samples and 2 periods, with a mean detection delay of 2 samples. ANO\_02 fires on D05 with 258 flagged samples and 1 period, with a mean delay of 6 samples (6~min). ANO\_04 fires on D06 with 192 flagged samples. The documented blind spots are the reason why D02 and D04 show no firing: the injection flag forces the PLC to trip its low-flow protection but does not modify the recorded \tg{Flow_m3h}, so the recorded data never shows ``pump running AND flow $<$ 2''. In the field, where the flow sensor is the detector, the rules would fire.
+	
+	\begin{table}[H]\centering\small
+		\begin{tabular}{|l|l|c|c|l|}
+			\hline
+			Dataset & Rule & Fault events & Detected & Mean delay \\
+			\hline
+			D03 & ANO\_06 & 2 & 2 & 2 samples (2 min) \\
+			D04 & ANO\_06 & 1 & 0 & n/a (blind spot) \\
+			D05 & ANO\_02 & 1 & 1 & 6 samples (6 min) \\
+			\hline
+		\end{tabular}
+		\caption{Detection against the injected faults (from \texttt{anomaly\_eval.csv}).}\label{tab:detect}
+	\end{table}
+	
+	\begin{table}[H]\centering\small
+		\begin{tabular}{|l|c|c|}
+			\hline
+			Check & Extreme on normal data & Threshold \\
+			\hline
+			ANO\_01 lowest flow while pumping (m$^3$/h) & 12.0 & 2.0 \\
+			ANO\_03 highest current while pumping (A) & 10.0 & 12.0 \\
+			ANO\_02 lowest level rise (\%/min) & 1.47 & 0.5 \\
+			ANO\_04 most starts in the window & 1 & 3 \\
+			ANO\_06 largest excess current (\%) & 0.0 & 15.0 \\
+			\hline
+		\end{tabular}
+		\caption{Threshold margins on the normal dataset.}\label{tab:margins}
+	\end{table}
+	
+	\figplace[0.95]{D05_leak_anomalies.png}{anomalies}{Signals and flagged periods for the leak dataset.}{Signals of D05 with the ANO\_02 flagged period shown in orange.}
+	
+	% =====================================================================
+	\chapter{Test plan and results}\label{ch:tests}
+	
+	\section{Method}
+	
+	Thirty-two tests were written before the PLC code and the plan grew to 69 tests with the derived requirements. The final campaign replays every manual PLC and HMI test on a frozen build, with only defect fixes allowed between the start of the campaign and the release tag. After a fix, the tests to rerun are taken from the traceability matrix. Three evidence levels apply: captures or videos for safety and end-to-end tests, observed values for the others, and automatic checks with their output saved.
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|c|c|c|c|}
+			\hline
+			Group & Tests & Passed & Failed & Pending \\
+			\hline
+			PLC logic & 31 & 31 & 0 & 0 \\
+			HMI & 14 & 14 & 0 & 0 \\
+			Data & 7 & 7 & 0 & 0 \\
+			Analytics & 6 & 6 & 0 & 0 \\
+			Process and reproducibility & 6 & 6 & 0 & 0 \\
+			Acceptance & 5 & 5 & 0 & 0 \\
+			All & 69 & 69 & 0 & 0 \\
+			\hline
+		\end{tabularx}
+		\caption{Results of the final campaign (from \texttt{campaign\_summary.md}).}\label{tab:results}
+	\end{table}
+	
+	Requirements verified: 56 of 56.
+	
+	\section{Acceptance scenarios}
+	
+	The five use cases of the design phase are replayed end to end: HMI commands, PLC simulation and the OPC UA collector recording a dataset.
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|l|Y|c|}
+			\hline
+			Test & Use case & Expected result & Result \\
+			\hline
+			T61 & Normal start in Auto & Priority pump starts at the low level, feedback confirmed, level rises & Pass \\
+			T62 & Fill and stop & Pump stops at the high level, priority passes to the other pump & Pass \\
+			T63 & Pump failure & Pump locked out, backup takes over, ALM\_006 & Pass \\
+			T64 & Source shortage & Pump stops, starts inhibited until recovery, ALM\_002 & Pass \\
+			T65 & Low flow & After 10~s the pump is unavailable, backup used, ALM\_004 & Pass \\
+			T68 & HMI E-stop single press & Pump stops at once, FAULT, ALM\_001, no confirmation window & Pass \\
+			T69 & HMI E-stop release & Cancel keeps the stop, confirmation clears it, reset gives STOPPED & Pass \\
+			\hline
+		\end{tabularx}
+		\caption{End-to-end acceptance tests.}\label{tab:acceptance}
+	\end{table}
+	
+	\section{Traceability and defects}
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|l|Y|}
+			\hline
+			Requirement & Tests & Subject \\
+			\hline
+			REQ-011 & T08 & Emergency stop latches the station in FAULT \\
+			REQ-014 & T09, T12 & Reset refused while the cause persists \\
+			REQ-012 & T15 & Critical tank level \\
+			REQ-045 & T23 & Acknowledgment does not clear a fault \\
+			REQ-054 & T58 & Rules never read the injected-fault columns \\
+			REQ-056 & T68, T69 & HMI emergency stop with confirmed release \\
+			\hline
+		\end{tabularx}
+		\caption{Examples from the traceability matrix.}\label{tab:trace}
+	\end{table}
+	
+	\begin{table}[H]\centering\small
+		\begin{tabularx}{\linewidth}{|l|Y|l|}
+			\hline
+			ID & Description and resolution & Severity \\
+			\hline
+			BUG-001 & Clock tag undefined: clock memory byte enabled in the CPU & Minor \\
+			BUG-002 & Instance data blocks out of date after a block interface change: update order documented & Minor \\
+			BUG-003 & Communication driver error of the HMI connection: HMI connection misconfigured after the CPU rename, recreated with the correct name & Minor \\
+			BUG-004 & External S7 reader cannot reach the simulated S7-1200: route changed to OPC UA & Major \\
+			BUG-005 & OPC UA port closed: runtime package, certificate authority and IIS set up, sequence documented & Major \\
+			\hline
+		\end{tabularx}
+		\caption{Defects found by execution.}\label{tab:defects}
+	\end{table}
+	
+	Four more findings came from design review, before any test: five requirements missing from the first version (state machine), a no-pump alarm that needed two resets (cause based on latches), a pump command that survived a mode change (HMI interface), and a start window counted in real time while the process ran accelerated (data design). Each became a requirement or a fix with a test.
+	
+	No defect was found during the final campaign on the frozen build.
+	
+	\section{Reproducibility}
+	
+	The cold start procedure of the runbook was run twice with identical initial values (T28, 15 variables checked in both runs), the project was restored from its release archive in a new folder with zero compilation errors (T66), and a clean clone of the repository passes the automated verification with all 20 checks in final mode (T67).
+	
+	% =====================================================================
+	\chapter{Limitations and perspectives}\label{ch:limits}
+	
+	\subsection*{Limitations}
+	
+	\begin{itemize}
+		\item Validation is entirely in simulation: S7-PLCSIM and WinCC Runtime, with no physical controller or sensor, and a process simulated inside the PLC.
+		\item The indicators and the datasets come from the simulation, with one or two injected failures: they illustrate the calculation and are not field statistics.
+		\item The emergency stop and the latched faults are simulated logic, not a certified safety chain. The HMI emergency stop request is a supplementary action, the reference emergency stop remains the hardware contact.
+		\item No IEC 62443 compliance is claimed. The OPC UA endpoint accepts anonymous access on the laboratory PC only.
+		\item Thresholds come from a noiseless simulation: their margins have to be measured again on field data.
+		\item The rules have documented blind spots. The comparison between the two pumps cannot judge the first run of a dataset and does not say which pump deviates, and a level that does not rise does not distinguish a leak from a flow sensor error. The D02 and D04 datasets show a limitation of the injection itself, which bypasses the recorded flow.
+	\end{itemize}
+	
+	\subsection*{Perspectives}
+	
+	\begin{itemize}
+		\item Secure the OPC UA endpoint with signed and encrypted messages and certificate trust management, then assess the security by zones and conduits.
+		\item Port the project to an S7-1500 to use S7-PLCSIM Advanced and a native OPC UA server.
+		\item Detect leaks with a mass-balance residual, the level change compared with the integrated flow.
+		\item Evaluate a statistical or learned detector against these rules on field data.
+		\item Move the HMI to a physical panel with user profiles, and add a hardware-in-the-loop test bench.
+	\end{itemize}
+	
+	% =====================================================================
+	\chapter*{General conclusion}
+	\markboth{General conclusion}{General conclusion}
+	\phantomsection\addcontentsline{toc}{chapter}{General conclusion}
+	
+	The project delivers a complete chain on a simulated pumping station: requirements and tests written before the code, a modular PLC program with latched faults and a conditional reset, a two-pump station with alternation and backup, an HMI with a native alarm system and an emergency stop whose release is confirmed, a read-only data path, reliability indicators and six explainable rules, all verified by a campaign of 69 tests on a frozen build with no failure.
+	
+	Five lessons stand out:
+	\begin{enumerate}
+		\item Writing the tests first forces the requirements to be clear: the design of the state machine alone revealed five missing requirements.
+		\item A feasibility test before building avoids wasted work: the planned data route was impossible and the test showed it in minutes.
+		\item Two clocks need two rules: delays on the real clock, dynamics on the simulated one, otherwise a false alarm hides in the accelerated runs.
+		\item Traceability is a decision tool: after a fix, the matrix says what to rerun, and a shared block triggers the full level~1 regression.
+		\item A threshold without a measured margin is a guess: every rule threshold was checked against the normal dataset.
+	\end{enumerate}
+	
+	The emergency stop addition at the end of the project shows the same process at work: a design question, a decision justified by safety reasoning (no confirmation on press, confirmed release), a new requirement, two new tests, an impact analysis and a full level~1 regression before the tag. The change is delivered with the project, not as an afterthought.
+	
+	% =====================================================================
+	\renewcommand{\bibname}{References}
+	\clearpage\phantomsection\addcontentsline{toc}{chapter}{References}
+	\begin{thebibliography}{99}
+		\markboth{References}{References}
+		\bibitem{iec61131} IEC 61131-3:2013. \textit{Programmable controllers, Part 3: Programming languages}. International Electrotechnical Commission, 2013.
+		\bibitem{iec60848} IEC 60848:2013. \textit{GRAFCET specification language for sequential function charts}. International Electrotechnical Commission, 2013.
+		\bibitem{iec60204} IEC 60204-1:2016. \textit{Safety of machinery, Electrical equipment of machines, Part 1: General requirements}. International Electrotechnical Commission, 2016.
+		\bibitem{iso13850} ISO 13850:2015. \textit{Safety of machinery, Emergency stop function, Principles for design}. International Organization for Standardization, 2015.
+		\bibitem{iso13849} ISO 13849-1:2023. \textit{Safety of machinery, Safety-related parts of control systems, Part 1: General principles for design}. International Organization for Standardization, 2023.
+		\bibitem{isa18} ISA-18.2:2016. \textit{Management of Alarm Systems for the Process Industries}. International Society of Automation, 2016.
+		\bibitem{s71200} Siemens AG. \textit{SIMATIC S7-1200 System Manual}. Siemens Industry Online Support.
+		\bibitem{opcua} IEC 62541. \textit{OPC Unified Architecture}. International Electrotechnical Commission.
+		\bibitem{john2010} K.-H. John and M. Tiegelkamp. \textit{IEC 61131-3: Programming Industrial Automation Systems}. 2nd ed. Springer, 2010.
+	\end{thebibliography}
+	
+	% =====================================================================
+	% Appendices
+	% =====================================================================
+	\appendix
+	\renewcommand{\chaptermark}[1]{\markboth{Appendix \thechapter.\ #1}{}}
+	
+	\chapter{Repository structure}\label{app:tree}
+	\begin{verbatim}
+		smart-pumping-station/
+		README.md, README.fr.md, CHANGELOG.md, CONTRIBUTING.md, LICENSE
+		01_requirements/   scope, assumptions, requirements, use cases, traceability matrix
+		02_design/         P&ID, I/O list, alarm matrix, state machine, diagrams/
+		03_plc/            src/ (SCL sources), exports/, TIA Portal notes
+		04_hmi/            screens/, operator guide, design standard, tag and alarm lists
+		05_iiot_data/      datasets/, python/, dashboard/, figures/, notebooks/, results
+		06_tests/          test plan, results, campaign, defect log, evidence/
+		07_media/          demonstration script and video notes
+		08_report/         report_final.tex, report_final.pdf
+		docs/              process, parameters, runbook, decision log, glossary
+		tools/             figure generation, campaign, verification, impact analysis
+		captures/          screenshots by iteration
+	\end{verbatim}
+	
+	\chapter{Main parameters}\label{app:params}
+	\begin{longtable}{|p{4.2cm}|p{2.4cm}|p{7cm}|}
+		\hline
+		Parameter & Default & Role \\
+		\hline
+		\endhead
+		\tg{Level_Low} & 30\,\% & Start threshold \\
+		\tg{Level_High} & 80\,\% & Stop threshold \\
+		\tg{Level_CritHigh} & 95\,\% & Critical high level \\
+		\tg{Source_Min}, \tg{Source_Hyst_pct} & 15\,\%, 5\,\% & Source low threshold and recovery hysteresis \\
+		\tg{Flow_Min} & 2.0 m$^3$/h & Low flow threshold \\
+		\tg{Flow_Validation} & 10 s & Delay before judging the flow \\
+		\tg{Restart_Delay} & 30 s & Anti-restart delay \\
+		\tg{Run_Feedback_Timeout} & 5 s & Feedback expected after a command \\
+		\tg{Init_Delay} & 2 s & Duration of the initialization \\
+		\tg{Maint_Test_Max} & 60 s & Longest pump test in maintenance \\
+		\tg{FreqStarts_Max} & 3 per 60 min & Frequent start threshold \\
+		\tg{Current_Nominal}, \tg{Current_High} & 10 A, 12 A & Nominal current and warning threshold \\
+		\tg{Current_High_Delay} & 5 s & Ignore the start-up inrush \\
+		\tg{Maintenance_Interval_h} & 500 h & Service interval \\
+		\tg{Raw_Low_Limit} & $-500$ & Wire break limit, about 3.7 mA \\
+		\tg{LevelRise_Window}, \tg{LevelRise_Min} & 60 s, 0.5\,\% & Level rise warning \\
+		\tg{Tank_Volume} & 10 m$^3$ & Level model \\
+		\tg{Pump_Flow}, \tg{Drain_Flow} & 12, 3 m$^3$/h & Level model \\
+		\tg{Sim_Step} & 0.1 s & Euler step, equal to the interrupt period \\
+		\tg{Time_Accel} & 1 or 60 & Acceleration of the process model \\
+		\tg{Supply_Voltage}, \tg{Power_Factor} & 400 V, 0.85 & Simulated electrical power \\
+		\hline
+	\end{longtable}
+	
+	\chapter{Alarm list}\label{app:alarms}
+	\begin{longtable}{|p{2.3cm}|p{1.6cm}|p{6.2cm}|p{4.2cm}|}
+		\hline
+		ID & Class & Condition & Reaction \\
+		\hline
+		\endhead
+		ALM\_001 & Critical & Emergency stop contact open, or HMI request engaged & All pumps off, FAULT latched \\
+		ALM\_002 & High & Source low signal, or source level under 15\,\% (recovers at 20\,\%) & Pumps stop, starts inhibited \\
+		ALM\_003 & Critical & Tank level above 95\,\% & All pumps off, FAULT latched \\
+		ALM\_004, 005 & High & Pump 1 or 2 running, flow under 2 m$^3$/h for 10 s & That pump unavailable, latched \\
+		ALM\_006, 007 & Medium & Pump protection open, or no run feedback within 5 s & That pump unavailable, latched \\
+		ALM\_008 (tank) & Critical & Tank level signal invalid & FAULT latched \\
+		ALM\_008 (other) & Warning & Flow, pressure, source level or current signal invalid & Information \\
+		ALM\_009 & Critical & Demand and no pump available & FAULT latched \\
+		ALM\_010 & Warning & More than 3 starts in 60 simulated minutes & Information \\
+		WRN\_002 (P1, P2) & Warning & Current above 12 A for 5 s & Information, pump keeps running \\
+		WRN\_003 (P1, P2) & Warning & Run hours since service above 500 h & Information \\
+		WRN\_004 & Warning & Pump running, level rise under 0.5\,\%/min over 60 s & Information \\
+		\hline
+	\end{longtable}
+	
+	\end{document}
