@@ -63,3 +63,5 @@ docker/grafana/data/
 
 # Duplicate PDF from a separate compilation
 08_report/Smart_Pumping_Station.pdf
+# Demo video, attached to the release, not committed
+07_media/demo.mp4
