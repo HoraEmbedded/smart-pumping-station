@@ -10,6 +10,7 @@ VERSION : 0.1
       Cmd_Stop : Bool;
       Cmd_Reset : Bool;
       Cmd_Silence : Bool;
+      EStop_Request : Bool;
       ModeSelect : Int;
       StationState : Int;
       AlarmLevel : Int;

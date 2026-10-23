@@ -24,6 +24,9 @@ BEGIN
         #sourceLow := "DI_Source_Low";
     END_IF;
 
+    // The HMI emergency stop request acts like an opened emergency stop contact.
+    #eStopOK := #eStopOK AND NOT "DB_HMI".EStop_Request;
+
     // Normally closed E-stop contact: FALSE means stop, a cut wire gives the same result.
     "DB_StationState".EStopOK := #eStopOK;
     "DB_Alarms".EStopCause := NOT #eStopOK;
