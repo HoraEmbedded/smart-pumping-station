@@ -86,7 +86,7 @@ G3 is enclosed in step 30. Leaving step 30 resets G3 to step 0 and switches the 
 
 | ID | Interlock | Effect | Alarm | Requirement |
 | --- | --- | --- | --- | --- |
-| IL-01 | DI_EStop_Sim = FALSE | All pump commands off, FAULT latched | ALM_001 | REQ-011 |
+| IL-01 | DI_EStop_Sim = FALSE | All pump commands off, FAULT latched; Emergency stop contact open, or HMI emergency stop request engaged | ALM_001 | REQ-011 |
 | IL-02 | DI_Source_Low or source level below Source_Min (P04) | Run commands off, starts inhibited until source above P04 + Source_Hyst_pct (P26) | ALM_002 | REQ-010 |
 | IL-03 | Tank level above Level_CritHigh (P03) | All pumps off, FAULT latched | ALM_003 | REQ-012 |
 | IL-04 | Pump fault input FALSE, or no run feedback within Run_Feedback_Timeout_s (P23) | That pump off and unavailable | ALM_006, ALM_007 | REQ-008, REQ-037 |

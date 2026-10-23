@@ -47,7 +47,11 @@ Open the **Alarms** screen. Each alarm shows its class, time and text. Press **I
 
 Run hours, start counts, current and service status per pump, and the validity of every signal. A signal shown INVALID points to a wiring or sensor problem. When a pump shows DUE, schedule its maintenance and reset its hours from the Commands screen in Maintenance mode.
 
-## 6. Typical situations
+## 6. Emergency stop
+
+Press **EMERGENCY STOP** once: the pumps stop at once, the station goes to FAULT and the siren sounds. There is no confirmation, the action must be immediate. To release it, open the Commands screen, press **Release E-stop** and confirm. Then reset the alarm: the reset is refused while the emergency stop is engaged. After the reset the station returns to STOPPED, start it again.
+
+## 7. Typical situations
 
 | Situation | What you see | What to do |
 | --- | --- | --- |
@@ -58,6 +62,6 @@ Run hours, start counts, current and service status per pump, and the validity o
 | Tank level not rising | WARNING, pump keeps running | Check consumption and the line |
 | Frequent starts | WARNING | Review the level thresholds, check for leaks |
 
-## 7. Trends
+## 8. Trends
 
 The Trends screen shows tank level, flow, pressure and the active pump over the last 10 minutes.

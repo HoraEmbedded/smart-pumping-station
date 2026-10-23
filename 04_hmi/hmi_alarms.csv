@@ -1,5 +1,5 @@
 Name,Class,TriggerTag,Bit,AlarmText,InfoText
-ALM_001,Critical,DB_HMI_AlarmWord1,0,EMERGENCY STOP ACTIVE,"Causes: button pressed or wire break. Action: check the area, release the E-stop, then reset."
+ALM_001,Critical,DB_HMI_AlarmWord1,0,EMERGENCY STOP ACTIVE,"Causes: button pressed or wire break. Action: check the area, release the emergency stop (Commands screen or the contact), then reset."
 ALM_002,High,DB_HMI_AlarmWord1,1,SOURCE LEVEL LOW: DRY RUN RISK,"Causes: source empty or sensor fault. Action: check the source supply and the sensor. Clears by itself when the source recovers."
 ALM_003,Critical,DB_HMI_AlarmWord1,2,TANK LEVEL CRITICAL HIGH: OVERFLOW RISK,"Causes: pump not stopped at the high level or level sensor drift. Action: check the level sensor and the stop logic, check the consumption, then reset."
 ALM_004,High,DB_HMI_AlarmWord1,3,LOW FLOW ON PUMP 1,"Causes: closed valve, clogged filter, leak, dry run or sensor fault. Action: check valves and filter, inspect pump 1, then reset."
