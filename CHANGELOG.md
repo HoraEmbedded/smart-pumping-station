@@ -129,7 +129,7 @@ All notable changes are documented here. Format inspired by Keep a Changelog.
 - Unit tests on constructed values, analysis of false positives and blind spots
 - V5 test report
 
-## [1.0.0] - 2026-10-23
+## [0.14.0] - 2026-10-23
 
 ### Added
 - HMI emergency stop request on the Commands screen and in the template, acting like the emergency stop contact
