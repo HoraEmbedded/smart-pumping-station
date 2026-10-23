@@ -83,3 +83,4 @@ Statements use "shall". Method: T = Test, I = Inspection, A = Analysis, D = Demo
 | REQ-053 | Each period flagged by an anomaly rule shall carry a plain explanation with the measured values and the threshold crossed | M | T | V5 |
 | REQ-054 | The anomaly rules shall use measured signals only, the injected fault columns being used only to score them | M | T | V5 |
 | REQ-055 | The project shall be restorable from its release archive, and a clean clone of the repository shall pass the automated verification | M | T | V6 |
+| REQ-056 | The HMI shall provide an emergency stop request that stops all pumps on a single action without confirmation, acts as the emergency stop contact, and stays engaged until released after a confirmation | M | T | V6 |

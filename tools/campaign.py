@@ -21,14 +21,14 @@ def span(a, b):
 
 GROUPS = {
     "plc": span(1, 9) + span(11, 22) + ["T27"] + span(33, 40) + ["T54"],
-    "hmi": ["T23", "T30"] + span(41, 50),
+    "hmi": ["T23", "T30"] + span(41, 50) + ["T68", "T69"],
     "data": ["T10", "T29", "T51", "T52", "T53", "T55", "T57"],
     "analytics": ["T25", "T26", "T56", "T58", "T59", "T60"],
     "process": ["T24", "T28", "T31", "T32", "T66", "T67"],
     "acceptance": span(61, 65),
 }
 LEVEL1 = {"T04", "T05", "T06", "T07", "T08", "T09", "T15", "T22", "T35", "T37", "T23", "T43", "T46",
-          "T47", "T48", "T10", "T28"} | set(span(61, 67))
+          "T47", "T48", "T10", "T28"} | set(span(61, 67)) | {"T68", "T69"}
 LEVEL3 = {"T24", "T25", "T29", "T32", "T53", "T56", "T58", "T59", "T60"}
 LEVEL_TEXT = {
     1: "level 1: save a capture or video named Txx_*.png or .mp4 in 06_tests/evidence/final",

@@ -46,3 +46,4 @@ REQ-052,V4,I,dashboard.py,T57,Verified
 REQ-053,V5,T,anomaly_rules.py;anomaly_report.py,T60,Verified
 REQ-054,V5,T,anomaly_rules.py,T58,Verified
 REQ-055,V6,T,verify_repo.py;runbook.md,T66;T67,Planned
+REQ-056,V6,T,FC_Interlocks;DB_HMI;Commands screen,T68;T69,Planned

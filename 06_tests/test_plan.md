@@ -91,6 +91,9 @@ T01, T02, T06, T08, T09, T11, T12, T13, T15, T27, T31 passed.
 | T65 | Acceptance UC-05 low flow detection | 016 | V6 | Pump 1 running, low flow injected | After 10 s pump 1 is unavailable, pump 2 is used, ALM_004 | Capture and CSV |
 | T66 | Restore from the release archive | 055 | V6 | Retrieve the project archive into a new folder, rebuild all | Zero compilation errors, one smoke test passes | Capture |
 | T67 | Clean clone verification | 055 | V6 | Fresh clone, new virtual environment, verification script in final mode | All checks pass | Command output |
+| T68 | HMI emergency stop on a single press | 056 | V6 | Auto, pump running, press EMERGENCY STOP once | Pump stops at once, state FAULT, ALM_001, siren, no confirmation window, reset refused while engaged | Capture |
+| T69 | HMI emergency stop release with confirmation | 056 | V6 | From T68, press Release then Cancel, then Release and confirm, then reset and start | Cancel keeps the stop engaged, confirmation clears it, reset gives STOPPED, no pump starts until a new start request | Capture |
+
 
 ## Exit criteria for V2
 
