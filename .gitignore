@@ -43,3 +43,23 @@ secrets.*
 # Grafana local state (should never be versioned)
 docker/grafana/data/
 .env
+
+# LaTeX build files
+08_report/*.aux
+08_report/*.log
+08_report/*.out
+08_report/*.toc
+08_report/*.fls
+08_report/*.fdb_latexmk
+08_report/*.synctex.gz
+
+# Raw OBS recordings (keep only the exported demo.mp4)
+07_media/2026-*.mp4
+07_media/raw/
+
+# LaTeX build files not yet covered
+08_report/*.lof
+08_report/*.lot
+
+# Duplicate PDF from a separate compilation
+08_report/Smart_Pumping_Station.pdf
