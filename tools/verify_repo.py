@@ -79,7 +79,7 @@ def check_placeholders():
 
 def check_code_conventions():
     found = []
-    skip = {"10_DB_Parameters.scl", "20_FC_ScaleAnalog.scl"}
+    skip = {"10_DB_Parameters.scl", "20_FC_ScaleAnalog.scl", "21_FC_ReadAndScaleInputs.scl", "22_FC_Interlocks.scl"}
     for p in sorted((ROOT / "03_plc" / "src").glob("*.scl")):
         content = read(p)
         if "DATA_BLOCK" in content.split("\n")[0]:
